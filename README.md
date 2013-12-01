@@ -13,3 +13,9 @@ A node.js application template.
  * Start up a [redis](http://redis.io/download) server to store session data
  * Run ``npm install`` to install all dependencies
  * Run ``npm run nodemon`` to start a development server that will watch for file changes
+
+## License
+
+Do [whatever you want](http://www.wtfpl.net/) with this template, it's just boilerplate & I'm happy to share it. No credits or anything required.
+
+If you improve on it, feel free to [submit pull requests](https://bitbucket.org/sparklinlabs/nuclearnode/). If you use it, feel free to [let me know](https://twitter.com/elisee).
