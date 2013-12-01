@@ -1,0 +1,7 @@
+module.exports =
+  appId: 'nuclearnode'
+  domain: 'nuclear.node'
+  internalPort: 3000
+  publicPort: 3000
+  redisDbIndex: 0
+  sessionSecret: 'your session secret here'
