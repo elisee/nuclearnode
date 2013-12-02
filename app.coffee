@@ -6,6 +6,7 @@ nib = require 'nib'
 expose = require 'express-expose'
 frakt = require 'jade-frakt'
 RedisStore = require('connect-redis')(express)
+socketio = require 'socket.io'
 config = require './config'
 
 app = express()
@@ -47,6 +48,30 @@ if 'development' == env
 # Routes
 app.get '/', (req, res) -> res.render 'index'
 
+# Create server
+server = http.createServer(app)
+
+# Socket.IO
+io = socketio.listen(server)
+io.set 'log level', 1
+
+###
+# (Enable this if you want passport.socketio authorization support)
+io.set "authorization", passportSocketIo.authorize
+  cookieParser: express.cookieParser
+  key: "#{config.appId}.sid"
+  secret: config.sessionSecret
+  store: sessionStore
+  fail: (data, err, critical, accept) -> accept null, !critical
+  success: (data, accept) -> accept null, true
+###
+
+io.sockets.on 'connection', (socket) ->
+  console.log "#{socket.id} (#{socket.handshake.address.address}) - connected"
+
+  socket.on 'disconnect', ->
+    console.log "#{socket.id} (#{socket.handshake.address.address}) - disconnected"
+
 # Listen
-http.createServer(app).listen app.get('port'), ->
+server.listen app.get('port'), ->
   console.log 'Server listening on port ' + app.get('port')

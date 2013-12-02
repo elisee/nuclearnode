@@ -16,6 +16,7 @@
     "connect-redis": "~1.4.6",
     "async": "~0.2.9",
     "coffee-script": "~1.6.3",
-    "express-coffee": "git://github.com/elisee/express-coffee.git"
+    "express-coffee": "git://github.com/elisee/express-coffee.git",
+    "socket.io": "~0.9.16"
   }
 }

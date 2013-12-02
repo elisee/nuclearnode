@@ -1,5 +1,12 @@
 extends layout
 
+block extrahead
+  script(src="/socket.io/socket.io.js")
+
 block content
   h1 NuclearNode
-  
+
+  :coffee
+    socket = io.connect null, reconnect: false
+    socket.on 'connect', ->
+      console.log "Connection established"

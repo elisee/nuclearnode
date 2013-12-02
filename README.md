@@ -24,4 +24,3 @@ If you improve on it, feel free to [submit pull requests](https://bitbucket.org/
 
  * Look at using [asset-rack](https://github.com/techpines/asset-rack) or a similar library for serving static content
  * Add optional [Passport](http://passportjs.org/) support for authentication
- * Add optional [socket.io](http://socket.io/) support for real-time communications
