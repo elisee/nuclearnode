@@ -1,6 +1,7 @@
 express = require 'express'
 http = require 'http'
 path = require 'path'
+fs = require 'fs'
 stylus = require 'stylus'
 nib = require 'nib'
 expose = require 'express-expose'
@@ -20,6 +21,9 @@ env = app.get 'env'
 baseURL = "http://#{config.domain}"
 baseURL += ":#{config.publicPort}" if config.publicPort != 80
 sessionStore = new RedisStore { db: config.redisDbIndex, ttl: 3600 * 24 * 14, prefix: "#{config.appId}sess:" }
+
+# Ensure required folders exist
+try fs.mkdirSync path.join( __dirname, 'clientTemplates' )
 
 # Middlewares
 if 'development' == env
