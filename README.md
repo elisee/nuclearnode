@@ -19,3 +19,9 @@ A node.js application template.
 Do [whatever you want](http://www.wtfpl.net/) with this template, it's just boilerplate & I'm happy to share it. No credits or anything required.
 
 If you improve on it, feel free to [submit pull requests](https://bitbucket.org/sparklinlabs/nuclearnode/). If you use it, feel free to [let me know](https://twitter.com/elisee).
+
+## Future improvements
+
+ * Look at using [asset-rack](https://github.com/techpines/asset-rack) or a similar library for serving static content
+ * Add optional [Passport](http://passportjs.org/) support for authentication
+ * Add optional [socket.io](http://socket.io/) support for real-time communications
