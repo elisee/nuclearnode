@@ -6,6 +6,7 @@ A node.js application template.
  * [CoffeeScript](http://coffeescript.org/) instead of JavaScript everywhere
  * [Jade](http://jade-lang.com/) & [jade-frakt](https://github.com/brikteknologier/jade-frakt) for server-side & client-side views
  * [Stylus](http://learnboost.github.io/stylus/) & [Nib](https://github.com/visionmedia/nib) for stylesheets
+ * [Socket.IO](http://socket.io/) for real-time communication
 
 ## Getting started
 
