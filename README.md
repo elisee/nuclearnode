@@ -12,6 +12,7 @@ A node.js application template.
 
  * Duplicate ``config.coffee.template`` as ``config.coffee`` and edit the file to suit your setup
  * Start up a [redis](http://redis.io/download) server to store session data
+ * Install nodemon with ```npm install -g nodemon``` as well as CoffeeScript with ``npm install -g coffee-script``
  * Run ``npm install`` to install all dependencies
  * Run ``npm run nodemon`` to start a development server that will watch for file changes
 
