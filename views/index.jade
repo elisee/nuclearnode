@@ -1,12 +1,12 @@
 extends layout
 
 block extrahead
-  script(src="/socket.io/socket.io.js")
+  !=assets.tag('/stylesheets/style.css')
+  
+  script(src='/socket.io/socket.io.js')
+  script(src='//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js')
+  !=assets.tag('/javascripts/templates.js')
+  !=assets.tag('/javascripts/app.js')
 
 block content
   h1 NuclearNode
-
-  :coffee
-    socket = io.connect null, reconnect: false
-    socket.on 'connect', ->
-      console.log "Connection established"
