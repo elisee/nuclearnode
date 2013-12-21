@@ -1,12 +1,12 @@
 extends layout
 
 block extrahead
-  !=assets.tag('/stylesheets/style.css')
+  link(rel='stylesheet',href=assetFingerprint('/css/style.css'))
   
   script(src='/socket.io/socket.io.js')
   script(src='//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js')
-  !=assets.tag('/javascripts/templates.js')
-  !=assets.tag('/javascripts/app.js')
+  script(src=assetFingerprint('/js/templates.js'))
+  script(src=assetFingerprint('/js/app.js'))
 
 block content
   h1 NuclearNode

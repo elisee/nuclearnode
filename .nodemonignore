@@ -1,6 +1,5 @@
-assets/*
-views/*
+/views/*
+/assets/*
+/public/*
 /node_modules/*
-/node_modules
 /.hg/*
-/.hg

@@ -4,9 +4,10 @@ A node.js application template.
 
  * Built on [Express](http://expressjs.com/)
  * [CoffeeScript](http://coffeescript.org/) instead of JavaScript everywhere
- * [Jade](http://jade-lang.com/) & [jade-frakt](https://github.com/brikteknologier/jade-frakt) for server-side & client-side views
- * [Stylus](http://learnboost.github.io/stylus/) & [Nib](https://github.com/visionmedia/nib) for stylesheets
- * [Socket.IO](http://socket.io/) for real-time communication
+ * [Jade](http://jade-lang.com/) for views both server-side and client-side
+ * [Stylus](http://learnboost.github.io/stylus/) for clean stylesheets, with [Nib](https://github.com/visionmedia/nib) taking care of browser differences
+ * [Socket.IO](http://socket.io/) for real-time communication support
+ * [static-asset](https://github.com/bminer/node-static-asset) for fingerprinting your static assets (ensures proper browser caching behavior)
 
 ## Getting started
 
@@ -14,7 +15,12 @@ A node.js application template.
  * Start up a [redis](http://redis.io/download) server to store session data
  * Install nodemon and CoffeeScript with ```npm install -g nodemon coffee-script```
  * Run ``npm install`` to install all dependencies
- * Run ``npm run nodemon`` to start a development server that will auto-restart whenever you make changes
+ * While developing
+  * Run ``grunt dev`` to start a grunt watcher that will automatically rebuild assets whenever you make changes to them
+  * Run ``npm run dev`` to start a development server that will automatically restart whenever you make changes to the server files
+ * When deploying to production
+  * Run ``grunt`` to build all your assets once
+  * Run ``npm start --production`` to start the server
 
 ## License
 

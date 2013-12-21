@@ -1,3 +1,3 @@
 $(document).ready ->
   console.log 'hello world'
-  $('body').append Templates['example']( what: 'client-side' )
+  $('body').append JST['example']( what: 'client-side' )
