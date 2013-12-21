@@ -7,7 +7,8 @@ A node.js application template.
  * [Jade](http://jade-lang.com/) for views both server-side and client-side
  * [Stylus](http://learnboost.github.io/stylus/) for clean stylesheets, with [Nib](https://github.com/visionmedia/nib) taking care of browser differences
  * [Socket.IO](http://socket.io/) for real-time communication support
- * [static-asset](https://github.com/bminer/node-static-asset) for fingerprinting your static assets (ensures proper browser caching behavior)
+ * [Grunt](https://gruntjs.com) for building all scripts, stylesheets and client-side views
+ * [static-asset](https://github.com/bminer/node-static-asset) for fingerprinting static assets (ensures proper browser caching behavior)
 
 ## Getting started
 
