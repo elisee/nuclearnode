@@ -15,16 +15,20 @@ A node.js application template.
  * Start up a [redis](http://redis.io/download) server to store session data
  * Install nodemon and CoffeeScript with ```npm install -g nodemon coffee-script```
  * Run ``npm install`` to install all dependencies
- * While developing
-  * Run ``grunt dev`` to start a grunt watcher that will automatically rebuild assets whenever you make changes to them
-  * Run ``npm run dev`` to start a development server that will automatically restart whenever you make changes to the server files
- * When deploying to production
-  * Run ``grunt`` to build all your assets once
-  * Run ``npm start --production`` to start the server
+
+### While developing
+
+ * Run ``grunt dev`` to start a grunt watcher that will automatically rebuild assets whenever you make changes to them
+ * Run ``npm run dev`` to start a development server that will automatically restart whenever you make changes to the server files
+
+### When deploying to production
+
+ * Run ``grunt`` to build all your assets once
+ * Run ``npm start --production`` to start the server
 
 ## License
 
-Do [whatever you want](http://www.wtfpl.net/) with this template, it's just boilerplate & I'm happy to share it. No credits or anything required.
+Do [whatever you want](http://www.wtfpl.net/) with this template, it's just boilerplate and I'm happy to share it. No credits or anything required.
 
 If you improve on it, feel free to [submit pull requests](https://bitbucket.org/sparklinlabs/nuclearnode/). If you use it, feel free to [let me know](https://twitter.com/elisee).
 
