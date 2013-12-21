@@ -1,4 +1,7 @@
 syntax: glob
 node_modules/*
-public/stylesheets/*.css
 config.coffee
+bower_components/*
+public/css/*.css
+public/js/*.js
+assets/templates/templates.js
