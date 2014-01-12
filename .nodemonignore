@@ -1,5 +1,5 @@
-/views/*
-/assets/*
-/public/*
-/node_modules/*
-/.hg/*
+/views
+/assets
+/public
+/node_modules
+/.hg
