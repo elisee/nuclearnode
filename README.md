@@ -9,6 +9,7 @@ A node.js application template.
  * [Socket.IO](http://socket.io/) for real-time communication support
  * [Grunt](https://gruntjs.com) for building all scripts, stylesheets and client-side views
  * [static-asset](https://github.com/bminer/node-static-asset) for fingerprinting static assets (ensures proper browser caching behavior)
+ * [i18next-node](https://github.com/jamuhl/i18next-node) for internationalization both server-side & client-side
 
 ## Getting started
 
