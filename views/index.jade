@@ -9,4 +9,10 @@ block extrahead
 block content
   h1 NuclearNode
 
+  form(method='get',action='')
+    select(name='setLng',onchange='this.form.submit()')
+      option(value='')= i18n.t('chooseLanguage')
+      option(value='en') English
+      option(value='fr') Français
+
   p= i18n.t('helloWorld')

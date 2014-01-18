@@ -1,4 +1,6 @@
 {
-  helloWorld: 'Hello, world!'
+  chooseLanguage: "(Choose a language)"
+  helloWorld: "Hello, world!"
   justAnExampleTemplate: "Just an example %{what} template"
+  clientSide: "client-side"
 }
