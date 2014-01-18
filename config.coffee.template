@@ -1,6 +1,6 @@
 module.exports =
   appId: 'nuclearnode'
-  domain: 'nuclear.node'
+  domain: 'nuclearnode.dev'
   internalPort: 3000
   publicPort: 3000
   redisDbIndex: 0
