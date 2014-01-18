@@ -1,6 +1,7 @@
 i18next = require 'i18next'
-cachedMarkdownsByLocale = {}
+marked = require 'marked'
 
+cachedMarkdownsByLocale = {}
 markdownI18nCache = (i18n, key) ->
   cachedMarkdowns = cachedMarkdownsByLocale[i18n.locale()]
   if ! cachedMarkdowns?

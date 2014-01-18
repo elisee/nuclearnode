@@ -15,7 +15,8 @@
     "async": "~0.2.9",
     "socket.io": "~0.9.16",
     "static-asset": "~0.5.2",
-    "i18next": "~1.7.1"
+    "i18next": "~1.7.1",
+    "marked": "~0.3.0"
   },
   "devDependencies": {
     "grunt": "~0.4.2",
