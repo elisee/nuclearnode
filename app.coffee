@@ -8,7 +8,7 @@ expose = require 'express-expose'
 app = express()
 
 app.set 'port', config.internalPort
-app.set 'views', path.join( __dirname, 'views' )
+app.set 'views', path.join __dirname, 'views'
 app.set 'view engine', 'jade'
 
 env = app.get 'env'
