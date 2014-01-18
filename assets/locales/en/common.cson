@@ -1,0 +1,4 @@
+{
+  helloWorld: 'Hello, world!'
+  justAnExampleTemplate: "Just an example %{what} template"
+}

@@ -1,7 +1,8 @@
 syntax: glob
-node_modules/*
 config.coffee
+node_modules/*
 bower_components/*
-public/css/*.css
-public/js/*.js
+public/css/**.css
+public/js/**.js
+public/locales/**.json
 assets/templates/templates.js

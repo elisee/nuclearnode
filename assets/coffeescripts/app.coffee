@@ -1,3 +1,2 @@
-$(document).ready ->
-  console.log 'hello world'
-  $('body').append JST['example']( what: 'client-side' )
+$(document).ready -> i18n.init window.app.i18nOptions, ->
+  $('body').append JST['example']( i18n: i18n, what: 'client-side' )
