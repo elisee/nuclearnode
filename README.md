@@ -36,5 +36,4 @@ If you improve on it, feel free to [submit pull requests](https://bitbucket.org/
 
 ## Future improvements
 
- * Look at using [asset-rack](https://github.com/techpines/asset-rack) or a similar library for serving static content
  * Add optional [Passport](http://passportjs.org/) support for authentication
