@@ -2,12 +2,9 @@ extends layout
 
 block extrahead
   link(rel='stylesheet',href=assetFingerprint('/css/style.css'))
-  
-  // script(src='/socket.io/socket.io.js')
-  script(src=assetFingerprint('/js/app.js'))
 
 block content
-  h1 NuclearNode
+  h1= title
 
   form(method='get',action='')
     select(name='setLng',onchange='this.form.submit()')
@@ -16,3 +13,5 @@ block content
       option(value='fr') Français
 
   p= i18n.t('helloWorld')
+
+  script(src=assetFingerprint('/js/index.js'))

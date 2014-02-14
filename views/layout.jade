@@ -1,9 +1,8 @@
 doctype html
 html
   head
-    title NuclearNode
-    script!=javascript
-    script(src='//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js')
+    title= title
+    script!= javascript
     script(src=assetFingerprint('/js/templates.js'))
     script(src='/i18next/i18next.js')
     block extrahead

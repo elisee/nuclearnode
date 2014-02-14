@@ -86,7 +86,7 @@ app.use app.router
 app.use express.errorHandler() if 'development' == env
 
 # Routes
-app.get '/', (req, res) -> res.render 'index'
+app.get '/', (req, res) -> res.render 'index', title: config.title
 
 #app.get '/auth/twitter', passport.authenticate 'twitter'
 #app.get '/auth/twitter/callback', passport.authenticate 'twitter', { successReturnToOrRedirect: '/', failureRedirect: '/' }
@@ -98,7 +98,6 @@ server = http.createServer(app)
 
 # Socket.IO
 socketio = require 'socket.io'
-
 io = socketio.listen(server)
 io.set 'log level', 1
 io.set 'transports', [ 'websocket' ]
@@ -112,12 +111,7 @@ io.set "authorization", passportSocketIo.authorize
   fail: (data, err, critical, accept) -> accept null, !critical
   success: (data, accept) -> accept null, true
 
-io.sockets.on 'connection', (socket) ->
-  console.log "#{socket.id} (#{socket.handshake.address.address}) - connected"
-
-  socket.on 'disconnect', ->
-    console.log "#{socket.id} (#{socket.handshake.address.address}) - disconnected"
-
 # Listen
-server.listen app.get('port'), ->
-  console.log "#{config.appId}  server listening on port " + app.get('port')
+require('./lib/engine').init app, io, ->
+  server.listen app.get('port'), ->
+    console.log "#{config.appId}  server listening on port " + app.get('port')

@@ -1,0 +1,10 @@
+extends layout
+
+block extrahead
+  link(rel='stylesheet',href=assetFingerprint('/css/style.css'))
+  script(src='/socket.io/socket.io.js')
+
+block content
+  h1 Channel #{channel}
+
+  script(src=assetFingerprint('/js/channel.js'))
