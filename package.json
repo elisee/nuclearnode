@@ -16,7 +16,9 @@
     "socket.io": "~0.9.16",
     "static-asset": "~0.5.2",
     "i18next": "~1.7.1",
-    "marked": "~0.3.0"
+    "marked": "~0.3.0",
+    "passport": "~0.2.0",
+    "passport.socketio": "~3.0.0"
   },
   "devDependencies": {
     "grunt": "~0.4.2",
