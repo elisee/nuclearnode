@@ -2,9 +2,6 @@ path = require 'path'
 fs = require 'fs'
 config = require './config'
 
-passport = require 'passport'
-passportSocketIo = require 'passport.socketio'
-
 # Application
 express = require 'express'
 expose = require 'express-expose'
@@ -22,6 +19,7 @@ RedisStore = require('connect-redis')(express)
 sessionStore = new RedisStore { db: config.redisDbIndex, ttl: 3600 * 24 * 14, prefix: "#{config.appId}sess:" }
 
 # Authentication
+passport = require 'passport'
 passport.serializeUser (user, done) -> done null, user
 passport.deserializeUser (obj, done) -> done null, obj
 
@@ -104,6 +102,7 @@ socketio = require 'socket.io'
 io = socketio.listen(server)
 io.set 'log level', 1
 
+passportSocketIo = require 'passport.socketio'
 io.set "authorization", passportSocketIo.authorize
   cookieParser: express.cookieParser
   key: "#{config.appId}.sid"
