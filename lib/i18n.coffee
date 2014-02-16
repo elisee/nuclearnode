@@ -23,11 +23,11 @@ module.exports = (app, namespaces=[]) ->
     fallbackLng: 'en'
     interpolationPrefix: '%{'
     interpolationSuffix: '}'
-    resGetPath: 'locales/%{lng}/%{ns}.json'
+    resGetPath: '/locales/%{lng}/%{ns}.json'
 
   app.expose i18nOptions: options
 
-  options.resGetPath = 'public/' + options.resGetPath
+  options.resGetPath = 'public' + options.resGetPath
   i18next.init options
 
   app.use (req, res, next) ->
