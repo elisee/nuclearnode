@@ -12,6 +12,7 @@
     "nib": "~1.0.1",
     "express-expose": "~0.3.3",
     "connect-redis": "~1.4.6",
+    "nuclear-i18n": "1.0.1",
     "async": "~0.2.9",
     "socket.io": "~0.9.16",
     "static-asset": "~0.5.2",
