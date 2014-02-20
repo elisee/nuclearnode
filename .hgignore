@@ -6,3 +6,5 @@ public/css/**.css
 public/js/**.js
 public/locales/**.json
 assets/templates/templates.js
+*.sublime-workspace
+*.sublime-project
