@@ -1,5 +1,4 @@
 path = require 'path'
-fs = require 'fs'
 config = require './config'
 
 # Application
@@ -23,50 +22,17 @@ passport = require 'passport'
 passport.serializeUser (user, done) -> done null, user
 passport.deserializeUser (obj, done) -> done null, obj
 
-# TODO: Install and uncomment the passport strategies you want to use
-
-###
-TwitterStrategy = require('passport-twitter').Strategy
-passport.use new TwitterStrategy
-    consumerKey: config.twitter.consumerKey,
-    consumerSecret: config.twitter.consumerSecret
-    callbackURL: baseURL + "/auth/twitter/callback"
-  , (token, tokenSecret, profile, done) ->
-    done null, 
-      authId: "twitter#{profile._json.id_str}"
-      twitterId: profile._json.id_str
-      twitterHandle: profile.username
-      displayName: profile.displayName
-      pictureURL: profile.photos[0].value
-      twitterToken: token
-      twitterTokenSecret: tokenSecret
-###
-
-###
-TwitchtvStrategy = require('passport-twitchtv').Strategy
-passport.use new TwitchtvStrategy
-    clientID: config.twitchtv.clientID,
-    clientSecret: config.twitchtv.clientSecret
-    callbackURL: baseURL + "/auth/twitchtv/callback"
-  , (accessToken, refreshToken, profile, done) ->
-    done null, 
-      authId: "twitchtv#{profile._json._id.toString()}",
-      twitchtvId: profile._json._id.toString()
-      twitchtvHandle: profile.username.toLowerCase()
-      displayName: profile._json.display_name
-      pictureURL: profile._json.logo
-      twitchtvToken: accessToken
-      twitchtvRefreshToken: refreshToken
-###
-
-###
-LocalStrategy = require('passport-local').Strategy
-passport.use new LocalStrategy (username, password) ->
-  # TODO: Validate username & password
-  return done null, false if ! ...
-
-  done null, authId: "local#{username}"
-###
+NuclearHubStrategy = require('passport-nuclearhub').Strategy
+passport.use new NuclearHubStrategy
+    appSecret: config.hubAppSecret
+  , (data, done) ->
+    done null,
+      authId: data.authId
+      displayName: data.displayName
+      pictureURL: data.pictureURL
+      isGuest: data.isGuest
+      # FIXME: We should get that dynamically from the NuclearHub API, maybe even client-side
+      apps: data.apps
 
 # Middlewares
 app.use express.logger('dev') if 'development' == env
@@ -86,11 +52,17 @@ app.use app.router
 app.use express.errorHandler() if 'development' == env
 
 # Routes
-app.get '/', (req, res) -> res.render 'index', title: config.title
+app.get '/', (req, res) ->
+  channelInfos = []
 
-#app.get '/auth/twitter', passport.authenticate 'twitter'
-#app.get '/auth/twitter/callback', passport.authenticate 'twitter', { successReturnToOrRedirect: '/', failureRedirect: '/' }
-app.get '/logout', (req, res) -> req.logout(); res.redirect '/'
+  for channelName, channel of engine.channelsByName
+    channelInfos.push
+      name: channelName
+      players: channel.public.players.length
+
+  res.render 'index',
+    appTitle: config.title,
+    channelInfos: channelInfos
 
 # Create server
 http = require 'http'
@@ -112,7 +84,9 @@ io.set "authorization", passportSocketIo.authorize
   success: (data, accept) -> accept null, true
 
 # Listen
-require('./lib/engine').init app, io, ->
+engine = require './lib/engine'
+
+engine.init app, io, ->
   server.listen app.get('port'), ->
     console.log "#{config.appId} server listening on port " + app.get('port')
 

@@ -1,2 +1,4 @@
 i18n.init window.app.i18nOptions, ->
-  document.querySelector('body').insertAdjacentHTML 'beforeend', JST['example']( i18n: i18n, what: i18n.t('clientSide') )
+  document.getElementById('StartChannelForm').addEventListener 'submit', (event) ->
+    event.preventDefault()
+    window.location = '/play/' + document.getElementById('StartChannelName').value

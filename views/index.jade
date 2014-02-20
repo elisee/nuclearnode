@@ -1,10 +1,11 @@
 extends layout
 
 block extrahead
-  link(rel='stylesheet',href=assetFingerprint('/css/style.css'))
+  title= appTitle
+  link(rel='stylesheet',href=assetFingerprint('/css/index.css'))
 
 block content
-  h1= title
+  h1= appTitle
 
   form(method='get',action='')
     select(name='setLng',onchange='this.form.submit()')
@@ -12,6 +13,21 @@ block content
       option(value='en') English
       option(value='fr') Français
 
-  p= i18n.t('helloWorld')
+
+  h2= i18n.t('liveChannels')
+
+  ul#LiveChannels
+    for channelInfo in channelInfos
+      li
+        a(href='/play/' + channelInfo.name)
+          = channelInfo.name
+          |  
+          = i18n.t('channelPlayers', { players: channelInfo.players })
+
+  h2= i18n.t('startYourOwnChannel')
+
+  form#StartChannelForm
+    input#StartChannelName(type="text",value="",placeholder="Choose a name",pattern="[a-zA-Z0-9_]+",title="Letters, digits, dash or underscore")
+    input(type="submit",value="Go")
 
   script(src=assetFingerprint('/js/index.js'))

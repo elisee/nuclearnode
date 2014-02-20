@@ -1,10 +1,54 @@
 extends layout
 
 block extrahead
-  link(rel='stylesheet',href=assetFingerprint('/css/style.css'))
+  title= channel.name + " - " + appTitle
+  link(rel='stylesheet',href=assetFingerprint('/css/channel.css'))
   script(src='/socket.io/socket.io.js')
 
 block content
-  h1 Channel #{channel}
+  #AppsBar
+    for app in apps
+      a(href=app.URL + '/play/' + channel.name,class=app.id == appId ? 'Active' : '')
+        img(src=hubBaseURL + '/apps/' + app.id + '/Icon.png')
+
+  #App.Fade
+    header
+      button#ToggleMenuButton
+      .AppInfo
+        span.ChannelName= channel.name
+        |  / 
+        a.AppTitle(href="/")= appTitle
+
+      .PlayerInfo
+        span.PlayerName=user.displayName
+        |  
+        if user.isGuest
+          button#LogInButton= i18n.t('login')
+        else
+          a(href=hubBaseURL + '/logout?redirect=/apps/' + appId + '/' + channel.name)#LogOutLink= i18n.t('logout')
+    
+    main
+
+  #Sidebar
+    #SidebarTabButtons
+      button.Active(data-tab="Chat")= i18n.t('sidebarTabs.chat')
+      button(data-tab="Log")= i18n.t('sidebarTabs.log')
+      button(data-tab="Leaderboard")= i18n.t('sidebarTabs.leaderboard')
+    #SidebarTabs
+      #ChatTab.Active
+        #ChatLogPanel
+          ol#ChatLog
+        #ChatInputPanel
+          textarea#ChatInputBox(placeholder=i18n.t('chat.typeHereToChat'))
+      #LogTab
+      #LeaderboardTab
+
+  #Overlay
+    #LogInDialog
+      ul#LogInOptions
+        li
+          a(href=hubBaseURL + '/auth/twitchtv?redirect=/apps/' + appId + '/' + channel.name) Log in with Twitch
+        li
+          a(href=hubBaseURL + '/auth/twitter?redirect=/apps/' + appId + '/' + channel.name) Log in with Twitter
 
   script(src=assetFingerprint('/js/channel.js'))

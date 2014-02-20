@@ -1,7 +1,19 @@
 module.exports = class Channel
+  @supportedStates = [
+    'waitingForPlayers'
+    'playing'
+    'end'
+  ]
+
   constructor: (@engine, @name) ->
     @public =
       players: []
+      state: 'waitingForPlayers'
+
+      settings:
+        minPlayers: 1
+        roundDuration: 10 * 1000
+        endRoundDuration: 5 * 1000
 
     @sockets = []
     @playersByAuthId = {}
@@ -9,6 +21,14 @@ module.exports = class Channel
   broadcast: (message, data, sockets=@sockets) ->
     socket.emit message, data for socket in sockets
     return
+
+  setState: (state) ->
+    if Channel.supportedStates.indexOf(state) == -1
+      @log "Warning: unsupported channel state being set - #{state}"
+    
+    @public.stateStartTime = Date.now()
+    @public.state = state
+    @broadcast 'setState', state
 
   log: (message) -> @engine.log "[#{@name}] #{message}"
 
@@ -36,17 +56,16 @@ module.exports = class Channel
     socket.player.sockets.push socket
     @log "socket #{socket.id} (#{socket.handshake.address.address}) added to player #{socket.player.public.displayName}"
 
-    # @setupHostEvents socket if socket.player.public.isHost
-    # @setupPlayerEvents socket
+    socket.on 'chatMessage', (text) =>
+      return if typeof text != 'string' or text.length == 0
+      text = text.substring 0, 300
+      @broadcast 'chatMessage', { playerAuthId: socket.player.public.authId, text: text }
+      return
 
     return
 
   removePlayerSocket: (socket) ->
     socket.player.sockets.splice socket.player.sockets.indexOf(socket), 1
-
-    for key in socket.watchedKeys
-      watchingSockets = @watchingSocketsByKeys[key]
-      watchingSockets.splice watchingSockets.indexOf(socket), 1
 
     return if socket.player.sockets.length > 0
 
@@ -70,6 +89,16 @@ module.exports = class Channel
     @playersByAuthId[ player.public.authId ] = player
     
     @broadcast 'addPlayer', player.public
-    
     @log "player #{player.public.displayName} created"
+
+    @startRound() if @public.state == 'waitingForPlayers' and @public.players.length == @public.settings.minPlayers
+
     player
+
+  startRound: ->
+    @setState 'playing'
+    setTimeout ( => @endRound() ), @public.settings.roundDuration
+
+  endRound: ->
+    @setState 'end'
+    setTimeout ( => @startRound() ), @public.settings.endRoundDuration

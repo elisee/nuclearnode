@@ -1,16 +1,32 @@
 config = require '../config'
+passport = require 'passport'
+signedRequest = require 'signed-request'
 Channel = require('./Channel')
 
 module.exports = engine =
   channelsByName: {}
 
   init: (app, io, callback) ->
+    setupUser = (req, res, next) ->
+      return next() if req.user?
+      # passport.authenticate('dummy')(req, res, next)
+
     app.get '/play/:channel', (req, res) ->
       channelName = req.params.channel.toLowerCase()
+      res.redirect "#{config.hubBaseURL}/apps/#{config.appId}/#{channelName}"
 
-      isHost = req.user? and channelName == req.user.twitchtvHandle
-      res.expose channel: channelName, isHost: isHost, authId: if req.user? then req.user.authId else null
-      res.render 'channel', { title: "#{channelName} - #{config.title}", user: req.user, channel: channelName, isHost: isHost }
+    app.post '/play/:channel', passport.authenticate('nuclearhub'), (req, res) ->
+      channelName = req.params.channel.toLowerCase()
+      isHost = false # TODO: Allow registering channels
+      res.expose channel: { name: channelName }, isHost: isHost, user: req.user
+      res.render 'channel',
+        apps: req.user.apps
+        hubBaseURL: config.hubBaseURL
+        appId: config.appId
+        appTitle: config.title
+        user: req.user
+        channel: { name: channelName }
+        isHost: isHost
       return
 
     engine.io = io

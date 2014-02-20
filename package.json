@@ -19,7 +19,10 @@
     "i18next": "~1.7.1",
     "marked": "~0.3.0",
     "passport": "~0.2.0",
-    "passport.socketio": "~3.0.0"
+    "passport.socketio": "~3.0.0",
+    "passport-dummy": "0.0.1",
+    "node-uuid": "~1.4.1",
+    "signed-request": "~1.0.7"
   },
   "devDependencies": {
     "grunt": "~0.4.2",
