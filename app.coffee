@@ -80,7 +80,7 @@ app.use express.cookieParser config.sessionSecret
 app.use express.session { key: "#{config.appId}.sid", cookie: { domain: '.' + config.domain, maxAge: 3600 * 24 * 14 * 1000 }, store: sessionStore }
 app.use passport.initialize()
 app.use passport.session()
-require('./lib/i18n')(app)
+require('nuclear-i18n')(app)
 app.use app.router
 
 app.use express.errorHandler() if 'development' == env
@@ -94,7 +94,7 @@ app.get '/logout', (req, res) -> req.logout(); res.redirect '/'
 
 # Create server
 http = require 'http'
-server = http.createServer(app)
+server = http.createServer app
 
 # Socket.IO
 socketio = require 'socket.io'
@@ -114,4 +114,5 @@ io.set "authorization", passportSocketIo.authorize
 # Listen
 require('./lib/engine').init app, io, ->
   server.listen app.get('port'), ->
-    console.log "#{config.appId}  server listening on port " + app.get('port')
+    console.log "#{config.appId} server listening on port " + app.get('port')
+

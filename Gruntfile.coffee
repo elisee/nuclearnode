@@ -66,5 +66,5 @@ module.exports = (grunt) ->
         files: [ 'assets/locales/**/*.cson' ]
         tasks: [ 'cson:i18n' ]  
   
-  grunt.registerTask 'default', [ 'jade', 'stylus', 'coffee', 'uglify' ]
+  grunt.registerTask 'default', [ 'jade', 'stylus', 'coffee', 'cson', 'uglify' ]
   grunt.registerTask 'dev', [ 'jade', 'stylus', 'coffee', 'cson', 'uglify:jadeRuntime', 'watch' ]
