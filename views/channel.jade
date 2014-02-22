@@ -2,7 +2,7 @@ extends layout
 
 block extrahead
   title= channel.name + " - " + appTitle
-  link(rel='stylesheet',href=assetFingerprint('/css/channel.css'))
+  link(rel='stylesheet',href=assetFingerprint('/css/nuclearnode/channel.css'))
   script(src='/socket.io/socket.io.js')
 
 block content
@@ -23,23 +23,23 @@ block content
         span.PlayerName=user.displayName
         |  
         if user.isGuest
-          button#LogInButton= i18n.t('login')
+          button#LogInButton= i18n.t('nuclearnode:login')
         else
-          a(href=hubBaseURL + '/logout?redirect=/apps/' + appId + '/' + channel.name)#LogOutLink= i18n.t('logout')
+          a(href=hubBaseURL + '/logout?redirect=/apps/' + appId + '/' + channel.name)#LogOutLink= i18n.t('nuclearnode:logout')
     
     main
 
   #Sidebar
     #SidebarTabButtons
-      button.Active(data-tab="Chat")= i18n.t('sidebarTabs.chat')
-      button(data-tab="Log")= i18n.t('sidebarTabs.log')
-      button(data-tab="Leaderboard")= i18n.t('sidebarTabs.leaderboard')
+      button.Active(data-tab="Chat")= i18n.t('nuclearnode:sidebarTabs.chat')
+      button(data-tab="Log")= i18n.t('nuclearnode:sidebarTabs.log')
+      button(data-tab="Leaderboard")= i18n.t('nuclearnode:sidebarTabs.leaderboard')
     #SidebarTabs
       #ChatTab.Active
         #ChatLogPanel
           ol#ChatLog
         #ChatInputPanel
-          textarea#ChatInputBox(placeholder=i18n.t('chat.typeHereToChat'))
+          textarea#ChatInputBox(placeholder=i18n.t('nuclearnode:chat.typeHereToChat'))
       #LogTab
       #LeaderboardTab
 
@@ -51,5 +51,5 @@ block content
         li
           a(href=hubBaseURL + '/auth/twitter?redirect=/apps/' + appId + '/' + channel.name) Log in with Twitter
 
-  script(src=assetFingerprint('/js/channel.js'))
-  script(src=assetFingerprint('/js/logic/main.js'))
+  script(src=assetFingerprint('/js/nuclearnode/channel.js'))
+  script(src=assetFingerprint('/js/nuclearnode/logic/main.js'))

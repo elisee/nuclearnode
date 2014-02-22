@@ -46,7 +46,7 @@ app.use express.cookieParser config.sessionSecret
 app.use express.session { key: "#{config.appId}.sid", cookie: { domain: '.' + config.domain, maxAge: 3600 * 24 * 14 * 1000 }, store: sessionStore }
 app.use passport.initialize()
 app.use passport.session()
-require('nuclear-i18n')(app)
+require('nuclear-i18n')(app, [ 'common', 'nuclearnode' ])
 app.use app.router
 
 app.use express.errorHandler() if 'development' == env

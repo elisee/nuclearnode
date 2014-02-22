@@ -37,7 +37,7 @@ onChannelDataReceived = (data) ->
   return
 
 onPlayerAdded = (player) ->
-  appendToChat i18n.t 'chat.playerJoined', player: player.displayName
+  appendToChat i18n.t 'nuclearnode:chat.playerJoined', player: player.displayName
   channel.data.players.push player
   channel.data.playersByAuthId[player.authId] = player
 
@@ -46,7 +46,7 @@ onPlayerAdded = (player) ->
 
 onPlayerRemoved = (authId) ->
   player = channel.data.playersByAuthId[authId]
-  appendToChat i18n.t 'chat.playerLeft', player: player.displayName
+  appendToChat i18n.t 'nuclearnode:chat.playerLeft', player: player.displayName
   delete channel.data.playersByAuthId[authId]
   channel.data.players.splice channel.data.players.indexOf(player), 1
 
@@ -93,6 +93,6 @@ appendToChat = (text, author) ->
   time = "#{hours}:#{minutes}"
 
   isChatLogScrolledToBottom = ChatLog.scrollTop >= ChatLog.scrollHeight - ChatLog.clientHeight
-  ChatLog.insertAdjacentHTML 'beforeend', JST['chatLogItem']( text: text, author: author, time: time )
+  ChatLog.insertAdjacentHTML 'beforeend', JST['nuclearnode/chatLogItem']( text: text, author: author, time: time )
   ChatLog.scrollTop = ChatLog.scrollHeight if isChatLogScrolledToBottom
   return
