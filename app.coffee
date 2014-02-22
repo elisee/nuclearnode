@@ -17,7 +17,7 @@ baseURL += ":#{config.publicPort}" if config.publicPort != 80
 RedisStore = require('connect-redis')(express)
 sessionStore = new RedisStore { db: config.redisDbIndex, ttl: 3600 * 24 * 14, prefix: "#{config.appId}sess:" }
 
-app.expose 'public', config.public
+app.expose config.public, 'app.public'
 
 # Authentication
 passport = require 'passport'
