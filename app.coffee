@@ -80,7 +80,7 @@ io.set "authorization", passportSocketIo.authorize
   key: "#{config.appId}.sid"
   secret: config.sessionSecret
   store: sessionStore
-  fail: (data, err, critical, accept) -> accept null, !critical
+  fail: (data, err, critical, accept) -> accept null, true
   success: (data, accept) -> accept null, true
 
 # Listen
