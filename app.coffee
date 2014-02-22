@@ -3,7 +3,7 @@ config = require './config'
 
 # Application
 express = require 'express'
-expose = require 'express-expose'
+require 'express-expose'
 app = express()
 
 app.set 'port', config.internalPort
@@ -16,6 +16,8 @@ baseURL += ":#{config.publicPort}" if config.publicPort != 80
 
 RedisStore = require('connect-redis')(express)
 sessionStore = new RedisStore { db: config.redisDbIndex, ttl: 3600 * 24 * 14, prefix: "#{config.appId}sess:" }
+
+app.expose 'public', config.public
 
 # Authentication
 passport = require 'passport'

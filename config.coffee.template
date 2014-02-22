@@ -1,7 +1,21 @@
 module.exports =
-  appId: 'nuclearnode'
-  domain: 'nuclearnode.dev'
-  internalPort: 3000
-  publicPort: 3000
-  redisDbIndex: 0
-  sessionSecret: 'your session secret here'
+  # URL-friendly ASCII unique identifier for the application
+  appId: 
+  # User-friendly name of the application
+  title: 
+  # Domain name where the application is hosted
+  domain: 
+  # Internal port on which the application should listen
+  internalPort: 
+  # Public-facing port on which the application will be accessible (generally 80 in production)
+  publicPort: 
+  # Index of the Redis database used for storing session data
+  redisDbIndex: 
+  # ~30 random characters for encrypting session data
+  sessionSecret: 
+  # URL of the NuclearHub app used by this application for authenticating users
+  hubBaseURL: 
+  # Secret string generated for the app by the NuclearHub
+  hubAppSecret: 
+  # Any global public data that you'd like to expose to your application's JS as window.app.public
+  public: {}
