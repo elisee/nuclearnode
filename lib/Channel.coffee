@@ -25,7 +25,10 @@ module.exports = class Channel
     @sockets.push socket
 
     @logic.onSocketAdded socket
+
+    @public.time = Date.now()
     socket.emit 'channelData', @public
+    @public.time = null
 
     socket.on 'chatMessage', (text) =>
       return if typeof text != 'string' or text.length == 0
