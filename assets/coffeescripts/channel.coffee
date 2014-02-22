@@ -1,8 +1,8 @@
-channel = {}
+window.channel = {}
 
 i18n.init window.app.i18nOptions, ->
   document.getElementById('App').classList.remove 'Fade'
-    
+  
   channel.socket = io.connect null, reconnect: false
 
   channel.socket.on 'connect', -> channel.socket.emit 'joinChannel', app.channel.name
@@ -31,12 +31,15 @@ onChannelDataReceived = (data) ->
   for player in channel.data.players
     channel.data.playersByAuthId[player.authId] = player
 
+  channel.logic.onChannelDataReceived()
   return
 
 onPlayerAdded = (player) ->
   appendToChat i18n.t 'chat.playerJoined', player: player.displayName
   channel.data.players.push player
   channel.data.playersByAuthId[player.authId] = player
+
+  channel.logic.onPlayerAdded player
   return
 
 onPlayerRemoved = (authId) ->
@@ -44,6 +47,8 @@ onPlayerRemoved = (authId) ->
   appendToChat i18n.t 'chat.playerLeft', player: player.displayName
   delete channel.data.playersByAuthId[authId]
   channel.data.players.splice channel.data.players.indexOf(player), 1
+
+  channel.logic.onPlayerRemoved player
   return
 
 onLogInButtonClicked = ->

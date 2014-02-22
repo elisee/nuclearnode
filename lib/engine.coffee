@@ -42,6 +42,7 @@ module.exports = engine =
 
     socket.on 'disconnect', ->
       engine.log "#{socket.id} (#{socket.handshake.address.address}) disconnected"
+      socket.channel.removeSocket socket
 
     socket.on 'joinChannel', (channelName) ->
       return if typeof channelName != 'string' or socket.channel?
