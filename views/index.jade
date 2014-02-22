@@ -1,18 +1,33 @@
 extends layout
 
 block extrahead
-  link(rel='stylesheet',href=assetFingerprint('/css/style.css'))
-  
-  // script(src='/socket.io/socket.io.js')
-  script(src=assetFingerprint('/js/app.js'))
+  title= appTitle
+  link(rel='stylesheet',href=assetFingerprint('/css/nuclearnode/index.css'))
 
 block content
-  h1 NuclearNode
+  h1= appTitle
 
   form(method='get',action='')
     select(name='setLng',onchange='this.form.submit()')
-      option(value='')= i18n.t('chooseLanguage')
+      option(value='')= i18n.t('nuclearnode:chooseLanguage')
       option(value='en') English
       option(value='fr') Français
 
-  p= i18n.t('helloWorld')
+
+  h2= i18n.t('nuclearnode:liveChannels')
+
+  ul#LiveChannels
+    for channelInfo in channelInfos
+      li
+        a(href='/play/' + channelInfo.name)
+          = channelInfo.name
+          |  
+          = i18n.t('nuclearnode:channelPlayers', { players: channelInfo.players })
+
+  h2= i18n.t('nuclearnode:startYourOwnChannel')
+
+  form#StartChannelForm
+    input#StartChannelName(type="text",value="",placeholder="Choose a name",pattern="[a-zA-Z0-9_]+",title="Letters, digits, dash or underscore")
+    input(type="submit",value="Go")
+
+  script(src=assetFingerprint('/js/nuclearnode/index.js'))

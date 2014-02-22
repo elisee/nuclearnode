@@ -1,0 +1,20 @@
+{
+  chooseLanguage: "(Choose a language)"
+
+  liveChannels: 'Live channels'
+  channelPlayers: '(%{players} players)'
+  startYourOwnChannel: 'Start your own channel'
+
+  login: "Log in"
+  logout: "Log out"
+
+  sidebarTabs:
+    chat: "Chat"
+    log: "Log"
+    leaderboard: "Leaderboard"
+
+  chat:
+    typeHereToChat: "Type here to chat"
+    playerJoined: "%{player} has joined."
+    playerLeft: "%{player} has left."
+}

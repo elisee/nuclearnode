@@ -1,9 +1,9 @@
 doctype html
 html
   head
-    title NuclearNode
-    script!=javascript
-    script(src='//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js')
+    link(href='http://fonts.googleapis.com/css?family=Roboto:100,400,300,500,700,900',rel='stylesheet',type='text/css')
+    link(rel='stylesheet',href=assetFingerprint('/css/nuclearnode/common.css'))
+    script!= javascript
     script(src=assetFingerprint('/js/templates.js'))
     script(src='/i18next/i18next.js')
     block extrahead

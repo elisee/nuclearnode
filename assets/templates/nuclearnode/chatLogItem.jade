@@ -1,0 +1,5 @@
+li(class=author ? 'Message' : 'Info')
+  span.Time= time
+  if author
+    span.Author= author.displayName
+  span.Text= text

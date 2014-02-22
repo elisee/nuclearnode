@@ -1,0 +1,15 @@
+{
+  chooseLanguage: "(Choisissez une langue)"
+
+  logInToPlay: "Se connecter pour jouer (pas de compte nécessaire)"
+
+  sidebarTabs:
+    chat: "Chat"
+    log: "Journal"
+    leaderboard: "Classement"
+
+  chat:
+    typeHereToChat: "Tapez ici pour discuter"
+    playerJoined: "%{player} a rejoint."
+    playerLeft: "%{player} est parti."
+}
