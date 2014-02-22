@@ -1,9 +1,11 @@
 window.channel.logic =
+  init: ->
   
   onChannelDataReceived: ->
     serverTimeOffset = Date.now() - channel.data.time
     channel.data.stateStartTime += serverTimeOffset if channel.data.stateStartTime?
 
-  onPlayerAdded: (player) ->
+  onDisconnected: ->
 
+  onPlayerAdded: (player) ->
   onPlayerRemoved: (player) ->

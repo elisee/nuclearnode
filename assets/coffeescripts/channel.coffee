@@ -6,6 +6,7 @@ i18n.init window.app.i18nOptions, ->
   channel.socket = io.connect null, reconnect: false
 
   channel.socket.on 'connect', -> channel.socket.emit 'joinChannel', app.channel.name
+  channel.socket.on 'disconnect', -> channel.logic.onDisconnected()
   channel.socket.on 'channelData', onChannelDataReceived
   channel.socket.on 'addPlayer', onPlayerAdded
   channel.socket.on 'removePlayer', onPlayerRemoved
@@ -22,6 +23,7 @@ i18n.init window.app.i18nOptions, ->
   if app.user.isGuest
     document.getElementById('LogInButton').addEventListener 'click', onLogInButtonClicked
 
+  channel.logic.init()
   return
 
 # Channel & player presence
