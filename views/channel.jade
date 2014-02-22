@@ -3,6 +3,7 @@ extends layout
 block extrahead
   title= channel.name + " - " + appTitle
   link(rel='stylesheet',href=assetFingerprint('/css/nuclearnode/channel.css'))
+  link(rel='stylesheet',href=assetFingerprint('/css/nuclearnode/main.css'))
   script(src='/socket.io/socket.io.js')
 
 block content
@@ -28,6 +29,7 @@ block content
           a(href=hubBaseURL + '/logout?redirect=/apps/' + appId + '/' + channel.name)#LogOutLink= i18n.t('nuclearnode:logout')
     
     main
+      include main
 
   #Sidebar
     #SidebarTabButtons
