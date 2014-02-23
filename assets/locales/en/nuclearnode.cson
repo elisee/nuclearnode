@@ -7,6 +7,14 @@
 
   login: "Log in"
   logout: "Log out"
+  selectLoginService: "Select service to log in with"
+  serviceDoesntMatter:
+    """It doesn't really matter which one, it's just  
+    to save you from remembering yet another password"""
+  logInWith: "Log in with %{service}"
+  privacyRespect:
+    """We won't tweet, post to your wall  
+    or microwave your cat"""
 
   sidebarTabs:
     chat: "Chat"

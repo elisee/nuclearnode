@@ -47,11 +47,17 @@ block content
 
   #Overlay
     #LogInDialog
+      h3=i18n.t('nuclearnode:selectLoginService')
+
+      !=i18n.md('nuclearnode:serviceDoesntMatter')
+
       ul#LogInOptions
-        li
-          a(href=hubBaseURL + '/auth/twitchtv?redirect=/apps/' + appId + '/' + channel.name) Log in with Twitch
-        li
-          a(href=hubBaseURL + '/auth/twitter?redirect=/apps/' + appId + '/' + channel.name) Log in with Twitter
+        for service in loginServices
+          li
+            a(href=hubBaseURL + '/auth/' + service.id + '?redirect=/apps/' + appId + '/' + channel.name)
+              img(src="/images/nuclearnode/loginIcons/" + service.id + ".png",alt=service.name,title=i18n.t('nuclearnode:logInWith', { service: service.name }))
+
+      !=i18n.md('nuclearnode:privacyRespect')
 
   script(src=assetFingerprint('/js/nuclearnode/channel.js'))
   script(src=assetFingerprint('/js/main.js'))

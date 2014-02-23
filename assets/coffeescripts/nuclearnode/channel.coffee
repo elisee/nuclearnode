@@ -1,5 +1,7 @@
 window.channel = {}
 
+overlay = document.getElementById('Overlay')
+
 i18n.init window.app.i18nOptions, ->
   document.getElementById('App').classList.remove 'Fade'
   
@@ -20,6 +22,7 @@ i18n.init window.app.i18nOptions, ->
 
   document.getElementById('ChatInputBox').addEventListener 'keydown', onSubmitChatMessage
 
+  overlay.addEventListener 'click', onOverlayClicked
   if app.user.isGuest
     document.getElementById('LogInButton').addEventListener 'click', onLogInButtonClicked
 
@@ -53,9 +56,16 @@ onPlayerRemoved = (authId) ->
   channel.logic.onPlayerRemoved player
   return
 
+# Log in
 onLogInButtonClicked = ->
-  document.getElementById('Overlay').classList.add 'Enabled'
+  overlay.classList.add 'Enabled'
   document.getElementById('LogInDialog').classList.add 'Active'
+
+onOverlayClicked = (event) ->
+  return if overlay != event.target
+
+  document.querySelector('#Overlay > div.Active').classList.remove 'Active'
+  document.getElementById('Overlay').classList.remove 'Enabled'
 
 # Apps bar
 onToggleMenuButtonClicked = (event) ->

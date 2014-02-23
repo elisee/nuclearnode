@@ -6,6 +6,23 @@ Channel = require('./Channel')
 module.exports = engine =
   channelsByName: {}
 
+  loginServices: [
+      id: 'steam'
+      name: 'Steam'
+    ,
+      id: 'twitch'
+      name: 'Twitch'
+    ,
+      id: 'twitter'
+      name: 'Twitter'
+    ,
+      id: 'facebook'
+      name: 'Facebook'
+    ,
+      id: 'google'
+      name: 'Google+'
+  ]
+
   init: (app, io, callback) ->
     setupUser = (req, res, next) ->
       return next() if req.user?
@@ -21,6 +38,7 @@ module.exports = engine =
       res.expose channel: { name: channelName }, isHost: isHost, user: req.user
       res.render 'channel',
         apps: req.user.apps
+        loginServices: engine.loginServices
         hubBaseURL: config.hubBaseURL
         appId: config.appId
         appTitle: config.title
