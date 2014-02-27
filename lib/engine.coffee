@@ -24,13 +24,26 @@ module.exports = engine =
   ]
 
   init: (app, io, callback) ->
-    setupUser = (req, res, next) ->
-      return next() if req.user?
-      # passport.authenticate('dummy')(req, res, next)
+
+    app.get '/', (req, res) -> res.redirect "#{config.hubBaseURL}/apps/#{config.appId}"
+
+    app.post '/', passport.authenticate('nuclearhub'), (req, res) ->
+      channelInfos = ( { name: channelName, players: channel.public.players.length } for channelName, channel of engine.channelsByName )
+
+      res.expose user: req.user
+      res.render 'index',
+        apps: req.user.apps
+        loginServices: engine.loginServices
+        hubBaseURL: config.hubBaseURL
+        appId: config.appId
+        appTitle: config.title
+        user: req.user
+        channelInfos: channelInfos
 
     app.get '/play/:channel', (req, res) ->
       channelName = req.params.channel.toLowerCase()
       res.redirect "#{config.hubBaseURL}/apps/#{config.appId}/#{channelName}"
+
 
     app.post '/play/:channel', passport.authenticate('nuclearhub'), (req, res) ->
       channelName = req.params.channel.toLowerCase()

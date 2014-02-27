@@ -1,3 +1,88 @@
+html, body
+  width 100%
+  height 100%
+
+body
+  display flex
+  flex-direction row
+  background #202020
+
+#App
+  flex 1
+  display flex
+  flex-direction column
+  transition opacity 0.5s ease-out
+
+  &.Fade
+    opacity 0
+
+  header
+    z-index 0
+    font-size 16px
+    background linear-gradient(to bottom, rgba(128,128,128,0.3) 0%, rgba(128,128,128,0.2) 100%)
+    box-shadow 0 0 2em rgba(0,0,0,0.1)
+    line-height 1
+
+    display flex
+    align-items center
+    color #c0c0c0
+
+    .AppInfo
+      flex 1
+      font-weight 100
+      padding 0 0.5em
+      display inline-block
+
+      .AppTitle
+        font inherit
+        color inherit
+        text-decoration none
+
+      .ChannelName
+        color #fff
+        font-weight 300
+
+    .PlayerInfo
+      padding 0 0.5em
+
+      .PlayerName
+        color #fff
+
+      #LogInButton, #LogOutLink
+        font inherit
+        font-size smaller
+        background none
+        margin 0
+        padding 0
+        border 0
+        color inherit
+        line-height 1.25
+        text-decoration none
+
+  main
+    flex 1
+    border-top 1px solid rgba(255,255,255,0.15)
+    border-left 1px solid rgba(255,255,255,0.1)
+    border-right 1px solid rgba(255,255,255,0.1)
+
+#ToggleMenuButton
+  background none
+  border none
+  padding 0.5em
+  outline none
+
+  width 30px
+  height 30px
+
+  background url(/images/nuclearnode/ToggleMenuButton.png) center center no-repeat
+
+  &:hover
+    background url(/images/nuclearnode/HoveredToggleMenuButton.png) center center no-repeat
+
+  &:active
+    background url(/images/nuclearnode/HoveredToggleMenuButton.png) center center no-repeat, rgba(255,255,255,0.1)
+
+
 #AppsBar
   width 60px
   display flex

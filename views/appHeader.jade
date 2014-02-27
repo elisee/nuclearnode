@@ -1,0 +1,15 @@
+header
+  button#ToggleMenuButton
+  .AppInfo
+    a.AppTitle(href="/")= appTitle
+    if channel
+      |  / 
+      span.ChannelName= channel.name
+
+  .PlayerInfo
+    span.PlayerName=user.displayName
+    |  
+    if user.isGuest
+      button#LogInButton= i18n.t('nuclearnode:login')
+    else
+      a(href=hubBaseURL + '/logout?redirect=/apps/' + appId + (channel ? '/' + channel.name : ''))#LogOutLink= i18n.t('nuclearnode:logout')

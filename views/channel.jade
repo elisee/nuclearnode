@@ -4,26 +4,12 @@ block extrahead
   title= channel.name + " - " + appTitle
   link(rel='stylesheet',href=assetFingerprint('/css/nuclearnode/channel.css'))
   link(rel='stylesheet',href=assetFingerprint('/css/main.css'))
-  script(src='/socket.io/socket.io.js')
 
 block content
   include appsBar
 
   #App.Fade
-    header
-      button#ToggleMenuButton
-      .AppInfo
-        span.ChannelName= channel.name
-        |  / 
-        a.AppTitle(href="/")= appTitle
-
-      .PlayerInfo
-        span.PlayerName=user.displayName
-        |  
-        if user.isGuest
-          button#LogInButton= i18n.t('nuclearnode:login')
-        else
-          a(href=hubBaseURL + '/logout?redirect=/apps/' + appId + '/' + channel.name)#LogOutLink= i18n.t('nuclearnode:logout')
+    include appHeader
     
     main
       include main
@@ -42,19 +28,7 @@ block content
       #LogTab
       #LeaderboardTab
 
-  #Overlay
-    #LogInDialog
-      h3=i18n.t('nuclearnode:selectLoginService')
-
-      !=i18n.md('nuclearnode:serviceDoesntMatter')
-
-      ul#LogInOptions
-        for service in loginServices
-          li
-            a(href=hubBaseURL + '/auth/' + service.id + '?redirect=/apps/' + appId + '/' + channel.name)
-              img(src="/images/nuclearnode/loginIcons/" + service.id + ".png",alt=service.name,title=i18n.t('nuclearnode:logInWith', { service: service.name }))
-
-      !=i18n.md('nuclearnode:privacyRespect')
+  include overlay
 
   script(src=assetFingerprint('/js/nuclearnode/channel.js'))
   script(src=assetFingerprint('/js/main.js'))

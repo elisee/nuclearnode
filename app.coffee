@@ -56,19 +56,6 @@ app.use app.router
 
 app.use express.errorHandler() if 'development' == env
 
-# Routes
-app.get '/', (req, res) ->
-  channelInfos = []
-
-  for channelName, channel of engine.channelsByName
-    channelInfos.push
-      name: channelName
-      players: channel.public.players.length
-
-  res.render 'index',
-    appTitle: config.title,
-    channelInfos: channelInfos
-
 # Create server
 http = require 'http'
 server = http.createServer app

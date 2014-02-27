@@ -1,6 +1,10 @@
 #AppsBar
   for app in apps
-    a(id=app.id + "AppLink",href=app.URL + '/play/' + channel.name,class=app.id == appId ? 'Active' : '')
+    - var appURL = app.URL
+    if channel
+      - appURL += '/play/' + channel.name
+
+    a(id=app.id + "AppLink",href=appURL,class=app.id == appId ? 'Active' : '')
       .AppIcon
         img(src=hubBaseURL + '/apps/' + app.id + '/Icon.png')
       .AppDetails

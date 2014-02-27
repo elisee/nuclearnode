@@ -1,21 +1,7 @@
 window.channel = {}
 
-overlay = document.getElementById('Overlay')
-
 i18n.init app.i18nOptions, ->
-  document.getElementById('App').classList.remove 'Fade'
-  
-  hubSocket = io.connect app.hubBaseURL, reconnect: true
-
-  hubSocket.on 'connect', ->
-    for appUsersElement in document.querySelectorAll("#AppsBar .AppUsers")
-      appUsersElement.textContent = ''
-
-    hubSocket.emit 'app', app.appId
-
-  hubSocket.on 'appUsers', (usersByAppId) ->
-    for appId, users of usersByAppId
-      document.querySelector("##{appId}AppLink .AppUsers").textContent = if users > 0 then users else ''
+  initApp()
 
   channel.socket = io.connect null, reconnect: false
 
@@ -26,17 +12,11 @@ i18n.init app.i18nOptions, ->
   channel.socket.on 'removePlayer', onPlayerRemoved
   channel.socket.on 'chatMessage', onChatMessageReceived
 
-  document.getElementById('ToggleMenuButton').addEventListener 'click', onToggleMenuButtonClicked
-
   tabButtons = document.querySelectorAll('#SidebarTabButtons button')
   for tabButton in tabButtons
     tabButton.addEventListener 'click', onSidebarTabButtonClicked
 
   document.getElementById('ChatInputBox').addEventListener 'keydown', onSubmitChatMessage
-
-  overlay.addEventListener 'click', onOverlayClicked
-  if app.user.isGuest
-    document.getElementById('LogInButton').addEventListener 'click', onLogInButtonClicked
 
   channel.logic.init()
   return
@@ -67,21 +47,6 @@ onPlayerRemoved = (authId) ->
 
   channel.logic.onPlayerRemoved player
   return
-
-# Log in
-onLogInButtonClicked = ->
-  overlay.classList.add 'Enabled'
-  document.getElementById('LogInDialog').classList.add 'Active'
-
-onOverlayClicked = (event) ->
-  return if overlay != event.target
-
-  document.querySelector('#Overlay > div.Active').classList.remove 'Active'
-  document.getElementById('Overlay').classList.remove 'Enabled'
-
-# Apps bar
-onToggleMenuButtonClicked = (event) ->
-  document.getElementById('AppsBar').classList.toggle 'Hidden'
 
 # Sidebar
 onSidebarTabButtonClicked = (event) ->
