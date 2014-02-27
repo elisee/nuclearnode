@@ -64,7 +64,6 @@ module.exports = class Channel
         authId: user.authId
         displayName: user.displayName
         pictureURL: user.pictureURL
-        isHost: user.twitterHandle == @name
     
     @playersByAuthId[ player.public.authId ] = player
     @logic.onPlayerJoined player
