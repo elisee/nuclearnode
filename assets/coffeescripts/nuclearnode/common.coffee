@@ -1,10 +1,14 @@
 overlay = null
 
 window.initApp = ->
-  overlay = document.getElementById('Overlay')
-
+  # Fade in
   document.getElementById('App').classList.remove 'Fade'
-  
+
+  # Prevent navigating to another page accidentally while trying to erase text
+  # Based on http://stackoverflow.com/questions/3850442/how-to-prevent-browsers-default-history-back-action-for-backspace-button-with-j
+  document.addEventListener 'keydown', suppressBackspace
+  document.addEventListener 'keypress', suppressBackspace
+
   # Apps bar
   hubSocket = io.connect app.hubBaseURL, reconnect: true
 
@@ -21,9 +25,16 @@ window.initApp = ->
   document.getElementById('ToggleMenuButton').addEventListener 'click', onToggleMenuButtonClicked
 
   # Overlay / Log in
+  overlay = document.getElementById('Overlay')
   overlay.addEventListener 'click', onOverlayClicked
   if app.user.isGuest
     document.getElementById('LogInButton').addEventListener 'click', onLogInButtonClicked
+
+suppressBackspace = (event) ->
+  if event.keyCode == 8 and not /input|textarea/i.test(event.target.nodeName)
+    event.preventDefault()
+    return false
+  return true
 
 onToggleMenuButtonClicked = (event) ->
   document.getElementById('AppsBar').classList.toggle 'Hidden'
@@ -38,4 +49,3 @@ onOverlayClicked = (event) ->
 
   document.querySelector('#Overlay > div.Active').classList.remove 'Active'
   document.getElementById('Overlay').classList.remove 'Enabled'
-
