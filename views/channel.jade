@@ -7,10 +7,7 @@ block extrahead
   script(src='/socket.io/socket.io.js')
 
 block content
-  #AppsBar
-    for app in apps
-      a(href=app.URL + '/play/' + channel.name,class=app.id == appId ? 'Active' : '',title=app.name)
-        img(src=hubBaseURL + '/apps/' + app.id + '/Icon.png')
+  include appsBar
 
   #App.Fade
     header

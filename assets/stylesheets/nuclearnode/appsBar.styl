@@ -1,0 +1,89 @@
+#AppsBar
+  width 60px
+  display flex
+  flex-direction column
+  background #202020
+  box-shadow 0 0 1em rgba(0,0,0,0.3) inset
+  line-height 1
+
+  transition width 0.2s ease-out
+  overflow hidden
+
+  &:hover
+    width 260px
+
+    .AppDetails
+      opacity 1
+
+  &.Hidden
+    width 0
+
+  > a
+    display flex
+    flex-direction row
+    align-items center
+    height 50px
+    background none
+    border none
+    outline none
+    opacity 0.6
+    text-decoration none
+    color #fff
+
+    .AppIcon
+      flex 0 0 60px
+      width 60px
+      height 50px
+      display flex
+      align-items center
+      justify-content center
+
+    .AppDetails
+      flex 1 0 0
+      margin-right 0.5em
+      opacity 0
+      transition opacity 0.1s linear
+
+      display flex
+      flex-direction column
+      line-height 1.25
+
+      .AppName
+        flex 1
+        font-weight bold
+        white-space nowrap
+        overflow hidden
+        text-overflow ellipsis
+
+      .AppDescription
+        font-size 0.8em
+        opacity 0.6
+        white-space nowrap
+        overflow hidden
+        text-overflow ellipsis
+
+    .AppUsers
+      font-size 0.8em
+      font-weight bold
+      background rgba(255,255,255,0.5)
+      color #000
+      border-radius 1em
+      padding 0.125em 0.5em
+      margin-right 0.5em
+
+      &:empty
+        background none
+
+    &.Active
+      background url(/images/nuclearnode/ButtonHoverHighlight.png) bottom left no-repeat, rgba(255,255,255,0.15)
+      opacity 1
+
+    &.Active:hover
+      background url(/images/nuclearnode/ButtonHoverHighlight.png) bottom left no-repeat, rgba(255,255,255,0.2)
+      opacity 1
+    &:hover
+      background rgba(255,255,255,0.1)
+      opacity 1
+    &:active
+      background rgba(255,255,255,0.05)
+      opacity 1

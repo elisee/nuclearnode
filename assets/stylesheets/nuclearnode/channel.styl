@@ -67,42 +67,7 @@ body
     &:active
       transform scale(0.9)
 
-#AppsBar
-  width 60px
-  display flex
-  flex-direction column
-  background #202020
-  box-shadow 0 0 1em rgba(0,0,0,0.3) inset
-
-  transition width 0.2s ease-out
-  overflow hidden
-
-  &.Hidden
-    width 0
-
-  > a, > button
-    width 60px
-    display flex
-    align-items center
-    justify-content center
-    height 50px
-    background none
-    border none
-    outline none
-    opacity 0.6
-
-    &.Active
-      background url(/images/nuclearnode/ActiveAppButton.png) no-repeat, rgba(255,255,255,0.1)
-      opacity 1
-    &.Active:hover
-      background url(/images/nuclearnode/ActiveAppButton.png) no-repeat, url(/images/nuclearnode/ButtonHoverHighlight.png) bottom center no-repeat, rgba(255,255,255,0.15)
-      opacity 1
-    &:hover
-      background url(/images/nuclearnode/ButtonHoverHighlight.png) bottom center no-repeat
-      opacity 1
-    &:active
-      background url(/images/nuclearnode/ActiveAppButton.png) no-repeat, url(/images/nuclearnode/ButtonHoverHighlight.png) bottom center no-repeat, rgba(255,255,255,0.05)
-      opacity 1
+@import 'appsBar'
 
 #App
   flex 1

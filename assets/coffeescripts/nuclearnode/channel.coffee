@@ -2,9 +2,21 @@ window.channel = {}
 
 overlay = document.getElementById('Overlay')
 
-i18n.init window.app.i18nOptions, ->
+i18n.init app.i18nOptions, ->
   document.getElementById('App').classList.remove 'Fade'
   
+  hubSocket = io.connect app.hubBaseURL, reconnect: true
+
+  hubSocket.on 'connect', ->
+    for appUsersElement in document.querySelectorAll("#AppsBar .AppUsers")
+      appUsersElement.textContent = ''
+
+    hubSocket.emit 'app', app.appId
+
+  hubSocket.on 'appUsers', (usersByAppId) ->
+    for appId, users of usersByAppId
+      document.querySelector("##{appId}AppLink .AppUsers").textContent = if users > 0 then users else ''
+
   channel.socket = io.connect null, reconnect: false
 
   channel.socket.on 'connect', -> channel.socket.emit 'joinChannel', app.channel.name
