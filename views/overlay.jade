@@ -7,7 +7,7 @@
     ul#LogInOptions
       for service in loginServices
         li
-          a(href=hubBaseURL + '/auth/' + service.id + '?redirect=/apps/' + appId + (channel ? '/' + channel.name : ''))
+          a(href=config.hubBaseURL + '/auth/' + service.id + '?redirect=/apps/' + config.appId + (channel ? '/' + channel.name : ''))
             img(src="/images/nuclearnode/loginIcons/" + service.id + ".png",alt=service.name,title=i18n.t('nuclearnode:logInWith', { service: service.name }))
 
     !=i18n.md('nuclearnode:privacyRespect')
