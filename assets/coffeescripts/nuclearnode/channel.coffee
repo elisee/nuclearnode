@@ -30,6 +30,8 @@ onChannelDataReceived = (data) ->
   channel.data.usersByAuthId = {}
   channel.data.usersByAuthId[user.authId] = user for user in channel.data.users
 
+  updateChannelUsersCounter()
+
   channel.data.actorsByAuthId = {}
   channel.data.actorsByAuthId[actor.authId] = actor for actor in channel.data.actors
 
@@ -41,6 +43,8 @@ onUserAdded = (user) ->
   channel.data.users.push user
   channel.data.usersByAuthId[user.authId] = user
 
+  updateChannelUsersCounter()
+
   channel.logic.onUserAdded user
   return
 
@@ -49,6 +53,8 @@ onUserRemoved = (authId) ->
   appendToChat i18n.t 'nuclearnode:chat.userLeft', user: user.displayName
   delete channel.data.usersByAuthId[authId]
   channel.data.users.splice channel.data.users.indexOf(user), 1
+
+  updateChannelUsersCounter()
 
   channel.logic.onUserRemoved user
   return
@@ -68,6 +74,8 @@ onActorRemoved = (authId) ->
   channel.logic.onActorRemoved actor
   return
 
+updateChannelUsersCounter = ->
+  document.querySelector('#App header .ChannelUsers').textContent = if channel.data.users.length > 0 then channel.data.users.length else ''
 
 # Sidebar
 onSidebarTabButtonClicked = (event) ->
