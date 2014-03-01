@@ -32,11 +32,9 @@ module.exports = engine =
 
       res.expose user: req.user
       res.render 'index',
+        config: config
         apps: req.user.apps
         loginServices: engine.loginServices
-        hubBaseURL: config.hubBaseURL
-        appId: config.appId
-        appTitle: config.title
         user: req.user
         channelInfos: channelInfos
 
@@ -50,11 +48,9 @@ module.exports = engine =
       isHost = false # TODO: Allow registering channels
       res.expose channel: { name: channelName }, isHost: isHost, user: req.user
       res.render 'channel',
+        config: config
         apps: req.user.apps
         loginServices: engine.loginServices
-        hubBaseURL: config.hubBaseURL
-        appId: config.appId
-        appTitle: config.title
         user: req.user
         channel: { name: channelName }
         isHost: isHost

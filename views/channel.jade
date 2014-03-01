@@ -1,7 +1,7 @@
 extends layout
 
 block extrahead
-  title= channel.name + " - " + appTitle
+  title= channel.name + " - " + config.title
   link(rel='stylesheet',href=assetFingerprint('/css/nuclearnode/channel.css'))
   link(rel='stylesheet',href=assetFingerprint('/css/main.css'))
 

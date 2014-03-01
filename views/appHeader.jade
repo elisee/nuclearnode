@@ -1,7 +1,7 @@
 header
   button#ToggleMenuButton
   .AppInfo
-    a.AppTitle(href="/")= appTitle
+    a.AppTitle(href="/")= config.title
     if channel
       |  / 
       span.ChannelName= channel.name
@@ -13,4 +13,4 @@ header
     if user.isGuest
       button#LogInButton= i18n.t('nuclearnode:login')
     else
-      a(href=hubBaseURL + '/logout?redirect=/apps/' + appId + (channel ? '/' + channel.name : ''))#LogOutLink= i18n.t('nuclearnode:logout')
+      a(href=config.hubBaseURL + '/logout?redirect=/apps/' + config.appId + (channel ? '/' + channel.name : ''))#LogOutLink= i18n.t('nuclearnode:logout')

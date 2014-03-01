@@ -4,9 +4,9 @@
     if channel
       - appURL += '/play/' + channel.name
 
-    a(id=app.id + "AppLink",href=appURL,class=app.id == appId ? 'Active' : '')
+    a(id=app.id + "AppLink",href=appURL,class=app.id == config.appId ? 'Active' : '')
       .AppIcon
-        img(src=hubBaseURL + '/apps/' + app.id + '/Icon.png')
+        img(src=config.hubBaseURL + '/apps/' + app.id + '/Icon.png')
       .AppDetails
         .AppName= app.name
         .AppDescription= app.description
