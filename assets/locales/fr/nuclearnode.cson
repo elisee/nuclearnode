@@ -23,6 +23,6 @@
 
   chat:
     typeHereToChat: "Tapez ici pour discuter"
-    playerJoined: "%{player} a rejoint."
-    playerLeft: "%{player} est parti."
+    userJoined: "%{user} a rejoint."
+    userLeft: "%{user} est parti."
 }

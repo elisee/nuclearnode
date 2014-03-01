@@ -23,6 +23,6 @@
 
   chat:
     typeHereToChat: "Type here to chat"
-    playerJoined: "%{player} has joined."
-    playerLeft: "%{player} has left."
+    userJoined: "%{user} has joined."
+    userLeft: "%{user} has left."
 }

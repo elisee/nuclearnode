@@ -8,8 +8,10 @@ i18n.init app.i18nOptions, ->
   channel.socket.on 'connect', -> channel.socket.emit 'joinChannel', app.channel.name
   channel.socket.on 'disconnect', -> channel.logic.onDisconnected()
   channel.socket.on 'channelData', onChannelDataReceived
-  channel.socket.on 'addPlayer', onPlayerAdded
-  channel.socket.on 'removePlayer', onPlayerRemoved
+  channel.socket.on 'addUser', onUserAdded
+  channel.socket.on 'removeUser', onUserRemoved
+  channel.socket.on 'addActor', onActorAdded
+  channel.socket.on 'removeActor', onActorRemoved
   channel.socket.on 'chatMessage', onChatMessageReceived
 
   tabButtons = document.querySelectorAll('#SidebarTabButtons button')
@@ -21,32 +23,51 @@ i18n.init app.i18nOptions, ->
   channel.logic.init()
   return
 
-# Channel & player presence
+# Channel & user presence
 onChannelDataReceived = (data) ->
   channel.data = data
-  channel.data.playersByAuthId = {}
-  for player in channel.data.players
-    channel.data.playersByAuthId[player.authId] = player
+
+  channel.data.usersByAuthId = {}
+  channel.data.usersByAuthId[user.authId] = user for user in channel.data.users
+
+  channel.data.actorsByAuthId = {}
+  channel.data.actorsByAuthId[actor.authId] = actor for actor in channel.data.actors
 
   channel.logic.onChannelDataReceived()
   return
 
-onPlayerAdded = (player) ->
-  appendToChat i18n.t 'nuclearnode:chat.playerJoined', player: player.displayName
-  channel.data.players.push player
-  channel.data.playersByAuthId[player.authId] = player
+onUserAdded = (user) ->
+  appendToChat i18n.t 'nuclearnode:chat.userJoined', user: user.displayName
+  channel.data.users.push user
+  channel.data.usersByAuthId[user.authId] = user
 
-  channel.logic.onPlayerAdded player
+  channel.logic.onUserAdded user
   return
 
-onPlayerRemoved = (authId) ->
-  player = channel.data.playersByAuthId[authId]
-  appendToChat i18n.t 'nuclearnode:chat.playerLeft', player: player.displayName
-  delete channel.data.playersByAuthId[authId]
-  channel.data.players.splice channel.data.players.indexOf(player), 1
+onUserRemoved = (authId) ->
+  user = channel.data.usersByAuthId[authId]
+  appendToChat i18n.t 'nuclearnode:chat.userLeft', user: user.displayName
+  delete channel.data.usersByAuthId[authId]
+  channel.data.users.splice channel.data.users.indexOf(user), 1
 
-  channel.logic.onPlayerRemoved player
+  channel.logic.onUserRemoved user
   return
+
+onActorAdded = (actor) ->
+  channel.data.actors.push actor
+  channel.data.actorsByAuthId[actor.authId] = actor
+
+  channel.logic.onActorAdded actor
+  return
+
+onActorRemoved = (authId) ->
+  actor = channel.data.actorsByAuthId[authId]
+  delete channel.data.actorsByAuthId[authId]
+  channel.data.actors.splice channel.data.actors.indexOf(actor), 1
+
+  channel.logic.onActorRemoved actor
+  return
+
 
 # Sidebar
 onSidebarTabButtonClicked = (event) ->
@@ -60,7 +81,7 @@ onSidebarTabButtonClicked = (event) ->
   return
 
 # Chat
-onChatMessageReceived = (message) -> appendToChat message.text, channel.data.playersByAuthId[message.playerAuthId]  
+onChatMessageReceived = (message) -> appendToChat message.text, channel.data.usersByAuthId[message.userAuthId]  
 
 onSubmitChatMessage = (event) ->
   return if event.keyCode != 13 or event.shiftKey
