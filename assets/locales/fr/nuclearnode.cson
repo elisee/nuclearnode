@@ -2,7 +2,7 @@
   chooseLanguage: "(Choisissez une langue)"
 
   liveChannels: 'Salons actifs'
-  channelPlayers: '(%{players} joueurs)'
+  channelUsers: '(%{users} personnes)'
   startYourOwnChannel: 'Créer votre propre salon'
 
   login: "Connexion"

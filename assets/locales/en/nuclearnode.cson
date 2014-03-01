@@ -2,7 +2,7 @@
   chooseLanguage: "(Choose a language)"
 
   liveChannels: 'Live channels'
-  channelPlayers: '(%{players} players)'
+  channelUsers: '(%{users} connected)'
   startYourOwnChannel: 'Start your own channel'
 
   login: "Log in"

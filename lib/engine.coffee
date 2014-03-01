@@ -28,7 +28,7 @@ module.exports = engine =
     app.get '/', (req, res) -> res.redirect "#{config.hubBaseURL}/apps/#{config.appId}"
 
     app.post '/', passport.authenticate('nuclearhub'), (req, res) ->
-      channelInfos = ( { name: channelName, players: channel.public.actors.length } for channelName, channel of engine.channelsByName )
+      channelInfos = ( { name: channelName, users: channel.public.users.length } for channelName, channel of engine.channelsByName )
 
       res.expose user: req.user
       res.render 'index',
