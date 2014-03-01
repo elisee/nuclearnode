@@ -56,6 +56,8 @@ module.exports = class Channel
       @public.users.splice @public.users.indexOf(socket.user.public), 1
       @broadcast 'removeUser', socket.user.public.authId
 
+    socket.user = null
+
     if @sockets.length == 0
       @logic.dispose()
       @logic = null
@@ -66,11 +68,12 @@ module.exports = class Channel
   createUser: (userProfile) ->
     user =
       sockets: []
+      actor: @actorsByAuthId[ userProfile.authId ]
       public:
         authId: userProfile.authId
         displayName: userProfile.displayName
         pictureURL: userProfile.pictureURL
-    
+
     @usersByAuthId[ user.public.authId ] = user
     @public.users.push user.public
     @logic.onUserJoined user

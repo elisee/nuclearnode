@@ -24,13 +24,12 @@ module.exports = class ChannelLogic
   #----------------------------------------------------------------------------
   # Channel events
   onSocketAdded: (socket) ->
-    socket.actor = @channel.actorsByAuthId[socket.user.public.authId]
 
     # Message handlers for user actions
     socket.on 'join', =>
-      return if socket.actor?
+      return if socket.user.actor?
 
-      socket.actor = actor =
+      socket.user.actor = actor =
         public:
           authId: socket.user.public.authId
           displayName: socket.user.public.displayName
@@ -49,11 +48,10 @@ module.exports = class ChannelLogic
     return
 
   onSocketRemoved: (socket) ->
-    socket.player = null
-
     # A user might be connected from multiple places so this event is rarely
     # useful. In most cases, we want to act only when the user is entirely
     # disconnected, i.e. when onUserLeft is fired
+    return
 
   onUserJoined: (user) ->
     return
