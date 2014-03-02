@@ -4,6 +4,7 @@ block extrahead
   title= channel.name + " - " + config.title
   link(rel='stylesheet',href=assetFingerprint('/css/nuclearnode/channel.css'))
   link(rel='stylesheet',href=assetFingerprint('/css/main.css'))
+  script(async,src="http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js")
 
 block content
   include appsBar
@@ -15,6 +16,7 @@ block content
       include main
 
   #Sidebar
+    .AdBox
     #SidebarTabButtons
       button.Active(data-tab="Chat")= i18n.t('nuclearnode:sidebarTabs.chat')
       button(data-tab="Log")= i18n.t('nuclearnode:sidebarTabs.log')
