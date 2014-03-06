@@ -80,5 +80,5 @@ engine = require './lib/engine'
 
 engine.init app, io, ->
   server.listen app.get('port'), ->
-    console.log "#{config.appId} server listening on port " + app.get('port')
+    console.log "#{config.appId} server listening in #{env} mode on port " + app.get('port')
 
