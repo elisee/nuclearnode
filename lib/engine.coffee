@@ -31,7 +31,7 @@ module.exports = engine =
       channelInfos = ( { name: channelName, users: channel.public.users.length } for channelName, channel of engine.channelsByName )
 
       res.expose user: req.user
-      res.render 'index',
+      res.render 'nuclearnode/index',
         config: config
         apps: req.user.apps
         loginServices: engine.loginServices
@@ -47,7 +47,7 @@ module.exports = engine =
       channelName = req.params.channel.toLowerCase()
       isHost = false # TODO: Allow registering channels
       res.expose channel: { name: channelName }, isHost: isHost, user: req.user
-      res.render 'channel',
+      res.render 'nuclearnode/channel',
         config: config
         apps: req.user.apps
         loginServices: engine.loginServices

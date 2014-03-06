@@ -1,8 +1,6 @@
 window.channel = {}
 
-i18n.init app.i18nOptions, ->
-  initApp()
-
+initApp ->
   channel.socket = io.connect null, reconnect: false
 
   channel.socket.on 'connect', -> channel.socket.emit 'joinChannel', app.channel.name

@@ -1,6 +1,6 @@
 overlay = null
 
-window.initApp = ->
+window.initApp = (callback) -> i18n.init window.app.i18nOptions, ->
   # Fade in
   document.getElementById('App').classList.remove 'Fade'
 
@@ -29,6 +29,9 @@ window.initApp = ->
   overlay.addEventListener 'click', onOverlayClicked
   if app.user.isGuest
     document.getElementById('LogInButton').addEventListener 'click', onLogInButtonClicked
+
+
+  callback()
 
 suppressBackspace = (event) ->
   if event.keyCode == 8 and not /input|textarea/i.test(event.target.nodeName)
