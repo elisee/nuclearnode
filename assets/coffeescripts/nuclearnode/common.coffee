@@ -40,7 +40,7 @@ suppressBackspace = (event) ->
   return true
 
 onToggleMenuButtonClicked = (event) ->
-  document.getElementById('AppsBar').classList.toggle 'Hidden'
+  document.body.classList.toggle 'AppsBarHidden'
 
 # Log in
 onLogInButtonClicked = ->
