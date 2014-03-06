@@ -1,22 +1,27 @@
-form(method='get',action='')
-  select(name='setLng',onchange='this.form.submit()')
-    option(value='')= i18n.t('nuclearnode:chooseLanguage')
-    option(value='en') English
-    option(value='fr') Français
+extends nuclearnode/index
+
+block extrahead
+
+block content
+  form(method='get',action='')
+    select(name='setLng',onchange='this.form.submit()')
+      option(value='')= i18n.t('nuclearnode:chooseLanguage')
+      option(value='en') English
+      option(value='fr') Français
 
 
-h2= i18n.t('nuclearnode:liveChannels')
+  h2= i18n.t('nuclearnode:liveChannels')
 
-ul#LiveChannels
-  for channelInfo in channelInfos
-    li
-      a(href='/play/' + channelInfo.name)
-        = channelInfo.name
-        |  
-        = i18n.t('nuclearnode:channelUsers', { users: channelInfo.users })
+  ul#LiveChannels
+    for channelInfo in channelInfos
+      li
+        a(href='/play/' + channelInfo.name)
+          = channelInfo.name
+          |  
+          = i18n.t('nuclearnode:channelUsers', { users: channelInfo.users })
 
-h2= i18n.t('nuclearnode:startYourOwnChannel')
+  h2= i18n.t('nuclearnode:startYourOwnChannel')
 
-form#StartChannelForm
-  input#StartChannelName(type="text",value="",placeholder="Choose a name",pattern="[a-zA-Z0-9_-]+",title="Letters, digits, dash or underscore")
-  input(type="submit",value="Go")
+  form#StartChannelForm
+    input#StartChannelName(type="text",value="",placeholder="Choose a name",pattern="[a-zA-Z0-9_]+",title="Letters, digits, dash or underscore")
+    input(type="submit",value="Go")

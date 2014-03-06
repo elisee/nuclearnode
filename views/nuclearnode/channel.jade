@@ -1,36 +1,30 @@
-extends layout
+doctype html
+html
+  head
+    link(href='http://fonts.googleapis.com/css?family=Roboto:100,400,300,500,700,900',rel='stylesheet',type='text/css')
+    link(rel='stylesheet',href=assetFingerprint('/css/nuclearnode/common.css'))
+    script!= javascript
+    script(src=assetFingerprint('/js/templates.js'))
+    script(src='/i18next/i18next.js')
+    script(src='/socket.io/socket.io.js')
+    script(src=assetFingerprint('/js/nuclearnode/common.js'))
 
-block extrahead
-  title= channel.name + " - " + config.title
-  link(rel='stylesheet',href=assetFingerprint('/css/nuclearnode/channel.css'))
-  link(rel='stylesheet',href=assetFingerprint('/css/main.css'))
-  script(async,src="http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js")
+    title= channel.name + " - " + config.title
+    link(rel='stylesheet',href=assetFingerprint('/css/nuclearnode/channel.css'))
+    link(rel='stylesheet',href=assetFingerprint('/css/main.css'))
 
-block content
-  include appsBar
+    block extrahead
+  body
+    include partials/appsBar
 
-  #App.Fade
-    include appHeader
-    
-    main
-      include ../main
+    #App.Fade
+      include partials/appHeader
+      
+      main
+        block content
 
-  #Sidebar
-    .AdBox
-    #SidebarTabButtons
-      button.Active(data-tab="Chat")= i18n.t('nuclearnode:sidebarTabs.chat')
-      button(data-tab="Log")= i18n.t('nuclearnode:sidebarTabs.log')
-      button(data-tab="Leaderboard")= i18n.t('nuclearnode:sidebarTabs.leaderboard')
-    #SidebarTabs
-      #ChatTab.Active
-        #ChatLogPanel
-          ol#ChatLog
-        #ChatInputPanel
-          textarea#ChatInputBox(placeholder=i18n.t('nuclearnode:chat.typeHereToChat'))
-      #LogTab
-      #LeaderboardTab
+    include partials/sidebar
+    include partials/overlay
 
-  include overlay
-
-  script(src=assetFingerprint('/js/nuclearnode/channel.js'))
-  script(src=assetFingerprint('/js/main.js'))
+    script(src=assetFingerprint('/js/nuclearnode/channel.js'))
+    script(src=assetFingerprint('/js/main.js'))

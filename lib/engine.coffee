@@ -21,7 +21,7 @@ module.exports = engine =
       channelInfos = ( { name: channel.name, service: channel.service, users: channel.public.users.length } for channelName, channel of engine.channelsById )
 
       res.expose user: req.user
-      res.render 'nuclearnode/index',
+      res.render 'home',
         config: config
         path: req.path
         apps: req.user.apps
@@ -50,7 +50,7 @@ module.exports = engine =
         service: if req.params.service? then { id: req.params.service, name: engine.loginServicesById[req.params.service] } else null
 
       res.expose channel: channel, isHost: isHost, user: req.user
-      res.render 'nuclearnode/channel',
+      res.render 'main',
         config: config
         path: req.path
         apps: req.user.apps
