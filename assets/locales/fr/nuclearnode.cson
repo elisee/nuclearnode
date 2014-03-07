@@ -4,6 +4,8 @@
   liveChannels: 'Salons actifs'
   channelUsers: '(%{users} personnes)'
   startYourOwnChannel: 'Créer votre propre salon'
+  channelOnService: 'sur'
+  host: 'Hôte'
 
   login: "Connexion"
   logout: "Déconnexion"

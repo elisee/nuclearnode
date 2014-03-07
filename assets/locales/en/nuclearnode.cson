@@ -4,6 +4,8 @@
   liveChannels: 'Live channels'
   channelUsers: '(%{users} connected)'
   startYourOwnChannel: 'Start your own channel'
+  channelOnService: 'on'
+  host: 'Host'
 
   login: "Log in"
   logout: "Log out"

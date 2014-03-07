@@ -4,55 +4,59 @@ signedRequest = require 'signed-request'
 Channel = require('./Channel')
 
 module.exports = engine =
-  channelsByName: {}
+  channelsById: {}
 
-  loginServices: [
-      id: 'steam'
-      name: 'Steam'
-    ,
-      id: 'twitch'
-      name: 'Twitch'
-    ,
-      id: 'twitter'
-      name: 'Twitter'
-    ,
-      id: 'facebook'
-      name: 'Facebook'
-    ,
-      id: 'google'
-      name: 'Google+'
-  ]
+  loginServicesById:
+    steam: "Steam"
+    twitch: "Twitch"
+    twitter: "Twitter"
+    facebook: "Facebook"
+    google: "Google+"
 
   init: (app, io, callback) ->
 
     app.get '/', (req, res) -> res.redirect "#{config.hubBaseURL}/apps/#{config.appId}"
 
     app.post '/', passport.authenticate('nuclearhub'), (req, res) ->
-      channelInfos = ( { name: channelName, users: channel.public.users.length } for channelName, channel of engine.channelsByName )
+      channelInfos = ( { name: channel.name, service: channel.service, users: channel.public.users.length } for channelName, channel of engine.channelsById )
 
       res.expose user: req.user
       res.render 'nuclearnode/index',
         config: config
+        path: req.path
         apps: req.user.apps
-        loginServices: engine.loginServices
+        loginServicesById: engine.loginServicesById
         user: req.user
         channelInfos: channelInfos
 
-    app.get '/play/:channel', (req, res) ->
-      channelName = req.params.channel.toLowerCase()
-      res.redirect "#{config.hubBaseURL}/apps/#{config.appId}/#{channelName}"
+    app.param 'channel', (req, res, next, channel) -> if /^[A-Za-z0-9_-]+$/.exec(channel) then next() else res.send 404
 
+    validateService = (req, res, next) ->
+      req.params.service ?= null
+      return res.send 404 if config.channels.services.indexOf(req.params.service) == -1
+      next()
 
-    app.post '/play/:channel', passport.authenticate('nuclearhub'), (req, res) ->
-      channelName = req.params.channel.toLowerCase()
-      isHost = false # TODO: Allow registering channels
-      res.expose channel: { name: channelName }, isHost: isHost, user: req.user
+    app.get '/play/:service?/:channel', validateService, (req, res) ->
+      if req.params.service?
+        res.redirect "#{config.hubBaseURL}/apps/#{config.appId}/#{config.channels.prefix}/#{req.params.service}/#{req.params.channel}"
+      else
+        res.redirect "#{config.hubBaseURL}/apps/#{config.appId}/#{config.channels.prefix}/#{req.params.channel}"
+
+    app.post '/play/:service?/:channel', validateService, passport.authenticate('nuclearhub'), (req, res) ->
+      isHost = req.params.service? and req.user.serviceHandles[req.params.service]?.toLowerCase() == req.params.channel.toLowerCase()
+
+      channel =
+        name: req.params.channel
+        service: if req.params.service? then { id: req.params.service, name: engine.loginServicesById[req.params.service] } else null
+
+      res.expose channel: channel, isHost: isHost, user: req.user
       res.render 'nuclearnode/channel',
         config: config
+        path: req.path
         apps: req.user.apps
-        loginServices: engine.loginServices
+        loginServicesById: engine.loginServicesById
         user: req.user
-        channel: { name: channelName }
+        channel: channel
         isHost: isHost
       return
 
@@ -71,14 +75,17 @@ module.exports = engine =
       engine.log "#{socket.id} (#{socket.handshake.address.address}) disconnected"
       socket.channel.removeSocket socket if socket.channel?
 
-    socket.on 'joinChannel', (channelName) ->
+    socket.on 'joinChannel', (service, channelName) ->
       return if typeof channelName != 'string' or socket.channel?
-      channelName = channelName.toLowerCase()
+      return if config.channels.services.indexOf(service) == -1
+
+      service = '' if ! service?
+      channelId = "#{service}:#{channelName.toLowerCase()}"
       
-      socket.channel = engine.channelsByName[channelName]
+      socket.channel = engine.channelsById[channelId]
       if ! socket.channel?
-        socket.channel = new Channel engine, channelName
-        engine.channelsByName[channelName] = socket.channel
+        socket.channel = new Channel engine, channelName, service
+        engine.channelsById[channelId] = socket.channel
       
       socket.channel.addSocket socket
       return
@@ -86,7 +93,7 @@ module.exports = engine =
     return
   
   clearChannel: (channel) ->
-    engine.log "Clearing channel #{channel.name}"
-    delete engine.channelsByName[channel.name]
+    channel.log "Clearing channel"
+    delete engine.channelsById["#{channel.service}:#{channel.name.toLowerCase()}"]
     
     return

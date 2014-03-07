@@ -5,6 +5,11 @@ header
     if channel
       |  / 
       span.ChannelName= channel.name
+      if channel.service
+        |  
+        = i18n.t('nuclearnode:channelOnService')
+        |  
+        span.ServiceName= channel.service.name
       span.ChannelUsers
 
   .PlayerInfo
@@ -13,4 +18,4 @@ header
     if user.isGuest
       button#LogInButton= i18n.t('nuclearnode:login')
     else
-      a(href=config.hubBaseURL + '/logout?redirect=/apps/' + config.appId + (channel ? '/' + channel.name : ''))#LogOutLink= i18n.t('nuclearnode:logout')
+      a(href=config.hubBaseURL + '/logout?redirect=/apps/' + config.appId + path)#LogOutLink= i18n.t('nuclearnode:logout')

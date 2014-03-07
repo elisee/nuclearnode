@@ -35,6 +35,7 @@ passport.use new NuclearHubStrategy
       authId: data.authId
       displayName: data.displayName
       pictureURL: data.pictureURL
+      serviceHandles: data.serviceHandles
       isGuest: data.isGuest
       # FIXME: We should get that dynamically from the NuclearHub API, maybe even client-side
       apps: data.apps

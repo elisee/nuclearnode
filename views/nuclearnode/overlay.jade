@@ -5,9 +5,9 @@
     !=i18n.md('nuclearnode:serviceDoesntMatter')
 
     ul#LogInOptions
-      for service in loginServices
+      each serviceName, serviceId in loginServicesById
         li
-          a(href=config.hubBaseURL + '/auth/' + service.id + '?redirect=/apps/' + config.appId + (channel ? '/' + channel.name : ''))
-            img(src="/images/nuclearnode/loginIcons/" + service.id + ".png",alt=service.name,title=i18n.t('nuclearnode:logInWith', { service: service.name }))
+          a(href=config.hubBaseURL + '/auth/' + serviceId + '?redirect=/apps/' + config.appId + path)
+            img(src="/images/nuclearnode/loginIcons/" + serviceId + ".png",alt=serviceName,title=i18n.t('nuclearnode:logInWith', { service: serviceName }))
 
     !=i18n.md('nuclearnode:privacyRespect')

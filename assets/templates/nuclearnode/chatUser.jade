@@ -1,0 +1,5 @@
+span.User
+  if user.isHost
+    span.Host(title=i18n.t('nuclearnode:host'))
+    |  
+  = user.displayName

@@ -3,7 +3,7 @@ window.channel = {}
 initApp ->
   channel.socket = io.connect null, reconnect: false
 
-  channel.socket.on 'connect', -> channel.socket.emit 'joinChannel', app.channel.name
+  channel.socket.on 'connect', -> channel.socket.emit 'joinChannel', app.channel.service?.id, app.channel.name
   channel.socket.on 'disconnect', -> channel.logic.onDisconnected()
   channel.socket.on 'channelData', onChannelDataReceived
   channel.socket.on 'addUser', onUserAdded
@@ -37,7 +37,7 @@ onChannelDataReceived = (data) ->
   return
 
 onUserAdded = (user) ->
-  appendToChat i18n.t 'nuclearnode:chat.userJoined', user: user.displayName
+  appendToChat 'Info', i18n.t 'nuclearnode:chat.userJoined', user: JST['nuclearnode/chatUser']( user: user, i18n: i18n )
   channel.data.users.push user
   channel.data.usersByAuthId[user.authId] = user
 
@@ -48,7 +48,7 @@ onUserAdded = (user) ->
 
 onUserRemoved = (authId) ->
   user = channel.data.usersByAuthId[authId]
-  appendToChat i18n.t 'nuclearnode:chat.userLeft', user: user.displayName
+  appendToChat 'Info', i18n.t 'nuclearnode:chat.userLeft', user: JST['nuclearnode/chatUser']( user: user, i18n: i18n )
   delete channel.data.usersByAuthId[authId]
   channel.data.users.splice channel.data.users.indexOf(user), 1
 
@@ -87,7 +87,13 @@ onSidebarTabButtonClicked = (event) ->
   return
 
 # Chat
-onChatMessageReceived = (message) -> appendToChat message.text, channel.data.usersByAuthId[message.userAuthId]  
+onChatMessageReceived = (message) ->
+  appendToChat 'Message',
+    JST['nuclearnode/chatMessage']
+      text: message.text
+      author: JST['nuclearnode/chatUser']
+        user: channel.data.usersByAuthId[message.userAuthId]
+        i18n: i18n
 
 onSubmitChatMessage = (event) ->
   return if event.keyCode != 13 or event.shiftKey
@@ -96,7 +102,7 @@ onSubmitChatMessage = (event) ->
   this.value = ''
   return
 
-appendToChat = (text, author) ->
+appendToChat = (type, content) ->
   ChatLog = document.getElementById('ChatLog')
 
   date = new Date()
@@ -107,6 +113,6 @@ appendToChat = (text, author) ->
   time = "#{hours}:#{minutes}"
 
   isChatLogScrolledToBottom = ChatLog.scrollTop >= ChatLog.scrollHeight - ChatLog.clientHeight
-  ChatLog.insertAdjacentHTML 'beforeend', JST['nuclearnode/chatLogItem']( text: text, author: author, time: time )
+  ChatLog.insertAdjacentHTML 'beforeend', JST['nuclearnode/chatLogItem']( type: type, content: content, time: time, i18n: i18n )
   ChatLog.scrollTop = ChatLog.scrollHeight if isChatLogScrolledToBottom
   return

@@ -2,7 +2,7 @@ ChannelLogic = require './ChannelLogic'
 
 module.exports = class Channel
 
-  constructor: (@engine, @name) ->
+  constructor: (@engine, @name, @service) ->
     @public =
       users: []
       actors: []
@@ -17,7 +17,7 @@ module.exports = class Channel
     socket.emit message, data for socket in sockets
     return
 
-  log: (message) -> @engine.log "[#{@name}] #{message}"
+  log: (message) -> @engine.log "[#{@service}:#{@name}] #{message}"
 
 
   #----------------------------------------------------------------------------
@@ -73,6 +73,7 @@ module.exports = class Channel
         authId: userProfile.authId
         displayName: userProfile.displayName
         pictureURL: userProfile.pictureURL
+        isHost: userProfile.serviceHandles[@service]?.toLowerCase() == @name.toLowerCase()
 
     @usersByAuthId[ user.public.authId ] = user
     @public.users.push user.public

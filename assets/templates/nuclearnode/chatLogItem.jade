@@ -1,5 +1,3 @@
-li(class=author ? 'Message' : 'Info')
+li(class=type)
   span.Time= time
-  if author
-    span.Author= author.displayName
-  span.Text= text
+  != content
