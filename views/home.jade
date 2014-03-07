@@ -18,5 +18,5 @@ ul#LiveChannels
 h2= i18n.t('nuclearnode:startYourOwnChannel')
 
 form#StartChannelForm
-  input#StartChannelName(type="text",value="",placeholder="Choose a name",pattern="[a-zA-Z0-9_]+",title="Letters, digits, dash or underscore")
+  input#StartChannelName(type="text",value="",placeholder="Choose a name",pattern="[a-zA-Z0-9_-]+",title="Letters, digits, dash or underscore")
   input(type="submit",value="Go")
