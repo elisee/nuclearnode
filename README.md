@@ -1,7 +1,7 @@
 # NuclearNode
 
-NuclearNode is a Node.js application template to build multiplayer/cooperative
-applications around a [NuclearHub](https://bitbucket.org/sparklinlabs/nuclearhub).
+NuclearNode is a Node.js application template for building cooperative
+applications and multiplayer games around a [NuclearHub](https://bitbucket.org/sparklinlabs/nuclearhub).
 
 A NuclearHub allows people to log in to various NuclearNode applications or
 games using a shared account stored on the hub itself and have named channels to
