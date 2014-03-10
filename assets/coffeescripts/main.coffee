@@ -18,10 +18,18 @@ setupState = ->
   currentStateElement.textContent = channel.data.state
 
 window.channel.logic =
-  init: ->
-
+  init: (callback) ->
     document.getElementById('JoinGame').addEventListener 'click', -> channel.socket.emit 'join'
+    callback()
+  
+  onChannelDataReceived: ->
+    serverTimeOffset = Date.now() - channel.data.time
+    channel.data.stateStartTime += serverTimeOffset if channel.data.stateStartTime?
 
+    setupUser user for user in channel.data.users
+    setupActor actor for actor in channel.data.actors
+    setupState()
+    
     channel.socket.on 'addActor', (actor) ->
       return
 
@@ -37,14 +45,6 @@ window.channel.logic =
     channel.socket.on 'setState', (state) ->
       channel.data.state = state
       setupState()
-  
-  onChannelDataReceived: ->
-    serverTimeOffset = Date.now() - channel.data.time
-    channel.data.stateStartTime += serverTimeOffset if channel.data.stateStartTime?
-
-    setupUser user for user in channel.data.users
-    setupActor actor for actor in channel.data.actors
-    setupState()
 
   onDisconnected: ->
 

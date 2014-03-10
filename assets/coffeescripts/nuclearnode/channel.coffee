@@ -1,6 +1,6 @@
 window.channel = {}
 
-initApp ->
+initApp -> channel.logic.init ->
   channel.socket = io.connect null, reconnect: false
 
   channel.socket.on 'connect', -> channel.socket.emit 'joinChannel', app.channel.service?.id, app.channel.name
@@ -17,8 +17,6 @@ initApp ->
     tabButton.addEventListener 'click', onSidebarTabButtonClicked
 
   document.getElementById('ChatInputBox').addEventListener 'keydown', onSubmitChatMessage
-
-  channel.logic.init()
   return
 
 # Channel & user presence
