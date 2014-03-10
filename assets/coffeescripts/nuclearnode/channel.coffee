@@ -4,7 +4,9 @@ initApp -> channel.logic.init ->
   channel.socket = io.connect null, reconnect: false
 
   channel.socket.on 'connect', -> channel.socket.emit 'joinChannel', app.channel.service?.id, app.channel.name
-  channel.socket.on 'disconnect', -> channel.logic.onDisconnected()
+  channel.socket.on 'disconnect', ->
+    appendToChat 'Info', i18n.t 'nuclearnode:chat.disconnected'
+    channel.logic.onDisconnected()
   channel.socket.on 'channelData', onChannelDataReceived
   channel.socket.on 'addUser', onUserAdded
   channel.socket.on 'removeUser', onUserRemoved

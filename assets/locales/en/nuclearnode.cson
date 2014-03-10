@@ -27,4 +27,5 @@
     typeHereToChat: "Type here to chat"
     userJoined: "%{user} has joined."
     userLeft: "%{user} has left."
+    disconnected: "Woops, you got disconnected. Please reload the page."
 }
