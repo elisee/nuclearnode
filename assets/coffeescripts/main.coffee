@@ -30,18 +30,6 @@ window.channel.logic =
     setupActor actor for actor in channel.data.actors
     setupState()
     
-    channel.socket.on 'addActor', (actor) ->
-      return
-
-    channel.socket.on 'removeActor', (authId) ->
-      actor = channel.data.actorsByAuthId[authId]
-      delete channel.data.actorsByAuthId[authId]
-      channel.data.actors.splice channel.data.actors.indexOf(actor), 1
-
-      document.getElementById('Actor' + actor.authId).remove()
-
-      return
-
     channel.socket.on 'setState', (state) ->
       channel.data.state = state
       setupState()
