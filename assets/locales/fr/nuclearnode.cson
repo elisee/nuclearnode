@@ -27,5 +27,5 @@
     typeHereToChat: "Tapez ici pour discuter"
     userJoined: "%{user} a rejoint."
     userLeft: "%{user} est parti."
-    disconnected: "Disconnected. Reload the page to reconnect."
+    disconnected: "Oups, vous avez été déconnecté. Veuillez recharger la page."
 }
