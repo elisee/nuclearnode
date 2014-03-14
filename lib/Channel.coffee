@@ -60,7 +60,7 @@ module.exports = class Channel
         socket.emit 'chatMessage', text: 'undelivered'
 
         if socket.user.chat.hellbanPoints >= chatSettings.maxHellbanPoints
-          @log "user #{socket.user.public.displayName} (#{socket.user.public.authId}) has been hellbanned"
+          @log "User #{socket.user.public.displayName} (#{socket.user.public.authId}) has been hellbanned"
           socket.user.chat.hellbanned = true
       return
 
