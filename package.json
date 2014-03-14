@@ -22,7 +22,8 @@
     "passport.socketio": "~3.0.0",
     "node-uuid": "~1.4.1",
     "signed-request": "~1.0.7",
-    "passport-nuclearhub": "~1.0.0"
+    "passport-nuclearhub": "~1.0.0",
+    "underscore": "~1.6.0"
   },
   "devDependencies": {
     "grunt": "~0.4.2",

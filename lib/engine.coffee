@@ -1,6 +1,7 @@
 config = require '../config'
 passport = require 'passport'
 signedRequest = require 'signed-request'
+_ = require 'underscore'
 Channel = require('./Channel')
 
 module.exports = engine =
@@ -19,6 +20,7 @@ module.exports = engine =
 
     app.post '/', passport.authenticate('nuclearhub'), (req, res) ->
       channelInfos = ( { name: channel.name, service: channel.service, users: channel.public.users.length, actors: channel.public.actors.length } for channelName, channel of engine.channelsById )
+      channelInfos = _.sortBy channelInfos, (x) -> -x.users
 
       res.expose user: req.user
       res.render 'home',
