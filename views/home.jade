@@ -9,16 +9,13 @@ block content
       option(value='en') English
       option(value='fr') Français
 
-
   h2= i18n.t('nuclearnode:liveChannels')
 
   ul#LiveChannels
     for channelInfo in channelInfos
       li
         a(href='/play/' + channelInfo.name)
-          = channelInfo.name
-          |  
-          = i18n.t('nuclearnode:channelUsers', { users: channelInfo.users })
+          != i18n.t('nuclearnode:liveChannelEntry', { channel: channelInfo })
 
   h2= i18n.t('nuclearnode:startYourOwnChannel')
 
