@@ -88,12 +88,17 @@ onSidebarTabButtonClicked = (event) ->
 
 # Chat
 onChatMessageReceived = (message) ->
-  appendToChat 'Message',
-    JST['nuclearnode/chatMessage']
-      text: message.text
-      author: JST['nuclearnode/chatUser']
-        user: channel.data.usersByAuthId[message.userAuthId]
-        i18n: i18n
+  if message.userAuthId?
+    appendToChat 'Message',
+      JST['nuclearnode/chatMessage']
+        text: message.text
+        author: JST['nuclearnode/chatUser']
+          user: channel.data.usersByAuthId[message.userAuthId]
+          i18n: i18n
+  else
+    appendToChat 'Info', i18n.t 'nuclearnode:chat.info.' + message.text
+
+  return
 
 onSubmitChatMessage = (event) ->
   return if event.keyCode != 13 or event.shiftKey

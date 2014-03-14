@@ -1,5 +1,10 @@
 ChannelLogic = require './ChannelLogic'
 
+chatSettings = 
+  maxRecentMessages: 3
+  minRecentMessageInterval: 2000
+  maxHellbanPoints: 5
+
 module.exports = class Channel
 
   constructor: (@engine, @name, @service) ->
@@ -38,7 +43,28 @@ module.exports = class Channel
     socket.on 'chatMessage', (text) =>
       return if typeof text != 'string' or text.length == 0
       text = text.substring 0, 300
-      @broadcast 'chatMessage', { userAuthId: socket.user.public.authId, text: text }
+
+      now = Date.now()
+      console.log now
+      socket.user.chat.recentMessageTimestamps.push now
+      if socket.user.chat.recentMessageTimestamps.length > chatSettings.maxRecentMessages
+        socket.user.chat.recentMessageTimestamps.splice 0, 1
+
+      console.log now - socket.user.chat.recentMessageTimestamps[0]
+      if socket.user.chat.hellbanned
+        # User is hellbanned, make it look to them as though their messages have been delivered
+        # but don't actually send them to anyone else
+        socket.emit 'chatMessage', { userAuthId: socket.user.public.authId, text: text }
+      else if socket.user.chat.recentMessageTimestamps.length < chatSettings.maxRecentMessages or now - socket.user.chat.recentMessageTimestamps[0] > chatSettings.minRecentMessageInterval
+        @broadcast 'chatMessage', { userAuthId: socket.user.public.authId, text: text }
+      else
+        socket.user.chat.hellbanPoints++
+        socket.emit 'chatMessage', text: 'undelivered'
+        console.log socket.user.chat.hellbanPoints
+
+        if socket.user.chat.hellbanPoints >= chatSettings.maxHellbanPoints
+          console.log 'hellbanned!'
+          socket.user.chat.hellbanned = true
       return
 
     return
@@ -69,6 +95,10 @@ module.exports = class Channel
     user =
       sockets: []
       actor: @actorsByAuthId[ userProfile.authId ]
+      chat:
+        recentMessageTimestamps: []
+        hellbanned: false
+        hellbanPoints: 0
       public:
         authId: userProfile.authId
         displayName: userProfile.displayName

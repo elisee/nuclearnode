@@ -28,4 +28,7 @@
     userJoined: "%{user} a rejoint."
     userLeft: "%{user} est parti."
     disconnected: "Oups, vous avez été déconnecté. Veuillez recharger la page."
+
+    info:
+      undelivered: "Pas si vite ! Votre message n'a pas pu être envoyé."
 }
