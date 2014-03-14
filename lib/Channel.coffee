@@ -45,12 +45,10 @@ module.exports = class Channel
       text = text.substring 0, 300
 
       now = Date.now()
-      console.log now
       socket.user.chat.recentMessageTimestamps.push now
       if socket.user.chat.recentMessageTimestamps.length > chatSettings.maxRecentMessages
         socket.user.chat.recentMessageTimestamps.splice 0, 1
 
-      console.log now - socket.user.chat.recentMessageTimestamps[0]
       if socket.user.chat.hellbanned
         # User is hellbanned, make it look to them as though their messages have been delivered
         # but don't actually send them to anyone else
@@ -60,10 +58,9 @@ module.exports = class Channel
       else
         socket.user.chat.hellbanPoints++
         socket.emit 'chatMessage', text: 'undelivered'
-        console.log socket.user.chat.hellbanPoints
 
         if socket.user.chat.hellbanPoints >= chatSettings.maxHellbanPoints
-          console.log 'hellbanned!'
+          @log "user #{socket.user.public.displayName} (#{socket.user.public.authId}) has been hellbanned"
           socket.user.chat.hellbanned = true
       return
 

@@ -96,7 +96,7 @@ onChatMessageReceived = (message) ->
           user: channel.data.usersByAuthId[message.userAuthId]
           i18n: i18n
   else
-    appendToChat 'Info', i18n.t 'nuclearnode:chat.info.' + message.text
+    appendToChat 'Info', i18n.t 'nuclearnode:chat.' + message.text
 
   return
 

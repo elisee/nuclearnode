@@ -28,7 +28,5 @@
     userJoined: "%{user} has joined."
     userLeft: "%{user} has left."
     disconnected: "Woops, you got disconnected. Please reload the page."
-
-    info:
-      undelivered: "Not so fast! Your chat message couldn't be delivered."
+    undelivered: "Not so fast! Your chat message couldn't be delivered."
 }
