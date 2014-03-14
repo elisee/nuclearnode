@@ -14,8 +14,20 @@ block content
   ul#LiveChannels
     for channelInfo in channelInfos
       li
-        a(href='/play/' + channelInfo.name)
-          != i18n.t('nuclearnode:liveChannelEntry', { channel: channelInfo })
+        if channelInfo.service
+          a(href='/play/' + channelInfo.service.id + '/' + channelInfo.name)
+            b= channelInfo.name
+            |  
+            = i18n.t('nuclearnode:channelOnService')
+            |  
+            = channelInfo.service.name
+            |  — 
+            != i18n.t('nuclearnode:connectedUsers', { users: channelInfo.users })
+        else
+          a(href='/play/' + channelInfo.name)
+            b= channelInfo.name
+            |  — 
+            != i18n.t('nuclearnode:connectedUsers', { users: channelInfo.users })
 
   h2= i18n.t('nuclearnode:startYourOwnChannel')
 

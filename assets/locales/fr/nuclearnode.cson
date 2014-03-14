@@ -2,7 +2,7 @@
   chooseLanguage: "(Choisissez une langue)"
 
   liveChannels: 'Salons actifs'
-  liveChannelEntry: '<b>%{channel.name}</b> — %{channel.users} connectés'
+  connectedUsers: '%{users} connectés'
   startYourOwnChannel: 'Créer votre propre salon'
   channelOnService: 'sur'
   host: 'Hôte'

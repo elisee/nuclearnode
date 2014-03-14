@@ -2,7 +2,7 @@
   chooseLanguage: "(Choose a language)"
 
   liveChannels: 'Live channels'
-  liveChannelEntry: '<b>%{channel.name}</b> — %{channel.users} connected'
+  connectedUsers: '%{users} connected'
   startYourOwnChannel: 'Start your own channel'
   channelOnService: 'on'
   host: 'Host'
