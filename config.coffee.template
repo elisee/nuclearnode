@@ -3,6 +3,8 @@ module.exports =
   appId: 
   # User-friendly name of the application
   title: 
+  # Short description for search engines (~155 characters)
+  description: 
   # Domain name where the application is hosted
   domain: 
   # Internal port on which the application should listen
