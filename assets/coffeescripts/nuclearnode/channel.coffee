@@ -107,8 +107,10 @@ onSubmitChatMessage = (event) ->
   this.value = ''
   return
 
+maxChatLogHistory = 100
+
 appendToChat = (type, content) ->
-  ChatLog = document.getElementById('ChatLog')
+  chatLogElement = document.getElementById('ChatLog')
 
   date = new Date()
   hours = date.getHours()
@@ -117,7 +119,11 @@ appendToChat = (type, content) ->
   minutes = (if minutes < 10 then '0' else '') + minutes
   time = "#{hours}:#{minutes}"
 
-  isChatLogScrolledToBottom = ChatLog.scrollTop >= ChatLog.scrollHeight - ChatLog.clientHeight
-  ChatLog.insertAdjacentHTML 'beforeend', JST['nuclearnode/chatLogItem']( type: type, content: content, time: time, i18n: i18n )
-  ChatLog.scrollTop = ChatLog.scrollHeight if isChatLogScrolledToBottom
+  isChatLogScrolledToBottom = chatLogElement.scrollTop >= chatLogElement.scrollHeight - chatLogElement.clientHeight
+  chatLogElement.insertAdjacentHTML 'beforeend', JST['nuclearnode/chatLogItem']( type: type, content: content, time: time, i18n: i18n )
+  chatLogElement.scrollTop = chatLogElement.scrollHeight if isChatLogScrolledToBottom
+
+  if isChatLogScrolledToBottom and chatLogElement.querySelectorAll('li').length > maxChatLogHistory
+    oldestLogEntry = chatLogElement.querySelector('li:first-of-type')
+    oldestLogEntry.parentNode.removeChild(oldestLogEntry)
   return
