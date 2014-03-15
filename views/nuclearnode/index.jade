@@ -1,28 +1,11 @@
-doctype html
-html
-  head
-    link(href='http://fonts.googleapis.com/css?family=Roboto:100,400,300,500,700,900',rel='stylesheet',type='text/css')
-    link(rel='stylesheet',href=assetFingerprint('/css/nuclearnode/common.css'))
-    script!= javascript
-    script(src=assetFingerprint('/js/templates.js'))
-    script(src='/i18next/i18next.js')
-    script(src='/socket.io/socket.io.js')
-    script(src=assetFingerprint('/js/nuclearnode/common.js'))
+extends layout
 
-    title= config.title
-    link(rel='stylesheet',href=assetFingerprint('/css/nuclearnode/index.css'))
-    link(rel='stylesheet',href=assetFingerprint('/css/home.css'))
+block head
+  title= config.title
+  link(rel='stylesheet',href=assetFingerprint('/css/nuclearnode/index.css'))
+  link(rel='stylesheet',href=assetFingerprint('/css/home.css'))
 
-    block extrahead
-  body
-    include partials/appsBar
+  block extrahead
 
-    #App.Fade
-      include partials/appHeader
-
-      main
-        block content
-      
-    include partials/overlay
-
-    script(src=assetFingerprint('/js/home.js'))
+block body
+  script(src=assetFingerprint('/js/home.js'))
