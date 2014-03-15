@@ -100,7 +100,7 @@ module.exports = class Channel
         authId: userProfile.authId
         displayName: userProfile.displayName
         pictureURL: userProfile.pictureURL
-        isHost: userProfile.serviceHandles[@service]?.toLowerCase() == @name.toLowerCase()
+        isHost: userProfile.serviceHandles?[@service]?.toLowerCase() == @name.toLowerCase()
 
     @usersByAuthId[ user.public.authId ] = user
     @public.users.push user.public
