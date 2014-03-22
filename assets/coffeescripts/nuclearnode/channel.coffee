@@ -3,15 +3,19 @@ window.channel = {}
 initApp -> channel.logic.init ->
   channel.socket = io.connect null, reconnect: false
 
-  channel.socket.on 'connect', -> channel.socket.emit 'joinChannel', app.channel.service?.id, app.channel.name
+  channel.socket.on 'connect', -> channel.socket.emit 'joinChannel', app.channel.service, app.channel.name
   channel.socket.on 'disconnect', ->
     appendToChat 'Info', i18n.t 'nuclearnode:chat.disconnected'
     channel.logic.onDisconnected()
   channel.socket.on 'channelData', onChannelDataReceived
+
   channel.socket.on 'addUser', onUserAdded
   channel.socket.on 'removeUser', onUserRemoved
+  channel.socket.on 'setUserRole', onUserRoleSet
+
   channel.socket.on 'addActor', onActorAdded
   channel.socket.on 'removeActor', onActorRemoved
+
   channel.socket.on 'chatMessage', onChatMessageReceived
 
   tabButtons = document.querySelectorAll('#SidebarTabButtons button')
@@ -56,6 +60,12 @@ onUserRemoved = (authId) ->
 
   channel.logic.onUserRemoved user
   return
+
+onUserRoleSet = (data) ->
+  user = channel.data.usersByAuthId[data.userAuthId]
+  user.role = data.role
+
+  appendToChat 'Info', i18n.t 'nuclearnode:chat.userRoleSet', user: JST['nuclearnode/chatUser']( user: user, i18n: i18n ), role: i18n.t('nuclearnode:userRoles.' + user.role)
 
 onActorAdded = (actor) ->
   channel.data.actors.push actor

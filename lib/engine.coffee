@@ -7,19 +7,14 @@ Channel = require('./Channel')
 module.exports = engine =
   channelsById: {}
 
-  loginServicesById:
-    steam: "Steam"
-    twitch: "Twitch"
-    twitter: "Twitter"
-    facebook: "Facebook"
-    google: "Google+"
+  loginServices: [ 'steam', 'twitch', 'twitter', 'facebook', 'google' ]
 
   init: (app, io, callback) ->
 
     app.get '/', (req, res) -> res.redirect "#{config.hubBaseURL}/apps/#{config.appId}"
 
     app.post '/', passport.authenticate('nuclearhub'), (req, res) ->
-      channelInfos = ( { name: channel.name, service: ( if channel.service != '' then { id: channel.service, name: engine.loginServicesById[channel.service] } else null ), users: channel.public.users.length, actors: channel.public.actors.length } for channelName, channel of engine.channelsById )
+      channelInfos = ( { name: channel.name, service: ( if channel.service != '' then channel.service else null ), users: channel.public.users.length, actors: channel.public.actors.length } for channelName, channel of engine.channelsById )
       channelInfos = _.sortBy channelInfos, (x) -> -x.users
 
       res.expose user: req.user
@@ -27,7 +22,7 @@ module.exports = engine =
         config: config
         path: req.path
         apps: req.user.apps
-        loginServicesById: engine.loginServicesById
+        loginServices: engine.loginServices
         user: req.user
         channelInfos: channelInfos
 
@@ -45,21 +40,18 @@ module.exports = engine =
         res.redirect "#{config.hubBaseURL}/apps/#{config.appId}/#{config.channels.prefix}/#{req.params.channel}"
 
     app.post '/play/:service?/:channel', validateService, passport.authenticate('nuclearhub'), (req, res) ->
-      isHost = req.params.service? and req.user.serviceHandles[req.params.service]?.toLowerCase() == req.params.channel.toLowerCase()
-
       channel =
         name: req.params.channel
-        service: if req.params.service? then { id: req.params.service, name: engine.loginServicesById[req.params.service] } else null
+        service: if req.params.service? then req.params.service else null
 
-      res.expose channel: channel, isHost: isHost, user: req.user
+      res.expose channel: channel, user: req.user
       res.render 'main',
         config: config
         path: req.path
         apps: req.user.apps
-        loginServicesById: engine.loginServicesById
+        loginServices: engine.loginServices
         user: req.user
         channel: channel
-        isHost: isHost
       return
 
     engine.io = io

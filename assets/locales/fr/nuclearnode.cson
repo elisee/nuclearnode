@@ -5,7 +5,6 @@
   connectedUsers: '%{users} connectés'
   startYourOwnChannel: 'Créer votre propre salon'
   channelOnService: 'sur'
-  host: 'Hôte'
 
   login: "Connexion"
   logout: "Déconnexion"
@@ -14,6 +13,14 @@
     """Peu importe lequel, c'est juste  
     pour vous éviter un mot de passe de plus"""
   logInWith: "Connexion avec %{service}"
+
+  loginServices:
+    steam: "Steam"
+    twitch: "Twitch"
+    twitter: "Twitter"
+    facebook: "Facebook"
+    google: "Google+"
+
   privacyRespect:
     """On ne postera rien sur votre mur et on promet  
     de ne pas passer votre chat au micro-onde"""
@@ -27,6 +34,15 @@
     typeHereToChat: "Tapez ici pour discuter"
     userJoined: "%{user} a rejoint."
     userLeft: "%{user} est parti."
+    userRoleSet: "%{user} est maintenant %{role}."
     disconnected: "Oups, vous avez été déconnecté. Veuillez recharger la page."
     undelivered: "Pas si vite ! Votre message n'a pas pu être envoyé."
+
+  userHandleOnService: "%{handle} sur %{service}"
+  serviceHandlePlaceholder: "Connecté"
+
+  userRoles:
+    host: 'Hôte'
+    administrator: 'Administrateur'
+    moderator: 'Modérateur'
 }

@@ -1,5 +1,11 @@
-span.User
-  if user.isHost
-    span.Host(title=i18n.t('nuclearnode:host'))
+- var serviceHandles = []
+for handle, service in user.serviceHandles
+  if handle == null
+    - handle = i18n.t('nuclearnode:serviceHandlePlaceholder')
+  if service != 'guest'
+    - serviceHandles.push( i18n.t('nuclearnode:userHandleOnService', { handle: handle, service: i18n.t('nuclearnode:loginServices.' + service) }) )
+span.User(title=serviceHandles.join(', '))
+  if user.role != ''
+    span(class="UserRole_" + user.role,title=i18n.t('nuclearnode:userRoles.' + user.role))
     |  
   = user.displayName

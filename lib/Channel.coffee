@@ -79,6 +79,13 @@ module.exports = class Channel
       @public.users.splice @public.users.indexOf(socket.user.public), 1
       @broadcast 'removeUser', socket.user.public.authId
 
+      # If user was the host of an unauthenticated channel
+      # Make the next user the host instead
+      if @service.length == 0 and socket.user.public.role == 'host' and @public.users.length > 0
+        newHostPublicUser = @public.users[0]
+        newHostPublicUser.role = 'host'
+        @broadcast 'setUserRole', userAuthId: newHostPublicUser.authId, role: newHostPublicUser.role
+
     socket.user = null
 
     if @sockets.length == 0
@@ -100,7 +107,16 @@ module.exports = class Channel
         authId: userProfile.authId
         displayName: userProfile.displayName
         pictureURL: userProfile.pictureURL
-        isHost: userProfile.serviceHandles?[@service]?.toLowerCase() == @name.toLowerCase()
+        serviceHandles: userProfile.serviceHandles
+        role: ''
+
+    if @service.length > 0
+      # Make the authenticated channel's owner its host
+      if userProfile.serviceHandles?[@service]?.toLowerCase() == @name.toLowerCase()
+        user.public.role = 'host'
+    else if @public.users.length == 0
+      # Make the first user to join an unauthenticated channel its host
+      user.public.role = 'host'
 
     @usersByAuthId[ user.public.authId ] = user
     @public.users.push user.public

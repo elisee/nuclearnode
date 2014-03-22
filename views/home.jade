@@ -15,12 +15,12 @@ block content
     for channelInfo in channelInfos
       li
         if channelInfo.service
-          a(href='/play/' + channelInfo.service.id + '/' + channelInfo.name)
+          a(href='/play/' + channelInfo.service + '/' + channelInfo.name)
             b= channelInfo.name
             |  
             = i18n.t('nuclearnode:channelOnService')
             |  
-            = channelInfo.service.name
+            = i18n.t('nuclearnode:loginServices.' + channelInfo.service)
             |  — 
             != i18n.t('nuclearnode:connectedUsers', { users: channelInfo.users })
         else

@@ -103,15 +103,24 @@
       margin-right 0.5em
       opacity 0.5
 
-    .Host
-      color #dc8
-
     .User
       font-weight bold
 
-      .Host:before
+      .UserRole_host:before
         content '★'
         cursor default
+        color #dc8
+
+      .UserRole_administrator:before
+        content '☆'
+        cursor default
+        color #dc8
+
+      .UserRole_moderator:before
+        content '●'
+        cursor default
+        color #346192
+
 
     &.Info
       color #8aa
