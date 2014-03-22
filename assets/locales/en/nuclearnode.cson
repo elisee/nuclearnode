@@ -1,9 +1,9 @@
 {
   chooseLanguage: "(Choose a language)"
 
-  liveChannels: 'Live channels'
+  liveChannels: 'Live rooms'
   connectedUsers: '%{users} connected'
-  startYourOwnChannel: 'Start your own channel'
+  startYourOwnChannel: 'Start your own room'
   channelOnService: 'on'
   host: 'Host'
 
