@@ -3,8 +3,12 @@
 
   liveChannels: 'Salons actifs'
   connectedUsers: '%{users} connectés'
-  startYourOwnChannel: 'Créer votre propre salon'
   channelOnService: 'sur'
+
+  createChannel:
+    title: "Créer un salon"
+    namePlaceholder: "Choisissez un nom"
+    nameValidChars: "Lettres, chiffres, tiret ou tiret bas"
 
   login: "Connexion"
   logout: "Déconnexion"

@@ -3,8 +3,12 @@
 
   liveChannels: 'Live rooms'
   connectedUsers: '%{users} connected'
-  startYourOwnChannel: 'Start your own room'
   channelOnService: 'on'
+
+  createChannel:
+    title: "Create a room"
+    namePlaceholder: "Choose a name"
+    nameValidChars: "Letters, digits, dash or underscore"
 
   login: "Log in"
   logout: "Log out"

@@ -1,4 +1,4 @@
 initApp ->
-  document.getElementById('StartChannelForm').addEventListener 'submit', (event) ->
+  document.getElementById('CreateChannelForm').addEventListener 'submit', (event) ->
     event.preventDefault()
-    window.location = '/play/' + document.getElementById('StartChannelName').value
+    window.location = '/play/' + document.getElementById('CreateChannelName').value

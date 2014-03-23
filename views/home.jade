@@ -29,8 +29,8 @@ block content
             |  — 
             != i18n.t('nuclearnode:connectedUsers', { users: channelInfo.users })
 
-  h2= i18n.t('nuclearnode:startYourOwnChannel')
+  h2= i18n.t('nuclearnode:createChannel.title')
 
-  form#StartChannelForm
-    input#StartChannelName(type="text",value="",placeholder="Choose a name",pattern="[a-zA-Z0-9_]+",title="Letters, digits, dash or underscore")
+  form#CreateChannelForm
+    input#CreateChannelName(type="text",value="",placeholder=i18n.t('nuclearnode:createChannel.namePlaceholder'),pattern="[a-zA-Z0-9_]+",title=i18n.t('nuclearnode:createChannel.nameValidChars'))
     input(type="submit",value="Go")
