@@ -11,20 +11,22 @@ block content
 
   h2= i18n.t('nuclearnode:liveChannels')
 
-  ul#LiveChannels
+  table#LiveChannels
     for channelInfo in channelInfos
-      li
-        if channelInfo.service
-          a(href='/play/' + channelInfo.service + '/' + channelInfo.name)
-            b= channelInfo.name
-            |  
-            = i18n.t('nuclearnode:channelOnService')
-            |  
-            = i18n.t('nuclearnode:loginServices.' + channelInfo.service)
-        else
-          a(href='/play/' + channelInfo.name)
-            b= channelInfo.name
-        span.ChannelUsers= channelInfo.users
+      tr
+        td
+          span.ChannelUsers= channelInfo.users
+        td
+          if channelInfo.service
+              a(href='/play/' + channelInfo.service + '/' + channelInfo.name)
+                b= channelInfo.name
+                |  
+                = i18n.t('nuclearnode:channelOnService')
+                |  
+                = i18n.t('nuclearnode:loginServices.' + channelInfo.service)
+          else
+            a(href='/play/' + channelInfo.name)
+              b= channelInfo.name
 
   h2= i18n.t('nuclearnode:createChannel.title')
 
