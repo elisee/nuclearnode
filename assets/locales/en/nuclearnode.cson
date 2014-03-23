@@ -2,7 +2,6 @@
   chooseLanguage: "(Choose a language)"
 
   liveChannels: 'Live rooms'
-  connectedUsers: '%{users} connected'
   channelOnService: 'on'
 
   createChannel:

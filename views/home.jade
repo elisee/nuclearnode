@@ -21,13 +21,10 @@ block content
             = i18n.t('nuclearnode:channelOnService')
             |  
             = i18n.t('nuclearnode:loginServices.' + channelInfo.service)
-            |  — 
-            != i18n.t('nuclearnode:connectedUsers', { users: channelInfo.users })
         else
           a(href='/play/' + channelInfo.name)
             b= channelInfo.name
-            |  — 
-            != i18n.t('nuclearnode:connectedUsers', { users: channelInfo.users })
+        span.ChannelUsers= channelInfo.users
 
   h2= i18n.t('nuclearnode:createChannel.title')
 
