@@ -17,8 +17,7 @@ module.exports = engine =
 
       channelInfosById = {}
 
-      for channelName, channel of engine.channelsById
-        channelId = "#{channel.service}:#{channelName.toLowerCase()}"
+      for channelId, channel of engine.channelsById
 
         channelInfosById[channelId] = 
           name: channel.name
