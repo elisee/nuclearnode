@@ -26,7 +26,7 @@ module.exports = engine =
           actors: channel.public.actors.length
 
       for service, handle of req.user.serviceHandles
-        continue if service == 'guest' or ! handle?
+        continue if config.channels.services.indexOf(service) == -1 or ! handle?
         channelId = "#{service}:#{handle.toLowerCase()}"
         
         channelInfo = channelInfosById[channelId]
