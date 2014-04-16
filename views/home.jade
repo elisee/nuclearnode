@@ -31,5 +31,5 @@ block content
   h2= i18n.t('nuclearnode:createChannel.title')
 
   form#CreateChannelForm
-    input#CreateChannelName(type="text",value="",placeholder=i18n.t('nuclearnode:createChannel.namePlaceholder'),pattern="[a-zA-Z0-9_]+",title=i18n.t('nuclearnode:createChannel.nameValidChars'))
+    input#CreateChannelName(type="text",value="",placeholder=i18n.t('nuclearnode:createChannel.namePlaceholder'),pattern="[a-zA-Z0-9_]{1,20}",maxlength="20",title=i18n.t('nuclearnode:createChannel.nameValidChars'))
     input(type="submit",value="Go")

@@ -48,7 +48,7 @@ module.exports = engine =
         user: req.user
         channelInfos: channelInfos
 
-    app.param 'channel', (req, res, next, channel) -> if /^[A-Za-z0-9_-]+$/.exec(channel) then next() else res.send 404
+    app.param 'channel', (req, res, next, channel) -> if /^[A-Za-z0-9_-]{1,20}$/.exec(channel) then next() else res.send 404
 
     validateService = (req, res, next) ->
       req.params.service ?= null
