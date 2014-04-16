@@ -30,7 +30,7 @@
 
   sidebarTabs:
     chat: "Chat"
-    log: "Log"
+    settings: "Settings"
     leaderboard: "Leaderboard"
 
   chat:

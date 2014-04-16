@@ -2,7 +2,7 @@
   .AdBox
   #SidebarTabButtons
     button.Active(data-tab="Chat")= i18n.t('nuclearnode:sidebarTabs.chat')
-    button(data-tab="Log")= i18n.t('nuclearnode:sidebarTabs.log')
+    button(data-tab="Settings")= i18n.t('nuclearnode:sidebarTabs.settings')
     button(data-tab="Leaderboard")= i18n.t('nuclearnode:sidebarTabs.leaderboard')
   #SidebarTabs
     #ChatTab.Active
@@ -10,5 +10,5 @@
         ol#ChatLog
       #ChatInputPanel
         textarea#ChatInputBox(placeholder=i18n.t('nuclearnode:chat.typeHereToChat'))
-    #LogTab
+    #SettingsTab
     #LeaderboardTab
