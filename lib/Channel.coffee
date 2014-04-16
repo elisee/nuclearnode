@@ -1,3 +1,4 @@
+config = require '../config'
 ChannelLogic = require './ChannelLogic'
 
 chatSettings = 
@@ -23,13 +24,13 @@ module.exports = class Channel
     return
 
   log: (message) -> @engine.log "[#{@service}:#{@name}] #{message}"
-
+  logDebug: (message) -> @engine.logDebug "[#{@service}:#{@name}] #{message}"
 
   #----------------------------------------------------------------------------
   # User management
   addSocket: (socket) ->
     socket.user = @usersByAuthId[ socket.handshake.user.authId ] ? @createUser socket.handshake.user
-    @log "socket #{socket.id} (#{socket.handshake.address.address}) added to user #{socket.user.public.displayName}"
+    @logDebug "socket #{socket.id} (#{socket.handshake.address.address}) added to user #{socket.user.public.displayName}"
 
     socket.user.sockets.push socket
     @sockets.push socket
@@ -125,7 +126,7 @@ module.exports = class Channel
     @logic.onUserJoined user
 
     @broadcast 'addUser', user.public
-    @log "User #{user.public.displayName} created"
+    @logDebug "User #{user.public.displayName} created"
 
     user
 

@@ -83,12 +83,13 @@ module.exports = engine =
     return
 
   log: (message) -> console.log new Date().toISOString() + " - #{message}"
+  logDebug: (message) -> log message if config.debugLog
 
   setupSocket: (socket) ->
-    engine.log "#{socket.id} (#{socket.handshake.address.address}) connected"
+    engine.logDebug "#{socket.id} (#{socket.handshake.address.address}) connected"
 
     socket.on 'disconnect', ->
-      engine.log "#{socket.id} (#{socket.handshake.address.address}) disconnected"
+      engine.logDebug "#{socket.id} (#{socket.handshake.address.address}) disconnected"
       socket.channel.removeSocket socket if socket.channel?
 
     socket.on 'joinChannel', (service, channelName) ->
@@ -109,7 +110,7 @@ module.exports = engine =
     return
   
   clearChannel: (channel) ->
-    channel.log "Clearing channel"
+    channel.logDebug "Clearing channel"
     delete engine.channelsById["#{channel.service}:#{channel.name.toLowerCase()}"]
     
     return
