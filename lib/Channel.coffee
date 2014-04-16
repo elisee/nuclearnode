@@ -110,7 +110,9 @@ module.exports = class Channel
         serviceHandles: userProfile.serviceHandles
         role: ''
 
-    if @service.length > 0
+    if userProfile.isHubAdministrator
+      user.public.role = 'hubAdministrator'
+    else if @service.length > 0
       # Make the authenticated channel's owner its host
       if userProfile.serviceHandles?[@service]?.toLowerCase() == @name.toLowerCase()
         user.public.role = 'host'

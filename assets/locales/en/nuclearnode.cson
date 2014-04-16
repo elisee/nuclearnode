@@ -45,6 +45,7 @@
   serviceHandlePlaceholder: "Logged in"
 
   userRoles:
+    hubAdministrator: 'Super administrator'
     host: 'Host'
     administrator: 'Administrator'
     moderator: 'Moderator'

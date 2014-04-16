@@ -45,6 +45,7 @@
   serviceHandlePlaceholder: "Connecté"
 
   userRoles:
+    hubAdministrator: 'Super administrateur'
     host: 'Hôte'
     administrator: 'Administrateur'
     moderator: 'Modérateur'
