@@ -10,7 +10,7 @@ header
         = i18n.t('nuclearnode:channelOnService')
         |  
         span.ServiceName= i18n.t('nuclearnode:loginServices.' + channel.service)
-      span.ChannelUsers
+      span.ChannelUsers ?
 
   .PlayerInfo
     span.PlayerName=user.displayName
