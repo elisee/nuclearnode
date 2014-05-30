@@ -31,11 +31,14 @@ onChannelDataReceived = (data) ->
 
   channel.data.usersByAuthId = {}
   channel.data.usersByAuthId[user.authId] = user for user in channel.data.users
+  app.user.role = channel.data.usersByAuthId[app.user.authId].role
 
   updateChannelUsersCounter()
 
   channel.data.actorsByAuthId = {}
   channel.data.actorsByAuthId[actor.authId] = actor for actor in channel.data.actors
+
+  renderSettings()
 
   channel.logic.onChannelDataReceived()
   return
@@ -64,6 +67,10 @@ onUserRemoved = (authId) ->
 onUserRoleSet = (data) ->
   user = channel.data.usersByAuthId[data.userAuthId]
   user.role = data.role
+
+  if data.userAuthId == app.user.authId
+    app.user.role = data.role
+    renderSettings()
 
   appendToChat 'Info', i18n.t 'nuclearnode:chat.userRoleSet', user: JST['nuclearnode/chatUser']( user: user, i18n: i18n ), role: i18n.t('nuclearnode:userRoles.' + user.role)
 
@@ -137,3 +144,7 @@ appendToChat = (type, content) ->
     oldestLogEntry = chatLogElement.querySelector('li:first-of-type')
     oldestLogEntry.parentNode.removeChild(oldestLogEntry)
   return
+
+# Settings
+renderSettings = ->
+  document.getElementById('SettingsTab').innerHTML = JST['settings']( role: app.user.role, settings: channel.data.settings, i18n: i18n )
