@@ -1,4 +1,4 @@
-if role == 'host' || role == 'hubAdministrator'
+if app.user.role == 'host' || app.user.role == 'hubAdministrator'
   p Host settings
 else
   p User settings
