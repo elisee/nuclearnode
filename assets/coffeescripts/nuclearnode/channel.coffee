@@ -5,7 +5,7 @@ initApp -> channel.logic.init ->
 
   channel.socket.on 'connect', -> channel.socket.emit 'joinChannel', app.channel.service, app.channel.name
   channel.socket.on 'disconnect', ->
-    appendToChat 'Info', i18n.t 'nuclearnode:chat.disconnected'
+    channel.appendToChat 'Info', i18n.t 'nuclearnode:chat.disconnected'
     channel.logic.onDisconnected()
   channel.socket.on 'channelData', onChannelDataReceived
 
@@ -44,7 +44,7 @@ onChannelDataReceived = (data) ->
   return
 
 onUserAdded = (user) ->
-  appendToChat 'Info', i18n.t 'nuclearnode:chat.userJoined', user: JST['nuclearnode/chatUser']( user: user, i18n: i18n )
+  channel.appendToChat 'Info', i18n.t 'nuclearnode:chat.userJoined', user: JST['nuclearnode/chatUser']( user: user, i18n: i18n )
   channel.data.users.push user
   channel.data.usersByAuthId[user.authId] = user
 
@@ -55,7 +55,7 @@ onUserAdded = (user) ->
 
 onUserRemoved = (authId) ->
   user = channel.data.usersByAuthId[authId]
-  appendToChat 'Info', i18n.t 'nuclearnode:chat.userLeft', user: JST['nuclearnode/chatUser']( user: user, i18n: i18n )
+  channel.appendToChat 'Info', i18n.t 'nuclearnode:chat.userLeft', user: JST['nuclearnode/chatUser']( user: user, i18n: i18n )
   delete channel.data.usersByAuthId[authId]
   channel.data.users.splice channel.data.users.indexOf(user), 1
 
@@ -72,7 +72,7 @@ onUserRoleSet = (data) ->
     app.user.role = data.role
     renderSettings()
 
-  appendToChat 'Info', i18n.t 'nuclearnode:chat.userRoleSet', user: JST['nuclearnode/chatUser']( user: user, i18n: i18n ), role: i18n.t('nuclearnode:userRoles.' + user.role)
+  channel.appendToChat 'Info', i18n.t 'nuclearnode:chat.userRoleSet', user: JST['nuclearnode/chatUser']( user: user, i18n: i18n ), role: i18n.t('nuclearnode:userRoles.' + user.role)
 
 onActorAdded = (actor) ->
   channel.data.actors.push actor
@@ -106,14 +106,14 @@ onSidebarTabButtonClicked = (event) ->
 # Chat
 onChatMessageReceived = (message) ->
   if message.userAuthId?
-    appendToChat 'Message',
+    channel.appendToChat 'Message',
       JST['nuclearnode/chatMessage']
         text: message.text
         author: JST['nuclearnode/chatUser']
           user: channel.data.usersByAuthId[message.userAuthId]
           i18n: i18n
   else
-    appendToChat 'Info', i18n.t 'nuclearnode:chat.' + message.text
+    channel.appendToChat 'Info', i18n.t 'nuclearnode:chat.' + message.text
 
   return
 
@@ -126,7 +126,7 @@ onSubmitChatMessage = (event) ->
 
 maxChatLogHistory = 100
 
-appendToChat = (type, content) ->
+channel.appendToChat = (type, content) ->
   chatLogElement = document.getElementById('ChatLog')
 
   date = new Date()
@@ -147,4 +147,6 @@ appendToChat = (type, content) ->
 
 # Settings
 renderSettings = ->
-  document.getElementById('SettingsTab').innerHTML = JST['settings']( role: app.user.role, settings: channel.data.settings, i18n: i18n )
+  settingsTab = document.getElementById('SettingsTab')
+  settingsTab.innerHTML = JST['settings']( app: app, channel: channel, i18n: i18n )
+  channel.logic.onSettingsSetup settingsTab
