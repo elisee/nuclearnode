@@ -1,7 +1,6 @@
 config = require '../config'
 passport = require 'passport'
 signedRequest = require 'signed-request'
-_ = require 'underscore'
 Channel = require('./Channel')
 
 module.exports = engine =
