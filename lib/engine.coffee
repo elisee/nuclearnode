@@ -1,7 +1,8 @@
 config = require '../config'
 passport = require 'passport'
 signedRequest = require 'signed-request'
-Channel = require('./Channel')
+_ = require 'lodash'
+Channel = require './Channel'
 
 module.exports = engine =
   channelsById: {}
