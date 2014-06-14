@@ -35,6 +35,8 @@
 
   chat:
     typeHereToChat: "Tapez ici pour discuter"
+    logInToChat: "Ce salon ne permet pas aux visiteurs de discuter. Veuillez vous connecter d'abord."
+
     userJoined: "%{user} a rejoint."
     userLeft: "%{user} est parti."
     userRoleSet: "%{user} est maintenant %{role}."

@@ -56,6 +56,9 @@ module.exports = class Channel
 
     socket.on 'chatMessage', (text) =>
       return if typeof text != 'string' or text.length == 0
+      # _(socket.user.public.authId).startsWith 'guest:' (waiting for lodash 2.5)
+      return if @public.guestAccess == 'noChat' and socket.user.public.authId.substring(0, 'guest:'.length) == 'guest:'
+
       text = text.substring 0, 300
 
       now = Date.now()
@@ -90,12 +93,13 @@ module.exports = class Channel
       @public.guestAccess = guestAccess
       @broadcast 'settings:room.guestAccess', @public.guestAccess
 
-      for authId, connectedUser of @usersByAuthId
-        # if _(authId).startsWith 'guest:' (waiting for lodash 2.5)
-        if authId.substring(0, 'guest:'.length) == 'guest:'
-          for userSocket in connectedUser.sockets
-            userSocket.emit 'noGuestsAllowed'
-            userSocket.disconnect()
+      if guestAccess == 'deny'
+        for authId, connectedUser of @usersByAuthId
+          # if _(authId).startsWith 'guest:' (waiting for lodash 2.5)
+          if authId.substring(0, 'guest:'.length) == 'guest:'
+            for userSocket in connectedUser.sockets
+              userSocket.emit 'noGuestsAllowed'
+              userSocket.disconnect()
 
       return
 

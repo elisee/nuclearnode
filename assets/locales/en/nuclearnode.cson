@@ -35,6 +35,8 @@
 
   chat:
     typeHereToChat: "Type here to chat"
+    logInToChat: "This room doesn't allow guests to chat. Please log in first."
+
     userJoined: "%{user} has joined."
     userLeft: "%{user} has left."
     userRoleSet: "%{user} is now %{role}."

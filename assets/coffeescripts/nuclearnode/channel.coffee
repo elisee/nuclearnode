@@ -57,6 +57,7 @@ onChannelDataReceived = (data) ->
   app.user.role = channel.data.usersByAuthId[app.user.authId].role
 
   updateChannelUsersCounter()
+  updateGuestChat()
 
   channel.data.actorsByAuthId = {}
   channel.data.actorsByAuthId[actor.authId] = actor for actor in channel.data.actors
@@ -201,9 +202,23 @@ onGuestAccessUpdated = (guestAccess) ->
   else
     document.querySelector('#SettingsTab select[name=guestAccess]').value = guestAccess
 
+  updateGuestChat()
+
+updateGuestChat = ->
+  return if ! app.user.isGuest
+
+  chatInputBoxElement = document.getElementById('ChatInputBox')
+  if channel.data.guestAccess == 'noChat'
+    chatInputBoxElement.placeholder = i18n.t('nuclearnode:chat.logInToChat')
+    chatInputBoxElement.value = ''
+    chatInputBoxElement.disabled = true
+  else
+    chatInputBoxElement.placeholder = i18n.t('nuclearnode:chat.typeHereToChat')
+    chatInputBoxElement.disabled = false
+
 onUserBanned = (bannedUser) ->
   channel.appendToChat 'Info', i18n.t 'nuclearnode:chat.userBanned', { user: bannedUser.displayName }
-  
+
   bannedUsersElement = document.querySelector('#SettingsTab .BannedUsers')
 
   if Object.keys(channel.data.bannedUsersByAuthId).length == 0
