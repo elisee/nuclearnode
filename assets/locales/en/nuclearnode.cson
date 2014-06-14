@@ -49,4 +49,8 @@
     host: 'Host'
     administrator: 'Administrator'
     moderator: 'Moderator'
+
+  settings:
+    rules: "Game rules"
+    room: "Room"
 }

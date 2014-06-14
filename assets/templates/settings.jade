@@ -1,4 +1,17 @@
+h2= i18n.t('nuclearnode:settings.rules')
+
+table
+  td Setting
+  td
+    if app.user.role == 'host' || app.user.role == 'hubAdministrator'
+      | Editable field
+    else
+      | Value
+
 if app.user.role == 'host' || app.user.role == 'hubAdministrator'
-  p Host settings
-else
-  p User settings
+  h2= i18n.t('nuclearnode:settings.room')
+
+  table
+    td Setting
+    td
+      | Editable field
