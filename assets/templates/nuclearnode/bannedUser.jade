@@ -1,0 +1,3 @@
+li(data-auth-id=bannedUser.authId)= bannedUser.displayName
+  if app.user.role == 'host' || app.user.role == 'hubAdministrator'
+    button.UnbanUser(data-auth-id=bannedUser.authId)= i18n.t('nuclearnode:chat.unban')

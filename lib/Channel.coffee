@@ -103,21 +103,31 @@ module.exports = class Channel
       return if socket.user.public.role not in [ 'host', 'hubAdministrator' ]
       return if typeof(user) != 'object' or typeof(user.authId) != 'string' or typeof(user.displayName) != 'string'
       
-      bannedUser =
+      bannedUserInfo =
         authId: user.authId
         displayName: user.displayName
 
-      @public.bannedUsersByAuthId[bannedUser.authId] = bannedUser
-      @broadcast 'banUser', bannedUser
+      return if @public.bannedUsersByAuthId[bannedUserInfo.authId]?
+
+      @public.bannedUsersByAuthId[bannedUserInfo.authId] = bannedUserInfo
+
+      bannedUser = @usersByAuthId[bannedUserInfo.authId]
+      if bannedUser?
+        for bannedUserSocket in bannedUser.sockets
+          bannedUserSocket.emit 'banned'
+          bannedUserSocket.disconnect()
+
+      @broadcast 'banUser', bannedUserInfo
 
     socket.on 'unbanUser', (userAuthId) =>
       return if socket.user.public.role not in [ 'host', 'hubAdministrator' ]
       return if typeof(userAuthId) != 'string' or userAuthId.length == 0
 
-      return if ! @public.bannedUsersByAuthId[userAuthId]?
+      bannedUserInfo = @public.bannedUsersByAuthId[userAuthId]
+      return if ! bannedUserInfo?
       delete @public.bannedUsersByAuthId[userAuthId]
 
-      @broadcast 'unbanUser', userAuthId
+      @broadcast 'unbanUser', bannedUserInfo
 
     return
 

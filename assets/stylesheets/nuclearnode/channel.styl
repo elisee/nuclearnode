@@ -126,6 +126,13 @@
         cursor default
         color #346192
 
+    .BanUser
+      display none
+
+    &:hover
+      .BanUser
+        display initial
+
 
     &.Info
       color #8aa
@@ -162,7 +169,7 @@
       td:nth-child(2)
         width 60%
 
-    input, button, select, textarea
+    input, button:not(.UnbanUser), select, textarea
       width 100%
       background #444
       border none
@@ -176,3 +183,20 @@
 
     ul
       list-style none
+
+#ChatLog .BanUser, #SettingsTab .UnbanUser
+  border none
+  background none
+  cursor pointer
+  color #a00
+  margin-left 0.25em
+  outline none
+  font-weight normal
+  font-size smaller
+  opacity 0.8
+
+  &:hover
+    opacity 1
+
+  &:active
+    background rgba(255,0,0,0.2)

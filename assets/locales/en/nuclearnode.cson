@@ -41,7 +41,12 @@
     disconnected: "Woops, you got disconnected. Please reload the page."
     undelivered: "Not so fast! Your chat message couldn't be delivered."
     noGuestsAllowed: "This room doesn't allow guests. Please log in to join."
+
+    userBanned: "%{user} has been banned."
+    userUnbanned: "%{user} has been unbanned."
     banned: "You have been banned from this room. Please be respectful and find another room to play in."
+    ban: "Ban"
+    unban: "Unban"
 
   userHandleOnService: "%{handle} on %{service}"
   serviceHandlePlaceholder: "Logged in"

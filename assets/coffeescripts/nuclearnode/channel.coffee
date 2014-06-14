@@ -22,12 +22,23 @@ initApp -> channel.logic.init ->
 
   channel.socket.on 'settings:room.welcomeMessage', onWelcomeMessageUpdated
   channel.socket.on 'settings:room.guestAccess', onGuestAccessUpdated
+  channel.socket.on 'banUser', onUserBanned
+  channel.socket.on 'unbanUser', onUserUnbanned
 
   tabButtons = document.querySelectorAll('#SidebarTabButtons button')
   for tabButton in tabButtons
     tabButton.addEventListener 'click', onSidebarTabButtonClicked
 
   document.getElementById('ChatInputBox').addEventListener 'keydown', onSubmitChatMessage
+
+  document.body.addEventListener 'click', (event) ->
+    return if event.target.tagName != 'BUTTON'
+    if event.target.className == 'BanUser'
+      console.log event.target.dataset.displayName
+      bannedUser = { authId: event.target.dataset.authId, displayName: event.target.dataset.displayName }
+      channel.socket.emit 'banUser', bannedUser
+    else if event.target.className == 'UnbanUser'
+      channel.socket.emit 'unbanUser', event.target.dataset.authId
   return
 
 # Channel & user presence
@@ -56,7 +67,7 @@ onChannelDataReceived = (data) ->
   return
 
 onUserAdded = (user) ->
-  channel.appendToChat 'Info', i18n.t 'nuclearnode:chat.userJoined', user: JST['nuclearnode/chatUser']( user: user, i18n: i18n )
+  channel.appendToChat 'Info', i18n.t 'nuclearnode:chat.userJoined', user: JST['nuclearnode/chatUser'] { user, i18n, app }
   channel.data.users.push user
   channel.data.usersByAuthId[user.authId] = user
 
@@ -67,7 +78,7 @@ onUserAdded = (user) ->
 
 onUserRemoved = (authId) ->
   user = channel.data.usersByAuthId[authId]
-  channel.appendToChat 'Info', i18n.t 'nuclearnode:chat.userLeft', user: JST['nuclearnode/chatUser']( user: user, i18n: i18n )
+  channel.appendToChat 'Info', i18n.t 'nuclearnode:chat.userLeft', user: JST['nuclearnode/chatUser'] { user, i18n, app }
   delete channel.data.usersByAuthId[authId]
   channel.data.users.splice channel.data.users.indexOf(user), 1
 
@@ -84,7 +95,7 @@ onUserRoleSet = (data) ->
     app.user.role = data.role
     renderSettings()
 
-  channel.appendToChat 'Info', i18n.t 'nuclearnode:chat.userRoleSet', user: JST['nuclearnode/chatUser']( user: user, i18n: i18n ), role: i18n.t('nuclearnode:userRoles.' + user.role)
+  channel.appendToChat 'Info', i18n.t 'nuclearnode:chat.userRoleSet', user: JST['nuclearnode/chatUser']( { user, i18n, app } ), role: i18n.t('nuclearnode:userRoles.' + user.role)
 
 onActorAdded = (actor) ->
   channel.data.actors.push actor
@@ -124,6 +135,7 @@ onChatMessageReceived = (message) ->
         author: JST['nuclearnode/chatUser']
           user: channel.data.usersByAuthId[message.userAuthId]
           i18n: i18n
+          app: app
   else
     channel.appendToChat 'Info', i18n.t 'nuclearnode:chat.' + message.text
 
@@ -188,3 +200,30 @@ onGuestAccessUpdated = (guestAccess) ->
     document.querySelector('#SettingsTab .GuestAccess').textContent = i18n.t "nuclearnode:settings.room.guestAccess.#{guestAccess}"
   else
     document.querySelector('#SettingsTab select[name=guestAccess]').value = guestAccess
+
+onUserBanned = (bannedUser) ->
+  channel.appendToChat 'Info', i18n.t 'nuclearnode:chat.userBanned', { user: bannedUser.displayName }
+  
+  bannedUsersElement = document.querySelector('#SettingsTab .BannedUsers')
+
+  if Object.keys(channel.data.bannedUsersByAuthId).length == 0
+    bannedUsersElement.innerHTML = ''
+
+  channel.data.bannedUsersByAuthId[bannedUser.authId] = bannedUser
+
+  bannedUsersElement.insertAdjacentHTML 'beforeend', JST['nuclearnode/bannedUser'] { bannedUser, app, channel, i18n }
+  return
+
+onUserUnbanned = (bannedUser) ->
+  channel.appendToChat 'Info', i18n.t 'nuclearnode:chat.userUnbanned', { user: bannedUser.displayName }
+
+  delete channel.data.bannedUsersByAuthId[bannedUser.authId]
+  liElement = document.querySelector("#SettingsTab .BannedUsers li[data-auth-id=\"#{bannedUser.authId}\"]")
+  liElement.parentElement.removeChild liElement
+
+  if Object.keys(channel.data.bannedUsersByAuthId).length == 0
+    noneElement = document.createElement 'li'
+    noneElement.textContent = i18n.t('nuclearnode:settings.room.bannedUsers.none')
+    document.querySelector('#SettingsTab .BannedUsers').appendChild noneElement
+
+  return
