@@ -40,6 +40,8 @@
     userRoleSet: "%{user} is now %{role}."
     disconnected: "Woops, you got disconnected. Please reload the page."
     undelivered: "Not so fast! Your chat message couldn't be delivered."
+    noGuestsAllowed: "This room doesn't allow guests. Please log in to join."
+    banned: "You have been banned from this room. Please be respectful and find another room to play in."
 
   userHandleOnService: "%{handle} on %{service}"
   serviceHandlePlaceholder: "Logged in"
@@ -51,6 +53,23 @@
     moderator: 'Moderator'
 
   settings:
-    rules: "Game rules"
-    room: "Room"
+    rules:
+      title: "Game rules"
+
+    room:
+      title: "Room"
+      welcomeMessage: "Welcome message"
+      guestAccess:
+        label: "Guests"
+        full: "Can play & chat"
+        noChat: "Can only play"
+        deny: "Can't join"
+      bannedUsers:
+        label: "Banned people"
+        none: "(Nobody)"
+
+  settingsUpdate:
+    room:
+      welcomeMessage: """The welcome message has been updated: "%{welcomeMessage}"."""
+      guestAccess: "Guest access rules have been updated: %{guestAccess}."
 }

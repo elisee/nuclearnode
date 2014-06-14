@@ -1,17 +1,42 @@
-h2= i18n.t('nuclearnode:settings.rules')
+h2= i18n.t('nuclearnode:settings.rules.title')
 
 table
-  td Setting
-  td
-    if app.user.role == 'host' || app.user.role == 'hubAdministrator'
-      | Editable field
-    else
-      | Value
-
-if app.user.role == 'host' || app.user.role == 'hubAdministrator'
-  h2= i18n.t('nuclearnode:settings.room')
-
-  table
+  tr
     td Setting
     td
-      | Editable field
+      if app.user.role == 'host' || app.user.role == 'hubAdministrator'
+        | Editable field
+      else
+        | Value
+
+h2= i18n.t('nuclearnode:settings.room.title')
+
+table
+  tr
+    td= i18n.t('nuclearnode:settings.room.welcomeMessage')
+    td
+      if app.user.role == 'host' || app.user.role == 'hubAdministrator'
+        input(type="text",name="welcomeMessage",value=channel.data.welcomeMessage,maxlength="300")
+      else
+        .WelcomeMessage= channel.data.welcomeMessage
+
+  tr
+    td= i18n.t('nuclearnode:settings.room.guestAccess.label')
+    td
+      if app.user.role == 'host' || app.user.role == 'hubAdministrator'
+        select(name="guestAccess")
+          for option in [ 'full', 'noChat', 'deny' ]
+            - var selected = option == channel.data.guestAccess
+            option(value=option,selected=selected)= i18n.t('nuclearnode:settings.room.guestAccess.' + option)
+      else
+        .GuestAccess= i18n.t('nuclearnode:settings.room.guestAccess.' + channel.data.guestAccess)
+
+  tr
+    td= i18n.t('nuclearnode:settings.room.bannedUsers.label')
+    td
+      ul.BannedUsers
+        if Object.keys(channel.data.bannedUsersByAuthId).length > 0
+          each bannedUser, key in channel.data.bannedUsersByAuthId
+            li(data-auth-id=bannedUser.authId)= bannedUser.displayName
+        else
+          li= i18n.t('nuclearnode:settings.room.bannedUsers.none')

@@ -1,12 +1,14 @@
 window.channel = {}
+muteDisconnect = false
 
 initApp -> channel.logic.init ->
   channel.socket = io.connect null, reconnect: false
 
   channel.socket.on 'connect', -> channel.socket.emit 'joinChannel', app.channel.service, app.channel.name
-  channel.socket.on 'disconnect', ->
-    channel.appendToChat 'Info', i18n.t 'nuclearnode:chat.disconnected'
-    channel.logic.onDisconnected()
+  channel.socket.on 'disconnect', onDisconnected
+  channel.socket.on 'noGuestsAllowed', -> channel.appendToChat 'Info', i18n.t 'nuclearnode:chat.noGuestsAllowed'; muteDisconnect = true
+  channel.socket.on 'banned', -> channel.appendToChat 'Info', i18n.t 'nuclearnode:chat.banned'; muteDisconnect = true
+
   channel.socket.on 'channelData', onChannelDataReceived
 
   channel.socket.on 'addUser', onUserAdded
@@ -18,6 +20,9 @@ initApp -> channel.logic.init ->
 
   channel.socket.on 'chatMessage', onChatMessageReceived
 
+  channel.socket.on 'settings:room.welcomeMessage', onWelcomeMessageUpdated
+  channel.socket.on 'settings:room.guestAccess', onGuestAccessUpdated
+
   tabButtons = document.querySelectorAll('#SidebarTabButtons button')
   for tabButton in tabButtons
     tabButton.addEventListener 'click', onSidebarTabButtonClicked
@@ -26,8 +31,15 @@ initApp -> channel.logic.init ->
   return
 
 # Channel & user presence
+onDisconnected = ->
+  channel.appendToChat 'Info', i18n.t 'nuclearnode:chat.disconnected' if ! muteDisconnect
+  channel.logic.onDisconnected()
+
 onChannelDataReceived = (data) ->
   channel.data = data
+
+  if channel.data.welcomeMessage.length > 0
+    channel.appendToChat 'Info', channel.data.welcomeMessage
 
   channel.data.usersByAuthId = {}
   channel.data.usersByAuthId[user.authId] = user for user in channel.data.users
@@ -149,4 +161,30 @@ channel.appendToChat = (type, content) ->
 renderSettings = ->
   settingsTab = document.getElementById('SettingsTab')
   settingsTab.innerHTML = JST['settings']( app: app, channel: channel, i18n: i18n )
+
+  if app.user.role in [ 'host', 'hubAdministrator' ]
+    settingsTab.querySelector('input[name=welcomeMessage]').addEventListener 'change', (event) ->
+      channel.socket.emit 'settings:room.welcomeMessage', event.target.value
+
+    settingsTab.querySelector('select[name=guestAccess]').addEventListener 'change', (event) ->
+      channel.socket.emit 'settings:room.guestAccess', event.target.value
+
   channel.logic.onSettingsSetup settingsTab
+
+onWelcomeMessageUpdated = (welcomeMessage) ->
+  channel.data.welcomeMessage = welcomeMessage
+
+  channel.appendToChat 'Info', i18n.t 'nuclearnode:settingsUpdate.room.welcomeMessage', welcomeMessage: welcomeMessage
+  if app.user.role not in [ 'host', 'hubAdministrator' ]
+    document.querySelector('#SettingsTab .WelcomeMessage').textContent = welcomeMessage
+  else
+    document.querySelector('#SettingsTab input[name=welcomeMessage]').value = welcomeMessage
+
+onGuestAccessUpdated = (guestAccess) ->
+  channel.data.guestAccess = guestAccess
+
+  channel.appendToChat 'Info', i18n.t 'nuclearnode:settingsUpdate.room.guestAccess', guestAccess: i18n.t "nuclearnode:settings.room.guestAccess.#{guestAccess}"
+  if app.user.role not in [ 'host', 'hubAdministrator' ]
+    document.querySelector('#SettingsTab .GuestAccess').textContent = i18n.t "nuclearnode:settings.room.guestAccess.#{guestAccess}"
+  else
+    document.querySelector('#SettingsTab select[name=guestAccess]').value = guestAccess

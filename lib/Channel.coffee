@@ -1,4 +1,5 @@
 config = require '../config'
+_ = require 'lodash'
 ChannelLogic = require './ChannelLogic'
 
 chatSettings = 
@@ -10,6 +11,10 @@ module.exports = class Channel
 
   constructor: (@engine, @name, @service) ->
     @public =
+      welcomeMessage: ''
+      guestAccess: 'full'
+      bannedUsersByAuthId: {}
+
       users: []
       actors: []
 
@@ -29,6 +34,14 @@ module.exports = class Channel
   #----------------------------------------------------------------------------
   # User management
   addSocket: (socket) ->
+    if socket.handshake.user.isGuest and @public.guestAccess == 'deny'
+      socket.emit 'noGuestsAllowed'
+      return socket.disconnect()
+
+    if @public.bannedUsersByAuthId[socket.handshake.user.authId]?
+      socket.emit 'banned'
+      return socket.disconnect()
+
     socket.user = @usersByAuthId[ socket.handshake.user.authId ] ? @createUser socket.handshake.user
     @logDebug "socket #{socket.id} (#{socket.handshake.address.address}) added to user #{socket.user.public.displayName}"
 
@@ -65,9 +78,53 @@ module.exports = class Channel
           socket.user.chat.hellbanned = true
       return
 
+    socket.on 'settings:room.welcomeMessage', (text) =>
+      return if socket.user.public.role not in [ 'host', 'hubAdministrator' ]
+      @public.welcomeMessage = text.substring 0, 300
+      @broadcast 'settings:room.welcomeMessage', @public.welcomeMessage
+
+    socket.on 'settings:room.guestAccess', (guestAccess) =>
+      return if socket.user.public.role not in [ 'host', 'hubAdministrator' ]
+      return if guestAccess not in [ 'full', 'noChat', 'deny' ]
+
+      @public.guestAccess = guestAccess
+      @broadcast 'settings:room.guestAccess', @public.guestAccess
+
+      for authId, connectedUser of @usersByAuthId
+        # if _(authId).startsWith 'guest:' (waiting for lodash 2.5)
+        if authId.substring(0, 'guest:'.length) == 'guest:'
+          for userSocket in connectedUser.sockets
+            userSocket.emit 'noGuestsAllowed'
+            userSocket.disconnect()
+
+      return
+
+    socket.on 'banUser', (user) =>
+      return if socket.user.public.role not in [ 'host', 'hubAdministrator' ]
+      return if typeof(user) != 'object' or typeof(user.authId) != 'string' or typeof(user.displayName) != 'string'
+      
+      bannedUser =
+        authId: user.authId
+        displayName: user.displayName
+
+      @public.bannedUsersByAuthId[bannedUser.authId] = bannedUser
+      @broadcast 'banUser', bannedUser
+
+    socket.on 'unbanUser', (userAuthId) =>
+      return if socket.user.public.role not in [ 'host', 'hubAdministrator' ]
+      return if typeof(userAuthId) != 'string' or userAuthId.length == 0
+
+      return if ! @public.bannedUsersByAuthId[userAuthId]?
+      delete @public.bannedUsersByAuthId[userAuthId]
+
+      @broadcast 'unbanUser', userAuthId
+
     return
 
   removeSocket: (socket) ->
+    index = @sockets.indexOf(socket)
+    return if index == -1
+
     @sockets.splice @sockets.indexOf(socket), 1
     socket.user.sockets.splice socket.user.sockets.indexOf(socket), 1
 

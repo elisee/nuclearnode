@@ -40,6 +40,8 @@
     userRoleSet: "%{user} est maintenant %{role}."
     disconnected: "Oups, vous avez été déconnecté. Veuillez recharger la page."
     undelivered: "Pas si vite ! Votre message n'a pas pu être envoyé."
+    noGuestsAllowed: "Ce salon n'accepte pas les visiteurs. Veuillez vous connecter pour rejoindre."
+    banned: "Vous avez été banni de ce salon. Soyez respectueux et choisissez un autre salon."
 
   userHandleOnService: "%{handle} sur %{service}"
   serviceHandlePlaceholder: "Connecté"
@@ -49,4 +51,25 @@
     host: 'Hôte'
     administrator: 'Administrateur'
     moderator: 'Modérateur'
+
+  settings:
+    rules:
+      title: "Règles du jeu"
+
+    room:
+      title: "Salon"
+      welcomeMessage: "Message d'accueil"
+      guestAccess:
+        label: "Accès visiteurs"
+        full: "Jouer & chat"
+        noChat: "Jouer uniquement"
+        deny: "Interdit"
+      bannedUsers:
+        label: "Personnes bannies"
+        none: "(Aucune)"
+
+  settingsUpdate:
+    room:
+      welcomeMessage: """Le message d'accueil a été mis à jour : "%{welcomeMessage}"."""
+      guestAccess: "Les conditions d'accès des visiteurs ont été mises à jour : %{guestAccess}."
 }
