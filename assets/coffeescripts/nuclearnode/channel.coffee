@@ -14,6 +14,8 @@ initApp -> channel.logic.init ->
   channel.socket.on 'addUser', onUserAdded
   channel.socket.on 'removeUser', onUserRemoved
   channel.socket.on 'setUserRole', onUserRoleSet
+  channel.socket.on 'banUser', onUserBanned
+  channel.socket.on 'unbanUser', onUserUnbanned
 
   channel.socket.on 'addActor', onActorAdded
   channel.socket.on 'removeActor', onActorRemoved
@@ -22,8 +24,7 @@ initApp -> channel.logic.init ->
 
   channel.socket.on 'settings:room.welcomeMessage', onWelcomeMessageUpdated
   channel.socket.on 'settings:room.guestAccess', onGuestAccessUpdated
-  channel.socket.on 'banUser', onUserBanned
-  channel.socket.on 'unbanUser', onUserUnbanned
+  channel.socket.on 'settings:livestream', onLivestreamUpdated
 
   tabButtons = document.querySelectorAll('#SidebarTabButtons button')
   for tabButton in tabButtons
@@ -40,6 +41,7 @@ initApp -> channel.logic.init ->
     else if event.target.className == 'UnbanUser'
       channel.socket.emit 'unbanUser', event.target.dataset.authId
   return
+
 
 # Channel & user presence
 onDisconnected = ->
@@ -62,6 +64,7 @@ onChannelDataReceived = (data) ->
   channel.data.actorsByAuthId = {}
   channel.data.actorsByAuthId[actor.authId] = actor for actor in channel.data.actors
 
+  setupLivestream()
   renderSettings()
 
   channel.logic.onChannelDataReceived()
@@ -98,6 +101,33 @@ onUserRoleSet = (data) ->
 
   channel.appendToChat 'Info', i18n.t 'nuclearnode:chat.userRoleSet', user: JST['nuclearnode/chatUser']( { user, i18n, app } ), role: i18n.t('nuclearnode:userRoles.' + user.role)
 
+onUserBanned = (bannedUser) ->
+  channel.appendToChat 'Info', i18n.t 'nuclearnode:chat.userBanned', { user: bannedUser.displayName }
+
+  bannedUsersElement = document.querySelector('#SettingsTab .BannedUsers')
+
+  if Object.keys(channel.data.bannedUsersByAuthId).length == 0
+    bannedUsersElement.innerHTML = ''
+
+  channel.data.bannedUsersByAuthId[bannedUser.authId] = bannedUser
+
+  bannedUsersElement.insertAdjacentHTML 'beforeend', JST['nuclearnode/bannedUser'] { bannedUser, app, channel, i18n }
+  return
+
+onUserUnbanned = (bannedUser) ->
+  channel.appendToChat 'Info', i18n.t 'nuclearnode:chat.userUnbanned', { user: bannedUser.displayName }
+
+  delete channel.data.bannedUsersByAuthId[bannedUser.authId]
+  liElement = document.querySelector("#SettingsTab .BannedUsers li[data-auth-id=\"#{bannedUser.authId}\"]")
+  liElement.parentElement.removeChild liElement
+
+  if Object.keys(channel.data.bannedUsersByAuthId).length == 0
+    noneElement = document.createElement 'li'
+    noneElement.textContent = i18n.t('nuclearnode:settings.room.bannedUsers.none')
+    document.querySelector('#SettingsTab .BannedUsers').appendChild noneElement
+
+  return
+
 onActorAdded = (actor) ->
   channel.data.actors.push actor
   channel.data.actorsByAuthId[actor.authId] = actor
@@ -116,6 +146,7 @@ onActorRemoved = (authId) ->
 updateChannelUsersCounter = ->
   document.querySelector('#App header .ChannelUsers').textContent = if channel.data.users.length > 0 then channel.data.users.length else ''
 
+
 # Sidebar
 onSidebarTabButtonClicked = (event) ->
   oldActiveButton = document.querySelector('#SidebarTabButtons button.Active')
@@ -126,6 +157,7 @@ onSidebarTabButtonClicked = (event) ->
   oldActiveTab.classList.remove 'Active'
   document.getElementById(event.target.dataset.tab + 'Tab').classList.add 'Active'
   return
+
 
 # Chat
 onChatMessageReceived = (message) ->
@@ -170,6 +202,20 @@ channel.appendToChat = (type, content) ->
     oldestLogEntry.parentNode.removeChild(oldestLogEntry)
   return
 
+
+# Livestream
+setupLivestream = ->
+  streamBoxElement = document.querySelector('#Sidebar .StreamBox')
+
+  if channel.data.livestream.service != 'none' and ( channel.data.livestream.channel.length > 0 or channel.data.livestream.service == 'talkgg' )
+    # alert 'todo: setupLivestream'
+    streamBoxElement.innerHTML = JST["nuclearnode/livestreams/#{channel.data.livestream.service}"] { channel: channel.data.livestream.channel, app: app }
+  else
+    streamBoxElement.innerHTML = ''
+
+  return
+
+
 # Settings
 renderSettings = ->
   settingsTab = document.getElementById('SettingsTab')
@@ -181,6 +227,16 @@ renderSettings = ->
 
     settingsTab.querySelector('select[name=guestAccess]').addEventListener 'change', (event) ->
       channel.socket.emit 'settings:room.guestAccess', event.target.value
+
+    livestreamServiceSelect = settingsTab.querySelector('select[name=livestreamService]')
+    livestreamChannelInput = settingsTab.querySelector('input[name=livestreamChannel]')
+
+    livestreamServiceSelect.addEventListener 'change', (event) ->
+      livestreamChannelInput.parentElement.parentElement.style.display = if event.target.value == 'talkgg' then 'none' else ''
+      channel.socket.emit 'settings:livestream', event.target.value, livestreamChannelInput.value
+
+    livestreamChannelInput.addEventListener 'change', (event) ->
+      channel.socket.emit 'settings:livestream', livestreamServiceSelect.value, event.target.value
 
   channel.logic.onSettingsSetup settingsTab
 
@@ -216,29 +272,12 @@ updateGuestChat = ->
     chatInputBoxElement.placeholder = i18n.t('nuclearnode:chat.typeHereToChat')
     chatInputBoxElement.disabled = false
 
-onUserBanned = (bannedUser) ->
-  channel.appendToChat 'Info', i18n.t 'nuclearnode:chat.userBanned', { user: bannedUser.displayName }
+onLivestreamUpdated = (livestream) ->
+  channel.data.livestream = livestream
 
-  bannedUsersElement = document.querySelector('#SettingsTab .BannedUsers')
+  if app.user.role in [ 'host', 'hubAdministrator' ]
+    document.querySelector('#SettingsTab select[name=livestreamService]').value = livestream.service
+    document.querySelector('#SettingsTab input[name=livestreamChannel]').value = livestream.channel
 
-  if Object.keys(channel.data.bannedUsersByAuthId).length == 0
-    bannedUsersElement.innerHTML = ''
-
-  channel.data.bannedUsersByAuthId[bannedUser.authId] = bannedUser
-
-  bannedUsersElement.insertAdjacentHTML 'beforeend', JST['nuclearnode/bannedUser'] { bannedUser, app, channel, i18n }
-  return
-
-onUserUnbanned = (bannedUser) ->
-  channel.appendToChat 'Info', i18n.t 'nuclearnode:chat.userUnbanned', { user: bannedUser.displayName }
-
-  delete channel.data.bannedUsersByAuthId[bannedUser.authId]
-  liElement = document.querySelector("#SettingsTab .BannedUsers li[data-auth-id=\"#{bannedUser.authId}\"]")
-  liElement.parentElement.removeChild liElement
-
-  if Object.keys(channel.data.bannedUsersByAuthId).length == 0
-    noneElement = document.createElement 'li'
-    noneElement.textContent = i18n.t('nuclearnode:settings.room.bannedUsers.none')
-    document.querySelector('#SettingsTab .BannedUsers').appendChild noneElement
-
+  setupLivestream()
   return

@@ -74,6 +74,14 @@
       bannedUsers:
         label: "Personnes bannies"
         none: "(Aucune)"
+        
+    livestream:
+      title: "Livestream"
+      service: "Service"
+      channel: "Chaîne"
+
+      services:
+        none: "(Pas de stream)"
 
   settingsUpdate:
     room:

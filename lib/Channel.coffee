@@ -14,6 +14,7 @@ module.exports = class Channel
       welcomeMessage: ''
       guestAccess: 'full'
       bannedUsersByAuthId: {}
+      livestream: { service: 'none', channel: '' }
 
       users: []
       actors: []
@@ -132,6 +133,13 @@ module.exports = class Channel
       delete @public.bannedUsersByAuthId[userAuthId]
 
       @broadcast 'unbanUser', bannedUserInfo
+
+    socket.on 'settings:livestream', (service, channel) =>
+      return if service not in [ 'none', 'twitch', 'hitbox' ]
+      return if ! /^[A-Za-z0-9_]+$/.test channel
+
+      @public.livestream = { service, channel }
+      @broadcast 'settings:livestream', @public.livestream
 
     return
 

@@ -75,6 +75,17 @@
         label: "Banned people"
         none: "(Nobody)"
 
+    livestream:
+      title: "Livestream"
+      service: "Service"
+      channel: "Channel"
+
+      services:
+        none: "(No stream)"
+        twitch: "Twitch.tv"
+        hitbox: "Hitbox.tv"
+        talkgg: "Talk.gg"
+
   settingsUpdate:
     room:
       welcomeMessage: """The welcome message has been updated: "%{welcomeMessage}"."""

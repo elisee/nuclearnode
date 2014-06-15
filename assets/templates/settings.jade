@@ -40,3 +40,19 @@ table
             li(data-auth-id=bannedUser.authId)= bannedUser.displayName
         else
           li= i18n.t('nuclearnode:settings.room.bannedUsers.none')
+
+if app.user.role == 'host' || app.user.role == 'hubAdministrator'
+  h2= i18n.t('nuclearnode:settings.livestream.title')
+
+  table
+    tr
+      td= i18n.t('nuclearnode:settings.livestream.service')
+      td
+        select(name="livestreamService")
+          for service in [ 'none', 'twitch', 'hitbox' ]
+            - var selected = service == channel.data.livestream.service
+            option(value=service,selected=selected)= i18n.t('nuclearnode:settings.livestream.services.' + service)
+    tr
+      td= i18n.t('nuclearnode:settings.livestream.channel')
+      td
+        input(type="text",name="livestreamChannel",value=channel.data.livestream.channel)
