@@ -25,7 +25,7 @@ window.audio =
 
       audioCtx.decodeAudioData @response, (buffer) =>
         snd.buffer = buffer
-        callback null, snd
+        callback null, snd if callback?
 
     xhr.send()
       
