@@ -57,7 +57,7 @@ window.initApp = (callback) -> i18n.init window.app.i18nOptions, ->
     audioVolumeSlider.style.display = 'none'
 
   # Close ads
-  for adCloseButton in document.querySelectorAll(".AdClose button")
+  for adCloseButton in document.querySelectorAll(".NuclearSupportBox .BoxClose button")
     adCloseButton.addEventListener 'click', (event) ->
       event.currentTarget.parentElement.parentElement.classList.remove 'Show'
 

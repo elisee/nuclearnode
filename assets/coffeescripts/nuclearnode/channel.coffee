@@ -291,8 +291,8 @@ channel.refreshAds = ->
        data-ad-client='#{window.app.public.adwords.client}'
        data-ad-slot='#{window.app.public.adwords.slot300x250}'></ins>
     """
-  for adBox in document.querySelectorAll(".AdBox")
+  for adBox in document.querySelectorAll(".NuclearSupportBox")
     adBox.classList.add 'Show'
-    adBox.querySelector('.AdContent').innerHTML = adsHTML
+    adBox.querySelector('.BoxContent').innerHTML = adsHTML
   (adsbygoogle = window.adsbygoogle || []).push({})
 
