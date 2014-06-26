@@ -46,8 +46,9 @@ window.initApp = (callback) -> i18n.init window.app.i18nOptions, ->
       toggleAudioIcon.src = '/images/nuclearnode/AudioVolume.png'
     else
       audio.savedVolume = audio.masterGain.gain.value
-      toggleAudioIcon.src = '/images/nuclearnode/AudioMuted.png'
+      audio.masterGain.gain.value = 0
       audioVolumeSlider.value = 0
+      toggleAudioIcon.src = '/images/nuclearnode/AudioMuted.png'
 
     return
 
