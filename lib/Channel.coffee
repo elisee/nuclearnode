@@ -35,15 +35,15 @@ module.exports = class Channel
   #----------------------------------------------------------------------------
   # User management
   addSocket: (socket) ->
-    if socket.handshake.user.isGuest and @public.guestAccess == 'deny'
+    if socket.request.user.isGuest and @public.guestAccess == 'deny'
       socket.emit 'noGuestsAllowed'
       return socket.disconnect()
 
-    if @public.bannedUsersByAuthId[socket.handshake.user.authId]?
+    if @public.bannedUsersByAuthId[socket.request.user.authId]?
       socket.emit 'banned'
       return socket.disconnect()
 
-    socket.user = @usersByAuthId[ socket.handshake.user.authId ] ? @createUser socket.handshake.user
+    socket.user = @usersByAuthId[ socket.request.user.authId ] ? @createUser socket.request.user
     @logDebug "socket #{socket.id} (#{socket.handshake.address.address}) added to user #{socket.user.public.displayName}"
 
     socket.user.sockets.push socket

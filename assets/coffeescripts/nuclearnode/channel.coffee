@@ -2,7 +2,7 @@ window.channel = {}
 muteDisconnect = false
 
 initApp -> channel.logic.init ->
-  channel.socket = io.connect null, reconnect: false
+  channel.socket = io.connect null, reconnection: false
 
   channel.socket.on 'connect', -> channel.socket.emit 'joinChannel', app.channel.service, app.channel.name
   channel.socket.on 'disconnect', onDisconnected
