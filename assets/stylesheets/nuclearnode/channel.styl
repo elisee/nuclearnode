@@ -13,6 +13,60 @@
 
   text-align center
 
+  .AdBox
+    display none
+    background #000
+
+    &.Show
+      display block
+      position relative
+      width 300px
+      height 275px
+
+    .AdPlz
+      position absolute
+      text-align center
+      padding 2em 1em
+      top 0
+      left 0
+      right 0
+      bottom 0
+      font-size 24px
+      line-height 1.5
+      opacity 0.5
+
+    .AdContent
+      position absolute
+      top 0
+      left 0
+
+    .AdClose
+      background #111
+      position absolute
+      top 250px
+      left 0
+      right 0
+      height 25px
+      font-size 12px
+      line-height 1
+      text-transform uppercase
+      padding 0.5em
+      text-align center
+
+      button
+        border none
+        background none
+        color #fff
+        opacity 0.5
+        text-transform uppercase
+
+        &:hover
+          opacity 0.8
+
+        &:active
+          opacity 1
+          outline none
+
 #SidebarTabButtons
   display flex
   flex-direction row

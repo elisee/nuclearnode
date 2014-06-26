@@ -28,6 +28,9 @@
     """We won't tweet, post to your wall  
     or microwave your cat"""
 
+  disableAdblockerPlz: "Wanna support me? Plz disable your adblocker. Thanks :)"
+  closeThisAd: "Close this ad"
+
   sidebarTabs:
     chat: "Chat"
     settings: "Settings"

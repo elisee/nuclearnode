@@ -281,3 +281,18 @@ onLivestreamUpdated = (livestream) ->
 
   setupLivestream()
   return
+
+# Ads
+channel.refreshAds = ->
+  adsHTML =
+    """
+    <ins class='adsbygoogle'
+       style='display:inline-block;width:300px;height:250px'
+       data-ad-client='#{window.app.public.adwords.client}'
+       data-ad-slot='#{window.app.public.adwords.slot300x250}'></ins>
+    """
+  for adBox in document.querySelectorAll(".AdBox")
+    adBox.classList.add 'Show'
+    adBox.querySelector('.AdContent').innerHTML = adsHTML
+  (adsbygoogle = window.adsbygoogle || []).push({})
+

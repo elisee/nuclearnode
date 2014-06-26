@@ -28,6 +28,9 @@
     """On ne postera rien sur votre mur et on promet  
     de ne pas passer votre chat au micro-onde"""
 
+  disableAdblockerPlz: "Vous voulez me soutenir ? Désactivez votre bloqueur de pub. Merci :)"
+  closeThisAd: "Fermer la publicité"
+
   sidebarTabs:
     chat: "Chat"
     settings: "Options"

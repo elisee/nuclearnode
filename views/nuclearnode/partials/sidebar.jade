@@ -1,5 +1,10 @@
 #Sidebar
   .AdBox
+    .AdPlz= i18n.t('nuclearnode:disableAdblockerPlz')
+    .AdContent
+    .AdClose
+      button × 
+        = i18n.t('nuclearnode:closeThisAd')
   #SidebarTabButtons
     button.Active(data-tab="Chat")= i18n.t('nuclearnode:sidebarTabs.chat')
     button(data-tab="Settings")= i18n.t('nuclearnode:sidebarTabs.settings')

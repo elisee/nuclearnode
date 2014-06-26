@@ -30,4 +30,8 @@ module.exports =
     services: [ null, 'steam', 'twitch', 'twitter', 'facebook', 'google' ]
 
   # Any global public data that you'd like to expose to your application's JS as window.app.public
-  public: {}
+  public:
+    adwords:
+      client: 
+      slot300x250: 
+

@@ -54,7 +54,12 @@ window.initApp = (callback) -> i18n.init window.app.i18nOptions, ->
   if ! window.audio?
     toggleAudioIcon.src = '/images/nuclearnode/AudioMuted.png'
     audioVolumeSlider.style.display = 'none'
-  
+
+  # Close ads
+  for adCloseButton in document.querySelectorAll(".AdClose button")
+    adCloseButton.addEventListener 'click', (event) ->
+      event.currentTarget.parentElement.parentElement.classList.remove 'Show'
+
   # Overlay / Log in
   overlay = document.getElementById('Overlay')
   overlay.addEventListener 'click', onOverlayClicked
