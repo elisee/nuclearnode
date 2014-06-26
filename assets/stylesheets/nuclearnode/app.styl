@@ -67,6 +67,31 @@ body
         &:empty
           background none
 
+    .AudioVolume
+      display flex
+      margin-right 0.5em
+      opacity 0.3
+
+      &:hover
+        opacity 1
+
+      button.ToggleAudio
+        border none
+        background none
+        margin-right 0.25em
+        cursor pointer
+        opacity 0.5
+        display flex
+
+        &:hover
+          opacity 0.8
+
+        &:active
+          opacity 1
+
+      input[type=range]
+        width 80px
+
     .PlayerInfo
       padding 0 0.5em
 

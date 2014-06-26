@@ -12,6 +12,12 @@ header
         span.ServiceName= i18n.t('nuclearnode:loginServices.' + channel.service)
       span.ChannelUsers ?
 
+  .AudioVolume
+    button.ToggleAudio
+      img(src="/images/nuclearnode/AudioVolume.png")
+
+    input(type="range",min="0",max="100",step="10",value="50")
+
   .PlayerInfo
     span.PlayerName=user.displayName
     |  

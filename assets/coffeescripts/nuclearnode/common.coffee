@@ -24,12 +24,42 @@ window.initApp = (callback) -> i18n.init window.app.i18nOptions, ->
 
   document.getElementById('ToggleMenuButton').addEventListener 'click', onToggleMenuButtonClicked
 
+  # Audio volume
+  audioVolumeSlider = document.querySelector('#App > header .AudioVolume input[type=range]')
+
+  audioVolumeSlider.addEventListener 'change', (event) ->
+    audio.masterGain.gain.value = audioVolumeSlider.value / 100
+    if audio.savedVolume?
+      audio.savedVolume = null
+      toggleAudioIcon.src = '/images/nuclearnode/AudioVolume.png'
+    return
+
+  toggleAudioButton = document.querySelector('#App > header button.ToggleAudio')
+  toggleAudioIcon = toggleAudioButton.querySelector('img')
+  toggleAudioButton.addEventListener 'click', (event) ->
+    return if ! window.audio?
+
+    if audio.savedVolume?
+      audio.masterGain.gain.value = audio.savedVolume
+      audioVolumeSlider.value = Math.round(audio.savedVolume * 100)
+      audio.savedVolume = null
+      toggleAudioIcon.src = '/images/nuclearnode/AudioVolume.png'
+    else
+      audio.savedVolume = audio.masterGain.gain.value
+      toggleAudioIcon.src = '/images/nuclearnode/AudioMuted.png'
+      audioVolumeSlider.value = 0
+
+    return
+
+  if ! window.audio?
+    toggleAudioIcon.src = '/images/nuclearnode/AudioMuted.png'
+    audioVolumeSlider.style.display = 'none'
+  
   # Overlay / Log in
   overlay = document.getElementById('Overlay')
   overlay.addEventListener 'click', onOverlayClicked
   if app.user.isGuest
     document.getElementById('LogInButton').addEventListener 'click', onLogInButtonClicked
-
 
   callback()
 
