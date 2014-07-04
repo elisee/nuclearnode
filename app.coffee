@@ -65,6 +65,7 @@ server = http.createServer app
 # Socket.IO
 socketio = require 'socket.io'
 io = socketio.listen(server)
+io.set 'transports', [ 'websocket' ]
 
 passportSocketIo = require 'passport.socketio'
 io.set "authorization", passportSocketIo.authorize

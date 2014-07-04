@@ -10,7 +10,7 @@ window.initApp = (callback) -> i18n.init window.app.i18nOptions, ->
   document.addEventListener 'keypress', suppressBackspace
 
   # Apps bar
-  hubSocket = io.connect app.hubBaseURL
+  hubSocket = io.connect app.hubBaseURL, reconnection: false, transports: [ 'websocket' ]
 
   hubSocket.on 'connect', ->
     for appUsersElement in document.querySelectorAll("#AppsBar .AppUsers")
