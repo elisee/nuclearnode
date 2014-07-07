@@ -83,7 +83,7 @@ module.exports = engine =
     return
 
   log: (message) -> console.log new Date().toISOString() + " - #{message}"
-  logDebug: (message) -> log message if config.debugLog
+  logDebug: (message) -> @log message if config.debugLog
 
   setupSocket: (socket) ->
     engine.logDebug "#{socket.id} (#{socket.handshake.address.address}) connected"
