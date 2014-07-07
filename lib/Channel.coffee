@@ -148,7 +148,7 @@ module.exports = class Channel
     index = @sockets.indexOf(socket)
     return if index == -1
 
-    @sockets.splice @sockets.indexOf(socket), 1
+    @sockets.splice index, 1
     socket.user.sockets.splice socket.user.sockets.indexOf(socket), 1
 
     @logic.onSocketRemoved socket
