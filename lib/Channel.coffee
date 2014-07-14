@@ -98,30 +98,36 @@ module.exports = class Channel
         for authId, connectedUser of @usersByAuthId
           # if _(authId).startsWith 'guest:' (waiting for lodash 2.5)
           if authId.substring(0, 'guest:'.length) == 'guest:'
-            for userSocket in connectedUser.sockets
-              userSocket.emit 'noGuestsAllowed'
-              userSocket.disconnect()
+            # Warning: socket.io fires the 'disconnect' event synchronously
+            # when disconnecting manually. That's why we're using a while loop
+            # rather than iterating over the array
+            while connectedUser.sockets.length > 0
+              connectedUser.sockets[0].emit 'noGuestsAllowed'
+              connectedUser.sockets[0].disconnect()
 
       return
 
-    socket.on 'banUser', (user) =>
+    socket.on 'banUser', (userToBan) =>
       return if socket.user.public.role not in [ 'host', 'hubAdministrator' ]
-      return if typeof(user) != 'object' or typeof(user.authId) != 'string' or typeof(user.displayName) != 'string'
+      return if typeof(userToBan) != 'object' or typeof(userToBan.authId) != 'string' or typeof(userToBan.displayName) != 'string'
 
-      bannedUser = @usersByAuthId[user.authId]
+      bannedUser = @usersByAuthId[userToBan.authId]
       return if ! bannedUser or bannedUser.public.role in [ 'host', 'hubAdministrator' ]
       
       bannedUserInfo =
-        authId: user.authId
-        displayName: user.displayName
+        authId: userToBan.authId
+        displayName: userToBan.displayName
 
       return if @public.bannedUsersByAuthId[bannedUserInfo.authId]?
 
       @public.bannedUsersByAuthId[bannedUserInfo.authId] = bannedUserInfo
 
-      for bannedUserSocket in bannedUser.sockets
-        bannedUserSocket.emit 'banned'
-        bannedUserSocket.disconnect()
+      # Warning: socket.io fires the 'disconnect' event synchronously
+      # when disconnecting manually. That's why we're using a while loop
+      # rather than iterating over the array
+      while bannedUser.sockets.length > 0
+        bannedUser.sockets[0].emit 'banned'
+        bannedUser.sockets[0].disconnect()
 
       @broadcast 'banUser', bannedUserInfo
 
