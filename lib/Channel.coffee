@@ -27,7 +27,11 @@ module.exports = class Channel
     @logic = new ChannelLogic @
 
   broadcast: (message, data, sockets=@sockets) ->
-    socket.emit message, data for socket in sockets
+    for socket in sockets
+      if socket?
+        socket.emit message, data
+      else
+         @log "Null socket in @sockets"
     return
 
   log: (message) -> @engine.log "[#{@service}:#{@name}] #{message}"
