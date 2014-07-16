@@ -1,8 +1,9 @@
 config = require '../config'
 _ = require 'lodash'
+http = require 'http'
 ChannelLogic = require './ChannelLogic'
 
-chatSettings = 
+chatSettings =
   maxRecentMessages: 3
   minRecentMessageInterval: 2000
   maxHellbanPoints: 5
@@ -113,7 +114,7 @@ module.exports = class Channel
 
       bannedUser = @usersByAuthId[userToBan.authId]
       return if ! bannedUser or bannedUser.public.role in [ 'host', 'hubAdministrator' ]
-      
+
       bannedUserInfo =
         authId: userToBan.authId
         displayName: userToBan.displayName
@@ -142,11 +143,27 @@ module.exports = class Channel
       @broadcast 'unbanUser', bannedUserInfo
 
     socket.on 'settings:livestream', (service, channel) =>
-      return if service not in [ 'none', 'twitch', 'hitbox' ]
-      return if ! /^[A-Za-z0-9_]+$/.test channel
+      return if service not in [ 'none', 'twitch', 'hitbox', 'talkgg' ]
 
-      @public.livestream = { service, channel }
-      @broadcast 'settings:livestream', @public.livestream
+      if service != 'talkgg'
+        return if ! /^[A-Za-z0-9_]+$/.test(channel)
+        @public.livestream = { service, channel }
+        @broadcast 'settings:livestream', @public.livestream
+      else
+        http.get('http://www.talk.gg/direct', (res) =>
+          console.log res
+          if res.statusCode == 302
+            location = res.headers.location.split('/')
+            channel = location[location.length - 1]
+
+            @public.livestream = { service, channel }
+            @broadcast 'settings:livestream', @public.livestream
+          else
+            console.log "Could not get talk.gg channel:"
+            consoe.log "Got unexpected status code #{res.statusCode}"
+        ).on 'error', (err) ->
+          console.log 'Could not get talk.gg channel:'
+          console.log err
 
     return
 
@@ -215,4 +232,3 @@ module.exports = class Channel
     @logDebug "User #{user.public.displayName} created"
 
     user
-

@@ -207,8 +207,7 @@ channel.appendToChat = (type, content) ->
 setupLivestream = ->
   streamBoxElement = document.querySelector('#Sidebar .StreamBox')
 
-  if channel.data.livestream.service != 'none' and ( channel.data.livestream.channel.length > 0 or channel.data.livestream.service == 'talkgg' )
-    # alert 'todo: setupLivestream'
+  if channel.data.livestream.service != 'none'
     streamBoxElement.innerHTML = JST["nuclearnode/livestreams/#{channel.data.livestream.service}"] { channel: channel.data.livestream.channel, app: app }
   else
     streamBoxElement.innerHTML = ''
@@ -295,4 +294,3 @@ channel.refreshAds = ->
     adBox.classList.add 'Show'
     adBox.querySelector('.BoxContent').innerHTML = adsHTML
   (adsbygoogle = window.adsbygoogle || []).push({})
-

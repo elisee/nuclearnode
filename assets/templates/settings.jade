@@ -49,7 +49,7 @@ if app.user.role == 'host' || app.user.role == 'hubAdministrator'
       td= i18n.t('nuclearnode:settings.livestream.service')
       td
         select(name="livestreamService")
-          for service in [ 'none', 'twitch', 'hitbox' ]
+          for service in [ 'none', 'twitch', 'hitbox', 'talkgg' ]
             - var selected = service == channel.data.livestream.service
             option(value=service,selected=selected)= i18n.t('nuclearnode:settings.livestream.services.' + service)
     tr
