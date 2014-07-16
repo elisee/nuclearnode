@@ -15,7 +15,7 @@ work in groups or play with friends, privately or publicly.
  * [Stylus](http://learnboost.github.io/stylus/) for clean stylesheets, with [Nib](https://github.com/visionmedia/nib) taking care of browser differences
  * Uses [passport-nuclearhub](https://github.com/elisee/passport-nuclearhub) to log in existing users even across domain names
  * [Socket.IO](http://socket.io/) for real-time communication support
- * [Grunt](https://gruntjs.com) for building all scripts, stylesheets and client-side templates
+ * [Gulp](https://gulpjs.com) for building all scripts, stylesheets and client-side templates
  * [static-asset](https://github.com/bminer/node-static-asset) for fingerprinting static assets (ensures proper browser caching behavior)
  * [nuclear-i18n](https://github.com/elisee/nuclear-i18n) for [i18next](https://github.com/jamuhl/i18next-node)-based internationalization
 
@@ -23,7 +23,7 @@ work in groups or play with friends, privately or publicly.
 
  * Duplicate ``config.coffee.template`` as ``config.coffee`` and edit the file to suit your setup
  * Start up a [redis](http://redis.io/download) server to store session data
- * Install grunt, nodemon and CoffeeScript with ```npm install -g grunt-cli nodemon coffee-script```
+ * Install gulp, nodemon and CoffeeScript with ```npm install -g gulp nodemon coffee-script```
  * Run ``npm install`` to install all dependencies
 
 To develop your app or game, you'll want to edit the following files:
@@ -36,12 +36,12 @@ To develop your app or game, you'll want to edit the following files:
 
 ### While developing
 
- * Run ``grunt dev`` to start a grunt watcher that will automatically rebuild assets whenever you make changes to them
+ * Run ``gulp watch`` to start a gulp watcher that will automatically rebuild assets whenever you make changes to them
  * Run ``npm run dev`` to start a development server that will automatically restart whenever you make changes to the server files
 
 ### When deploying to production
 
- * Run ``grunt`` to build all your assets once
+ * Run ``gulp`` to build all your assets once
  * Run ``npm start --production`` to start the server
 
 ## License
