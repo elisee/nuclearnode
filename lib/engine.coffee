@@ -14,6 +14,8 @@ module.exports = engine =
     app.get '/', (req, res) -> res.redirect "#{config.hubBaseURL}/apps/#{config.appId}"
 
     app.post '/', passport.authenticate('nuclearhub'), (req, res) ->
+      if config.channels.services.length == 0
+        return res.redirect "/play/#{config.appId}"
 
       channelInfosById = {}
 
@@ -52,6 +54,7 @@ module.exports = engine =
 
     validateService = (req, res, next) ->
       req.params.service ?= null
+      return next() if config.channels.services.length == 0 and ! req.params.service? and req.params.channel == config.appId
       return res.send 404 if config.channels.services.indexOf(req.params.service) == -1
       next()
 
@@ -94,7 +97,10 @@ module.exports = engine =
 
     socket.on 'joinChannel', (service, channelName) ->
       return if typeof channelName != 'string' or socket.channel?
-      return if config.channels.services.indexOf(service) == -1
+      if config.channels.services.length == 0
+        return if service? and channelName != config.appId
+      else
+        return if config.channels.services.indexOf(service) == -1
 
       service = '' if ! service?
       channelId = "#{service}:#{channelName.toLowerCase()}"

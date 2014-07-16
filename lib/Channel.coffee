@@ -203,7 +203,7 @@ module.exports = class Channel
       # Make the authenticated channel's owner its host
       if userProfile.serviceHandles?[@service]?.toLowerCase() == @name.toLowerCase()
         user.public.role = 'host'
-    else if @public.users.length == 0
+    else if @public.users.length == 0 and config.channels.services.length > 0
       # Make the first user to join an unauthenticated channel its host
       user.public.role = 'host'
 
