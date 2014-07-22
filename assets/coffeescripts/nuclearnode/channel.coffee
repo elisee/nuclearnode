@@ -2,6 +2,8 @@ window.channel = {}
 muteDisconnect = false
 joinPartEnabled = true
 
+chatLogElement = document.getElementById('ChatLog')
+
 initApp -> channel.logic.init ->
   channel.socket = io.connect reconnection: false, transports: [ 'websocket' ]
 
@@ -98,6 +100,7 @@ onUserRemoved = (authId) ->
   if joinPartEnabled
     channel.appendToChat 'Info', i18n.t 'nuclearnode:chat.userLeft', user: JST['nuclearnode/chatUser'] { user, i18n, app }
 
+
   channel.logic.onUserRemoved user
   return
 
@@ -193,9 +196,9 @@ onSubmitChatMessage = (event) ->
 
 maxChatLogHistory = 100
 
-channel.appendToChat = (type, content) ->
-  chatLogElement = document.getElementById('ChatLog')
+isChatLogScrolledToBottom = -> chatLogElement.scrollTop >= chatLogElement.scrollHeight - chatLogElement.clientHeight
 
+channel.appendToChat = (type, content) ->
   date = new Date()
   hours = date.getHours()
   hours = (if hours < 10 then '0' else '') + hours
@@ -203,11 +206,11 @@ channel.appendToChat = (type, content) ->
   minutes = (if minutes < 10 then '0' else '') + minutes
   time = "#{hours}:#{minutes}"
 
-  isChatLogScrolledToBottom = chatLogElement.scrollTop >= chatLogElement.scrollHeight - chatLogElement.clientHeight
+  wasChatLogScrolledToBottom = isChatLogScrolledToBottom()
   chatLogElement.insertAdjacentHTML 'beforeend', JST['nuclearnode/chatLogItem']( type: type, content: content, time: time, i18n: i18n )
-  chatLogElement.scrollTop = chatLogElement.scrollHeight if isChatLogScrolledToBottom
+  chatLogElement.scrollTop = chatLogElement.scrollHeight if wasChatLogScrolledToBottom
 
-  if isChatLogScrolledToBottom and chatLogElement.querySelectorAll('li').length > maxChatLogHistory
+  if wasChatLogScrolledToBottom and chatLogElement.querySelectorAll('li').length > maxChatLogHistory
     oldestLogEntry = chatLogElement.querySelector('li:first-of-type')
     oldestLogEntry.parentNode.removeChild(oldestLogEntry)
   return
@@ -293,6 +296,8 @@ onLivestreamUpdated = (livestream) ->
 
 # Ads
 channel.refreshAds = ->
+  wasChatLogScrolledToBottom = isChatLogScrolledToBottom()
+
   adsHTML =
     """
     <ins class='adsbygoogle'
@@ -304,3 +309,5 @@ channel.refreshAds = ->
     adBox.classList.add 'Show'
     adBox.querySelector('.BoxContent').innerHTML = adsHTML
   (adsbygoogle = window.adsbygoogle || []).push({})
+
+  chatLogElement.scrollTop = chatLogElement.scrollHeight if wasChatLogScrolledToBottom
