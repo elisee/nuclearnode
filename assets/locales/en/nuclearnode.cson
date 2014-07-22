@@ -40,6 +40,7 @@
     typeHereToChat: "Type here to chat"
     logInToChat: "This room doesn't allow guests to chat. Please log in first."
 
+    joinPartDisabled: "Wow, there's a lot of people in here! Join/part messages have been disabled until the crowd clears."
     userJoined: "%{user} has joined."
     userLeft: "%{user} has left."
     userRoleSet: "%{user} is now %{role}."

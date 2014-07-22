@@ -34,4 +34,4 @@ module.exports =
     adwords:
       client: 
       slot300x250: 
-
+    joinPartMaxUsers: 20

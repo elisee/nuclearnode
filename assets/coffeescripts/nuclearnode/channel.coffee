@@ -1,5 +1,6 @@
 window.channel = {}
 muteDisconnect = false
+joinPartEnabled = true
 
 initApp -> channel.logic.init ->
   channel.socket = io.connect reconnection: false, transports: [ 'websocket' ]
@@ -71,22 +72,31 @@ onChannelDataReceived = (data) ->
   return
 
 onUserAdded = (user) ->
-  channel.appendToChat 'Info', i18n.t 'nuclearnode:chat.userJoined', user: JST['nuclearnode/chatUser'] { user, i18n, app }
   channel.data.users.push user
   channel.data.usersByAuthId[user.authId] = user
-
   updateChannelUsersCounter()
+
+  if joinPartEnabled
+    if channel.data.users.length > app.public.joinPartMaxUsers
+      joinPartEnabled = false
+      channel.appendToChat 'Info', i18n.t 'nuclearnode:chat.joinPartDisabled'
+    else
+      channel.appendToChat 'Info', i18n.t 'nuclearnode:chat.userJoined', user: JST['nuclearnode/chatUser'] { user, i18n, app }
 
   channel.logic.onUserAdded user
   return
 
 onUserRemoved = (authId) ->
   user = channel.data.usersByAuthId[authId]
-  channel.appendToChat 'Info', i18n.t 'nuclearnode:chat.userLeft', user: JST['nuclearnode/chatUser'] { user, i18n, app }
   delete channel.data.usersByAuthId[authId]
   channel.data.users.splice channel.data.users.indexOf(user), 1
-
   updateChannelUsersCounter()
+
+  if ! joinPartEnabled and channel.data.users.length <= app.public.joinPartMaxUsers
+    joinPartEnabled = true
+
+  if joinPartEnabled
+    channel.appendToChat 'Info', i18n.t 'nuclearnode:chat.userLeft', user: JST['nuclearnode/chatUser'] { user, i18n, app }
 
   channel.logic.onUserRemoved user
   return

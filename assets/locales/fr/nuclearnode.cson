@@ -40,6 +40,7 @@
     typeHereToChat: "Tapez ici pour discuter"
     logInToChat: "Ce salon ne permet pas aux visiteurs de discuter. Veuillez vous connecter d'abord."
 
+    joinPartDisabled: "Wah, ça en fait du monde ! Les notifications d'arrivée/départ ont été désactivées jusqu'à ce que ça se vide."
     userJoined: "%{user} a rejoint."
     userLeft: "%{user} est parti."
     userRoleSet: "%{user} est maintenant %{role}."
