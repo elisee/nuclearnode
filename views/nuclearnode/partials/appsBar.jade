@@ -1,9 +1,10 @@
 #AppsBar
   for app in apps
-    a(id=app.id + "AppLink",href=app.URL,class=app.id == config.appId ? 'Active' : '')
-      .AppIcon
-        img(src=config.hubBaseURL + '/apps/' + app.id + '/Icon.png')
-      .AppDetails
-        .AppName= app.name
-        .AppDescription= app.description
-      .AppUsers
+    if ! app.hidden || config.appId == app.id
+      a(id=app.id + "AppLink",href=app.URL,class=app.id == config.appId ? 'Active' : '')
+          .AppIcon
+            img(src=config.hubBaseURL + '/apps/' + app.id + '/Icon.png')
+          .AppDetails
+            .AppName= app.name
+            .AppDescription= app.description
+          .AppUsers
