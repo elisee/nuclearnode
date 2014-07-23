@@ -20,6 +20,10 @@ module.exports = class Channel
       users: []
       actors: []
 
+    if @service in ['twitch', 'hitbox']
+      @public.livestream.service = @service
+      @public.livestream.channel = @name
+
     @sockets = []
     @usersByAuthId = {}
     @actorsByAuthId = {}
