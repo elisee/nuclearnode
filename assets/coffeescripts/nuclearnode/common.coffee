@@ -20,7 +20,8 @@ window.initApp = (callback) -> i18n.init window.app.i18nOptions, ->
 
   hubSocket.on 'appUsers', (usersByAppId) ->
     for appId, users of usersByAppId
-      document.querySelector("##{appId}AppLink .AppUsers").textContent = if users > 0 then users else ''
+      document.querySelector("##{appId}AppLink .AppUsers")?.textContent = if users > 0 then users else ''
+    return
 
   document.getElementById('ToggleMenuButton').addEventListener 'click', onToggleMenuButtonClicked
 
