@@ -159,7 +159,6 @@ module.exports = class Channel
         @broadcast 'settings:livestream', @public.livestream
       else
         http.get('http://www.talk.gg/direct', (res) =>
-          console.log res
           if res.statusCode == 302
             location = res.headers.location.split('/')
             channel = location[location.length - 1]
@@ -168,7 +167,7 @@ module.exports = class Channel
             @broadcast 'settings:livestream', @public.livestream
           else
             console.log "Could not get talk.gg channel:"
-            consoe.log "Got unexpected status code #{res.statusCode}"
+            console.log "Got unexpected status code #{res.statusCode}"
         ).on 'error', (err) ->
           console.log 'Could not get talk.gg channel:'
           console.log err
