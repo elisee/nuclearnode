@@ -6,6 +6,10 @@ module.exports = class ChannelLogic
     'end'
   ]
 
+  @init: (callback) ->
+    # TODO: Run any initialization logic you might have
+    callback()
+
   constructor: (@channel) ->
     @channel.public.settings =
       minPlayers: 1

@@ -82,7 +82,7 @@ module.exports = engine =
     engine.io = io
     engine.io.sockets.on 'connection', engine.setupSocket
 
-    callback()
+    require('./ChannelLogic').init callback
     return
 
   log: (message) -> console.log new Date().toISOString() + " - #{message}"
