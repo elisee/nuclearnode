@@ -58,8 +58,6 @@ module.exports = class Channel
     socket.user.sockets.push socket
     @sockets.push socket
 
-    @logic.onSocketAdded socket
-
     @public.time = Date.now()
     socket.emit 'channelData', @public
     @public.time = null
@@ -172,6 +170,7 @@ module.exports = class Channel
           console.log 'Could not get talk.gg channel:'
           console.log err
 
+    @logic.onSocketAdded socket
     return
 
   removeSocket: (socket) ->
