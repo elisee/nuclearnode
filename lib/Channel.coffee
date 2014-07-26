@@ -28,6 +28,9 @@ module.exports = class Channel
     @usersByAuthId = {}
     @actorsByAuthId = {}
 
+    @adminUsers = []
+    @modUsers = []
+
     @logic = new ChannelLogic @
 
   broadcast: (message, data, sockets=@sockets) ->
@@ -90,12 +93,12 @@ module.exports = class Channel
       return
 
     socket.on 'settings:room.welcomeMessage', (text) =>
-      return if socket.user.public.role not in [ 'host', 'hubAdministrator' ]
+      return if @adminUsers.indexOf(socket.user) == -1
       @public.welcomeMessage = text.substring 0, 300
       @broadcast 'settings:room.welcomeMessage', @public.welcomeMessage
 
     socket.on 'settings:room.guestAccess', (guestAccess) =>
-      return if socket.user.public.role not in [ 'host', 'hubAdministrator' ]
+      return if @adminUsers.indexOf(socket.user) == -1
       return if guestAccess not in [ 'full', 'noChat', 'deny' ]
 
       @public.guestAccess = guestAccess
@@ -115,11 +118,11 @@ module.exports = class Channel
       return
 
     socket.on 'banUser', (userToBan) =>
-      return if socket.user.public.role not in [ 'host', 'hubAdministrator' ]
+      return if @adminUsers.indexOf(socket.user) == -1 and @modUsers.indexOf(socket.user) == -1
       return if typeof(userToBan) != 'object' or typeof(userToBan.authId) != 'string' or typeof(userToBan.displayName) != 'string'
 
       bannedUser = @usersByAuthId[userToBan.authId]
-      return if ! bannedUser or bannedUser.public.role in [ 'host', 'hubAdministrator' ]
+      return if ! bannedUser or @adminUsers.indexOf(bannedUser) != -1 and @modUsers.indexOf(bannedUser) != -1
 
       bannedUserInfo =
         authId: userToBan.authId
@@ -139,7 +142,7 @@ module.exports = class Channel
       @broadcast 'banUser', bannedUserInfo
 
     socket.on 'unbanUser', (userAuthId) =>
-      return if socket.user.public.role not in [ 'host', 'hubAdministrator' ]
+      return if @adminUsers.indexOf(socket.user) == -1 and @modUsers.indexOf(socket.user) == -1
       return if typeof(userAuthId) != 'string' or userAuthId.length == 0
 
       bannedUserInfo = @public.bannedUsersByAuthId[userAuthId]
@@ -189,16 +192,28 @@ module.exports = class Channel
       @public.users.splice @public.users.indexOf(socket.user.public), 1
       @broadcast 'removeUser', socket.user.public.authId
 
-      # If user was the host of an unauthenticated channel
-      # Make the next user the host instead
-      if @service.length == 0 and socket.user.public.role == 'host' and @public.users.length > 0
-        newHostPublicUser = @public.users[0]
-        newHostPublicUser.role = 'host'
-        @broadcast 'setUserRole', userAuthId: newHostPublicUser.authId, role: newHostPublicUser.role
+      # Remove from admin list if applicable
+      adminIndex = @adminUsers.indexOf(socket.user)
+      if adminIndex != -1
+        @adminUsers.splice adminIndex, 1
+
+        # If there are no hosts left in an unauthenticated channel
+        # Make the oldest user a host
+        if @adminUsers.length == 0 and @service.length == 0 and @public.users.length > 0
+          newHostPublicUser = @public.users[0]
+          newHostPublicUser.role = 'host'
+          newHostUser = @usersByAuthId[newHostUser.authId]
+          @adminUsers newHostUser
+
+          @broadcast 'setUserRole', userAuthId: newHostPublicUser.authId, role: newHostPublicUser.role
+
+      # Remove from mod list if applicable
+      modIndex = @modUsers.indexOf(socket.user)
+      @modUsers.splice modIndex, 1 if modIndex != -1
 
     socket.user = null
 
-    if @sockets.length == 0
+    if @sockets.length == 0 and @logic?
       @logic.dispose()
       @logic = null
       @engine.clearChannel this
@@ -222,13 +237,16 @@ module.exports = class Channel
 
     if userProfile.isHubAdministrator
       user.public.role = 'hubAdministrator'
+      @adminUsers.push user
     else if @service.length > 0
-      # Make the authenticated channel's owner its host
+      # Make the authenticated channel's owner a host
       if userProfile.serviceHandles?[@service]?.toLowerCase() == @name.toLowerCase()
         user.public.role = 'host'
+        @adminUsers.push user
     else if @public.users.length == 0 and config.channels.services.length > 0
-      # Make the first user to join an unauthenticated channel its host
+      # Make the first user to join an unauthenticated channel a host
       user.public.role = 'host'
+      @adminUsers.push user
 
     @usersByAuthId[ user.public.authId ] = user
     @public.users.push user.public
