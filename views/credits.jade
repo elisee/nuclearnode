@@ -1,0 +1,27 @@
+doctype html
+html
+  head
+    link(href='http://fonts.googleapis.com/css?family=Roboto:100,400,300,500,700,900',rel='stylesheet',type='text/css')
+    link(rel='stylesheet',href=assetFingerprint('/css/common.css'))
+    title Credits - 
+      = config.title
+
+  style
+    :stylus
+      body
+        font 16px Arial
+        margin 0 auto
+        width 700px
+      
+      a
+        text-decoration none
+        color #00f
+
+        &:hover
+          text-decoration underline
+
+  body
+    h1 Credits for 
+      = config.title
+
+    p Developed by <a href="http://twitter.com/elisee">Elisée Maurer</a> from <a href="http://sparklinlabs.com/">Sparklin Labs</a>.

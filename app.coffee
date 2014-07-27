@@ -56,6 +56,8 @@ app.use passport.session()
 require('nuclear-i18n')(app, [ 'common', 'nuclearnode' ])
 app.use app.router
 
+app.get '/credits', (req, res) -> res.render 'credits', { config }
+
 app.use express.errorHandler() if 'development' == env
 
 # Create server

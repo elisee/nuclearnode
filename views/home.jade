@@ -3,7 +3,9 @@ extends nuclearnode/index
 block extrahead
 
 block content
-  form(method='get',action='')
+  h1= config.title
+
+  form#ChooseLanguageForm(method='get',action='')
     select(name='setLng',onchange='this.form.submit()')
       option(value='')= i18n.t('nuclearnode:chooseLanguage')
       option(value='en') English
@@ -33,3 +35,14 @@ block content
   form#CreateChannelForm
     input#CreateChannelName(type="text",value="",placeholder=i18n.t('nuclearnode:createChannel.namePlaceholder'),pattern="[a-zA-Z0-9_]{1,20}",maxlength="20",title=i18n.t('nuclearnode:createChannel.nameValidChars'))
     input(type="submit",value="Go")
+
+  footer
+    .MadeWithLove Made with love by 
+      a(href="http://sparklinlabs.com/",target="_blank") Sparklin Labs 
+        img(src=assetFingerprint('/images/nuclearnode/SparklinLabsMiniLogo.png'),alt="")
+        | &nbsp;
+
+    .Links
+      a(href="/credits") Credits
+      |  &middot; 
+      a(href=config.hubBaseURL + "/terms") Terms
