@@ -8,7 +8,7 @@ module.exports =
     prefix: "play"
     # Services which can be used to create username-based channels
     # null allows creating channels without any authentication service
-    services: [ null, 'steam', 'twitch', 'twitter', 'facebook', 'google' ]
+    services: [ null, 'twitch', 'twitter' ] # 'steam', 'facebook', 'google'
     # Limit the number of users who can join a channel. Others will be shown stream / info message
     maxUsers: 100
 
