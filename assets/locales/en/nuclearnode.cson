@@ -28,6 +28,10 @@
     """We won't tweet, post to your wall  
     or microwave your cat"""
 
+  channelFull:
+    withLivestream: "Sorry, this room is packed right now! Here's a livestream instead:"
+    noLivestream: "Sorry, this room is packed and no livestream is available."
+
   disableAdblockerPlz: "Wanna support me? Plz whitelist this ad in your adblocker. Thanks :)"
   closeThisAd: "Close this ad"
 

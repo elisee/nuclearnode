@@ -9,6 +9,8 @@ module.exports =
     # Services which can be used to create username-based channels
     # null allows creating channels without any authentication service
     services: [ null, 'steam', 'twitch', 'twitter', 'facebook', 'google' ]
+    # Limit the number of users who can join a channel. Others will be shown stream / info message
+    maxUsers: 100
 
   # Global *public* data, will be exposed to the client as window.app.public
   public:

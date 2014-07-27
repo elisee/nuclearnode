@@ -19,7 +19,7 @@ html
     #App.Fade
       include partials/appHeader
 
-      main
+      main(class= isFull ? 'FullChannel' : '')
         block content
 
     include partials/overlay

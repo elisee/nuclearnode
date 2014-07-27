@@ -1,0 +1,21 @@
+extends layout
+
+block head
+  title= channel.name + " - " + config.title
+  link(rel='stylesheet',href=assetFingerprint('/css/nuclearnode/channel.css'))
+  link(rel='stylesheet',href=assetFingerprint('/css/main.css'))
+
+  script(async,src="http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js")
+  block extrahead
+
+block content
+  .StreamInfo
+  .StreamBox
+
+  script
+    :coffee
+      initApp ->
+        document.querySelector('.StreamInfo').textContent = i18n.t 'nuclearnode:channelFull.' + if app.livestream.service != 'none' then 'withLivestream' else 'noLivestream'
+
+        if app.livestream.service != 'none'
+          document.querySelector('.StreamBox').innerHTML = JST["nuclearnode/livestreams/#{app.livestream.service}"] { channel: app.livestream.channel, app: app }
