@@ -76,6 +76,9 @@ module.exports = engine =
         isFull = true
         res.expose livestream: engineChannel.public.livestream
 
+      if req.user.serviceHandles?[channel.service]?.toLowerCase() == channel.name.toLowerCase()
+        isFull = false
+      
       res.expose channel: channel, user: req.user
 
       res.render (if isFull then 'nuclearnode/fullChannel' else 'main'),
