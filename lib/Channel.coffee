@@ -202,7 +202,7 @@ module.exports = class Channel
         if @adminUsers.length == 0 and @service.length == 0 and @public.users.length > 0
           newHostPublicUser = @public.users[0]
           newHostPublicUser.role = 'host'
-          newHostUser = @usersByAuthId[newHostUser.authId]
+          newHostUser = @usersByAuthId[newHostPublicUser.authId]
           @adminUsers newHostUser
 
           @broadcast 'setUserRole', userAuthId: newHostPublicUser.authId, role: newHostPublicUser.role
