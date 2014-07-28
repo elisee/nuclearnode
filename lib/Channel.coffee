@@ -203,7 +203,7 @@ module.exports = class Channel
           newHostPublicUser = @public.users[0]
           newHostPublicUser.role = 'host'
           newHostUser = @usersByAuthId[newHostPublicUser.authId]
-          @adminUsers newHostUser
+          @adminUsers.push newHostUser
 
           @broadcast 'setUserRole', userAuthId: newHostPublicUser.authId, role: newHostPublicUser.role
 
