@@ -31,20 +31,19 @@ window.audio =
       
     return
 
-  playSoundOnce: (snd) ->
+  playSound: (snd, options) ->
     return unless audioCtx?
-    source = audioCtx.createBufferSource()
-    source.buffer = snd.buffer
-    source.connect masterGain
-    source.start 0
-    source
+    options or= {}
 
-  playSoundLoop: (snd) ->
-    return unless audioCtx?
+    gainNode = audioCtx.createGain()
+    gainNode.gain.value = options.volume or 1
+    gainNode.connect masterGain
+
     source = audioCtx.createBufferSource()
     source.buffer = snd.buffer
-    source.loop = true
-    source.connect masterGain
+    source.loop = options.loop == true
+    source.connect gainNode
+
     source.start 0
     source
 
