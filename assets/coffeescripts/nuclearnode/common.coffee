@@ -86,6 +86,8 @@ onLogInButtonClicked = ->
 
 onOverlayClicked = (event) ->
   return if overlay != event.target
+  window.closeOverlay()
 
+window.closeOverlay = ->
   document.querySelector('#Overlay > div.Active').classList.remove 'Active'
   document.getElementById('Overlay').classList.remove 'Enabled'
