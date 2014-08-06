@@ -1,3 +1,5 @@
+config = require './config'
+
 gulp = require 'gulp'
 gutil = require 'gulp-util'
 jade = require 'gulp-jade'
@@ -25,12 +27,15 @@ paths =
     dest: './public/locales'
 
 gulp.task 'scripts', ->
-  gulp
+  stream = gulp
     .src paths.scripts.src
     .pipe coffee()
     .on 'error', gutil.log
-    .pipe uglify()
-    .pipe gulp.dest paths.scripts.dest
+
+  if ! config.disableUglify
+    stream = stream.pipe uglify()
+
+  stream.pipe gulp.dest paths.scripts.dest
 
 templateHeader = fs.readFileSync('./node_modules/jade/runtime.js', 'utf8') + '\nvar JST = {};\n'
 through = require 'through2'
@@ -58,14 +63,17 @@ fixTemplateFunctionName = (rootPath) ->
   through.obj transform
 
 gulp.task 'templates', ->
-  gulp
+  stream = gulp
     .src paths.templates.src
     .pipe jade client: true
     .pipe fixTemplateFunctionName './assets/templates'
     .pipe concat 'templates.js'
     .pipe header templateHeader
-    .pipe uglify()
-    .pipe gulp.dest paths.templates.dest
+
+  if ! config.disableUglify
+    stream = stream.pipe uglify()
+
+  stream.pipe gulp.dest paths.templates.dest
 
 gulp.task 'styles', ->
   gulp
