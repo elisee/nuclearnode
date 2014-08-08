@@ -99,6 +99,10 @@ module.exports = engine =
   logDebug: (message) -> @log message if config.debugLog
 
   setupSocket: (socket) ->
+    if ! socket.request?.user?.authId?
+      socket.disconnect()
+      return
+
     engine.logDebug "#{socket.id} (#{socket.handshake.address.address}) connected"
 
     socket.on 'disconnect', ->
