@@ -72,13 +72,11 @@ module.exports = engine =
       isFull = false
 
       engineChannel = engine.channelsById["#{channel.service or ''}:#{channel.name.toLowerCase()}"]
-      if engineChannel? and engineChannel.public.users.length >= config.channels.maxUsers
+      console.log req.user.authId
+      if engineChannel? and engineChannel.public.users.length >= config.channels.maxUsers and ! engineChannel.actorsByAuthId[req.user.authId]? and req.user.serviceHandles?[channel.service]?.toLowerCase() != channel.name.toLowerCase()
         isFull = true
         res.expose livestream: engineChannel.public.livestream
 
-      if req.user.serviceHandles?[channel.service]?.toLowerCase() == channel.name.toLowerCase()
-        isFull = false
-      
       res.expose channel: channel, user: req.user
 
       res.render (if isFull then 'nuclearnode/fullChannel' else 'main'),
