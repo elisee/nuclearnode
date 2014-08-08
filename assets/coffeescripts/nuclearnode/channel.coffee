@@ -295,11 +295,11 @@ onLivestreamUpdated = (livestream) ->
   return
 
 # Ads
-lastRefreshAdTime = 0
+lastAdRefreshTime = 0
 channel.refreshAds = ->
-  elapsedTime = Date.now() - lastRefreshAdTime
+  elapsedTime = Date.now() - lastAdRefreshTime
   return if elapsedTime < 30 * 1000
-  lastRefreshAdTime = Date.now()
+  lastAdRefreshTime = Date.now()
 
   wasChatLogScrolledToBottom = isChatLogScrolledToBottom()
 
