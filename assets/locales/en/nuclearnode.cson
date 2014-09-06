@@ -28,6 +28,10 @@
     """We won't tweet, post to your wall  
     or microwave your cat"""
 
+  madeWithLoveBy: "Made with love by"
+  credits: "Credits"
+  terms: "Terms of service"
+
   channelFull:
     withLivestream: "Sorry, this room is packed right now! Here's a livestream instead:"
     noLivestream: "Sorry, this room is packed and no livestream is available."

@@ -37,12 +37,13 @@ block content
     input(type="submit",value="Go")
 
   footer
-    .MadeWithLove Made with love by 
+    .MadeWithLove= i18n.t('nuclearnode:madeWithLoveBy')
+      |  
       a(href="http://sparklinlabs.com/",target="_blank") Sparklin Labs 
         img(src=assetFingerprint('/images/nuclearnode/SparklinLabsMiniLogo.png'),alt="")
         | &nbsp;
 
     .Links
-      a(href="/credits") Credits
+      a(href="/credits")= i18n.t('nuclearnode:credits')
       |  &middot; 
-      a(href=config.hubBaseURL + "/terms") Terms
+      a(href=config.hubBaseURL + "/terms")= i18n.t('nuclearnode:terms')
