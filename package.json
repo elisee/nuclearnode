@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "express": "~3.4.7",
-    "jade": "~1.0.0",
+    "jade": "^1.6.0",
     "nib": "~1.0.1",
     "express-expose": "~0.3.3",
     "connect-redis": "~1.4.6",
