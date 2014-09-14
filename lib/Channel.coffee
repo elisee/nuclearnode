@@ -152,7 +152,7 @@ module.exports = class Channel
       @broadcast 'unbanUser', bannedUserInfo
 
     socket.on 'settings:livestream', (service, channel) =>
-      return if service not in [ 'none', 'twitch', 'hitbox', 'talkgg' ]
+      return if service not in [ 'none', 'twitch', 'hitbox', 'dailymotion', 'talkgg' ]
 
       if service != 'talkgg'
         return if ! /^[A-Za-z0-9_]+$/.test(channel)

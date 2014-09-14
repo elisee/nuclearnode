@@ -96,6 +96,7 @@
         none: "(No stream)"
         twitch: "Twitch.tv"
         hitbox: "Hitbox.tv"
+        dailymotion: "Dailymotion"
         talkgg: "Talk.gg"
 
   settingsUpdate:
