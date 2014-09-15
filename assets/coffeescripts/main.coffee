@@ -43,3 +43,5 @@ window.channel.logic =
   onActorRemoved: (actor) -> document.getElementById('Actor' + actor.authId).remove()
 
   onSettingsSetup: (settingsTab) ->
+
+channel.start()
