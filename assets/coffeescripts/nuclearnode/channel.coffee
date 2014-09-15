@@ -125,6 +125,14 @@ onUserBanned = (bannedUser) ->
   channel.data.bannedUsersByAuthId[bannedUser.authId] = bannedUser
 
   bannedUsersElement.insertAdjacentHTML 'beforeend', JST['nuclearnode/bannedUser'] { bannedUser, app, channel, i18n }
+
+  # remove all messages
+  removed = i18n.t('nuclearnode:chat.removed')
+  for elt in chatLogElement.querySelectorAll(".Author-#{bannedUser.authId.replace(/:/g,'_')}")
+    elt.style.opacity = 0.4
+    contentElt = elt.querySelector('.Content')
+    contentElt.dataset.text = contentElt.textContent
+    contentElt.textContent = removed
   return
 
 onUserUnbanned = (bannedUser) ->
@@ -175,7 +183,7 @@ onSidebarTabButtonClicked = (event) ->
 # Chat
 onChatMessageReceived = (message) ->
   if message.userAuthId?
-    channel.appendToChat 'Message',
+    channel.appendToChat "Message Author-#{message.userAuthId.replace(/:/g,'_')}",
       JST['nuclearnode/chatMessage']
         text: message.text
         author: JST['nuclearnode/chatUser']

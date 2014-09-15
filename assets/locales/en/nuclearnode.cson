@@ -61,6 +61,7 @@
     banned: "You have been banned from this room. Please be respectful and find another room to play in."
     ban: "Ban"
     unban: "Unban"
+    removed: "(removed)"
 
   userHandleOnService: "%{handle} on %{service}"
   serviceHandlePlaceholder: "Logged in"

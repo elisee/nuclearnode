@@ -61,6 +61,7 @@
     banned: "Vous avez été banni de ce salon. Soyez respectueux et choisissez un autre salon."
     ban: "Bannir"
     unban: "Débannir"
+    removed: "(effacé)"
 
   userHandleOnService: "%{handle} sur %{service}"
   serviceHandlePlaceholder: "Connecté"
