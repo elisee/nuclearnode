@@ -9,5 +9,8 @@ span.User(title=serviceHandles.join(', '))
     span(class="UserRole_" + user.role,title=i18n.t('nuclearnode:userRoles.' + user.role))
     |  
   = user.displayName
-  if app.user.role == 'host' || app.user.role == 'hubAdministrator'
-    button.BanUser(data-auth-id=user.authId,data-display-name=user.displayName)= i18n.t('nuclearnode:chat.ban')
+  if ['host', 'hubAdministrator', 'moderator'].indexOf(app.user.role) != -1
+    .Actions
+      button.BanUser(data-auth-id=user.authId,data-display-name=user.displayName)= i18n.t('nuclearnode:chat.ban')
+      if app.user.role == 'host' || app.user.role == 'hubAdministrator'
+        button.ModUser(data-auth-id=user.authId,data-display-name=user.displayName)= i18n.t('nuclearnode:chat.mod')

@@ -119,7 +119,7 @@ module.exports = class Channel
 
     socket.on 'banUser', (userToBan) =>
       return if @adminUsers.indexOf(socket.user) == -1 and @modUsers.indexOf(socket.user) == -1
-      return if typeof(userToBan) != 'object' or typeof(userToBan.authId) != 'string' or typeof(userToBan.displayName) != 'string'
+      return if ! userToBan? or typeof(userToBan) != 'object' or typeof(userToBan.authId) != 'string' or typeof(userToBan.displayName) != 'string'
 
       bannedUser = @usersByAuthId[userToBan.authId]
       return if ! bannedUser or @adminUsers.indexOf(bannedUser) != -1 and @modUsers.indexOf(bannedUser) != -1
@@ -140,6 +140,7 @@ module.exports = class Channel
         bannedUser.sockets[0].disconnect()
 
       @broadcast 'banUser', bannedUserInfo
+      return
 
     socket.on 'unbanUser', (userAuthId) =>
       return if @adminUsers.indexOf(socket.user) == -1 and @modUsers.indexOf(socket.user) == -1
@@ -150,6 +151,35 @@ module.exports = class Channel
       delete @public.bannedUsersByAuthId[userAuthId]
 
       @broadcast 'unbanUser', bannedUserInfo
+      return
+
+    socket.on 'modUser', (userToMod) =>
+      return if @adminUsers.indexOf(socket.user) == -1
+      return if ! userToMod? or typeof(userToMod) != 'object' or typeof(userToMod.authId) != 'string' or typeof(userToMod.displayName) != 'string'
+
+      moddedUser = @usersByAuthId[userToMod.authId]
+      return if ! moddedUser? or @adminUsers.indexOf(moddedUser) != -1 and @modUsers.indexOf(moddedUser) != -1
+      return if moddedUser.public.role != ''
+
+      @modUsers.push moddedUser
+      moddedUser.public.role = 'moderator'
+
+      @broadcast 'setUserRole', userAuthId: moddedUser.public.authId, role: moddedUser.public.role
+      return
+
+    socket.on 'unmodUser', (userAuthId) =>
+      return if @adminUsers.indexOf(socket.user) == -1
+      return if typeof(userAuthId) != 'string' or userAuthId.length == 0
+
+      moddedUser = @usersByAuthId[userAuthId]
+      return if ! moddedUser?
+      index = @modUsers.indexOf(moddedUser)
+      return if index == -1
+      @moddedUsers.splice index, 1
+      moddedUser.public.role = ''
+
+      @broadcast 'setUserRole', userAuthId: userAuthId, role: moddedUser.public.role
+      return
 
     socket.on 'settings:livestream', (service, channel) =>
       return if service not in [ 'none', 'twitch', 'hitbox', 'dailymotion', 'talkgg' ]

@@ -37,12 +37,17 @@ channel.start = -> initApp -> channel.logic.init ->
 
   document.body.addEventListener 'click', (event) ->
     return if event.target.tagName != 'BUTTON'
-    if event.target.className == 'BanUser'
-      console.log event.target.dataset.displayName
-      bannedUser = { authId: event.target.dataset.authId, displayName: event.target.dataset.displayName }
-      channel.socket.emit 'banUser', bannedUser
-    else if event.target.className == 'UnbanUser'
-      channel.socket.emit 'unbanUser', event.target.dataset.authId
+    switch event.target.className
+      when 'BanUser'
+        bannedUser = { authId: event.target.dataset.authId, displayName: event.target.dataset.displayName }
+        channel.socket.emit 'banUser', bannedUser
+      when 'UnbanUser'
+        channel.socket.emit 'unbanUser', event.target.dataset.authId
+      when 'ModUser'
+        moddedUser = { authId: event.target.dataset.authId, displayName: event.target.dataset.displayName }
+        channel.socket.emit 'modUser', moddedUser
+      when 'UnmodUser'
+        channel.socket.emit 'unmodUser', event.target.dataset.authId
   return
 
 

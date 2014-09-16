@@ -59,6 +59,8 @@
     userBanned: "%{user} a été banni."
     userUnbanned: "%{user} a été débanni."
     banned: "Vous avez été banni de ce salon. Soyez respectueux et choisissez un autre salon."
+    mod: "Mod"
+    unmod: "Dé-mod"
     ban: "Bannir"
     unban: "Débannir"
     removed: "(effacé)"

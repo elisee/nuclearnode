@@ -59,6 +59,8 @@
     userBanned: "%{user} has been banned."
     userUnbanned: "%{user} has been unbanned."
     banned: "You have been banned from this room. Please be respectful and find another room to play in."
+    mod: "Mod"
+    unmod: "Unmod"
     ban: "Ban"
     unban: "Unban"
     removed: "(removed)"
