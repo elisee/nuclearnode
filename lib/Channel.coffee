@@ -122,7 +122,7 @@ module.exports = class Channel
       return if ! userToBan? or typeof(userToBan) != 'object' or typeof(userToBan.authId) != 'string' or typeof(userToBan.displayName) != 'string'
 
       bannedUser = @usersByAuthId[userToBan.authId]
-      return if ! bannedUser or @adminUsers.indexOf(bannedUser) != -1 and @modUsers.indexOf(bannedUser) != -1
+      return if ! bannedUser? or @adminUsers.indexOf(bannedUser) != -1 or @modUsers.indexOf(bannedUser) != -1
 
       bannedUserInfo =
         authId: userToBan.authId
@@ -158,7 +158,7 @@ module.exports = class Channel
       return if ! userToMod? or typeof(userToMod) != 'object' or typeof(userToMod.authId) != 'string' or typeof(userToMod.displayName) != 'string'
 
       moddedUser = @usersByAuthId[userToMod.authId]
-      return if ! moddedUser? or @adminUsers.indexOf(moddedUser) != -1 and @modUsers.indexOf(moddedUser) != -1
+      return if ! moddedUser? or @adminUsers.indexOf(moddedUser) != -1 or @modUsers.indexOf(moddedUser) != -1
       return if moddedUser.public.role != ''
 
       @modUsers.push moddedUser
