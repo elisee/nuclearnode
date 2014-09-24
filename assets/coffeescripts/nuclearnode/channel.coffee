@@ -231,7 +231,7 @@ channel.appendToChat = (type, content) ->
 
 # Livestream
 setupLivestream = ->
-  streamBoxElement = document.querySelector('#Sidebar .StreamBox')
+  streamBoxElement = document.querySelector('.StreamBox')
 
   if channel.data.livestream.service != 'none'
     streamBoxElement.innerHTML = JST["nuclearnode/livestreams/#{channel.data.livestream.service}"] { channel: channel.data.livestream.channel, app: app }
