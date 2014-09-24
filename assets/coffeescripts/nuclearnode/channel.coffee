@@ -209,7 +209,7 @@ onSubmitChatMessage = (event) ->
 
 maxChatLogHistory = 100
 
-isChatLogScrolledToBottom = -> chatLogElement.scrollTop >= chatLogElement.scrollHeight - chatLogElement.clientHeight
+isChatLogScrolledToBottom = -> chatLogElement.scrollTop >= chatLogElement.scrollHeight - chatLogElement.clientHeight - 5
 
 channel.appendToChat = (type, content) ->
   date = new Date()
