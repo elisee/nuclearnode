@@ -13,6 +13,8 @@ cson = require 'gulp-cson'
 fs = require 'fs'
 
 paths =
+  copy: {}
+
   scripts:
     src: './assets/coffeescripts/**/*.coffee'
     dest: './public/js'
@@ -25,6 +27,14 @@ paths =
   locales:
     src: './assets/locales/**/*.cson'
     dest: './public/locales'
+
+tasks = []
+for taskName, task of paths.copy
+  tasks.push taskName
+  gulp.task taskName, ->
+    gulp
+      .src task.src
+      .pipe gulp.dest task.dest
 
 gulp.task 'scripts', ->
   stream = gulp
@@ -87,9 +97,10 @@ gulp.task 'locales', ->
     .pipe cson()
     .pipe gulp.dest paths.locales.dest
 
-tasks = [ 'scripts', 'templates', 'styles', 'locales' ]
+tasks.push 'scripts', 'templates', 'styles', 'locales'
 
 gulp.task 'watch', tasks, ->
+  gulp.watch task.src, [taskName] for taskName, task of paths.copy
   gulp.watch paths.scripts.src, ['scripts']
   gulp.watch paths.styles.src, ['styles']
   gulp.watch paths.templates.src, ['templates']
