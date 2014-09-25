@@ -44,15 +44,19 @@ table
 if app.user.role == 'host' || app.user.role == 'hubAdministrator'
   h2= i18n.t('nuclearnode:settings.livestream.title')
 
-  table
-    tr
-      td= i18n.t('nuclearnode:settings.livestream.service')
-      td
-        select(name="livestreamService")
-          for service in [ 'none', 'twitch', 'hitbox', 'dailymotion', 'talkgg' ]
-            - var selected = service == channel.data.livestream.service
-            option(value=service,selected=selected)= i18n.t('nuclearnode:settings.livestream.services.' + service)
-    tr
-      td= i18n.t('nuclearnode:settings.livestream.channel')
-      td
-        input(type="text",name="livestreamChannel",value=channel.data.livestream.channel)
+  for livestream, i in channel.data.livestreams
+    table(data-livestream-index=i)
+        tr
+          td
+            if channel.data.livestreams.length > 1
+              = "(" + (i + 1) + ") "
+            = i18n.t('nuclearnode:settings.livestream.service')
+          td
+            select(name="livestreamService")
+              for service in [ 'none', 'twitch', 'hitbox', 'dailymotion', 'talkgg' ]
+                - var selected = service == livestream.service
+                option(value=service,selected=selected)= i18n.t('nuclearnode:settings.livestream.services.' + service)
+        tr(style= livestream.service == 'none' ? "display: none" : null)
+          td= i18n.t('nuclearnode:settings.livestream.channel')
+          td
+            input(type="text",name="livestreamChannel",value=livestream.channel)

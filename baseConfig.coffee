@@ -18,3 +18,6 @@ module.exports =
       client: "ca-pub-1755908062252241"
       slot300x250: "8738164039"
     joinPartMaxUsers: 20
+    # Maximum number of embedded livestreams
+    maxLivestreams: 1
+

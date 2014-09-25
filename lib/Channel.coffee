@@ -15,14 +15,17 @@ module.exports = class Channel
       welcomeMessage: ''
       guestAccess: 'full'
       bannedUsersByAuthId: {}
-      livestream: { service: 'none', channel: '' }
+      livestreams: []
 
       users: []
       actors: []
 
+    for i in [0...config.public.maxLivestreams]
+      @public.livestreams.push { service: 'none', channel: '' }
+
     if @service in ['twitch', 'hitbox']
-      @public.livestream.service = @service
-      @public.livestream.channel = @name
+      @public.livestreams[0].service = @service
+      @public.livestreams[0].channel = @name
 
     @sockets = []
     @usersByAuthId = {}
@@ -181,21 +184,23 @@ module.exports = class Channel
       @broadcast 'setUserRole', userAuthId: userAuthId, role: moddedUser.public.role
       return
 
-    socket.on 'settings:livestream', (service, channel) =>
+    socket.on 'settings:livestream', (index, service, channel) =>
       return if service not in [ 'none', 'twitch', 'hitbox', 'dailymotion', 'talkgg' ]
+      index |= 0
+      return if index < 0 or index >= config.public.maxLivestreams
 
       if service != 'talkgg'
         return if ! /^[A-Za-z0-9_]+$/.test(channel)
-        @public.livestream = { service, channel }
-        @broadcast 'settings:livestream', @public.livestream
+        @public.livestreams[index] = { service, channel }
+        @broadcast 'settings:livestream', { index, service, channel }
       else
         http.get('http://www.talk.gg/direct', (res) =>
           if res.statusCode == 302
             location = res.headers.location.split('/')
             channel = location[location.length - 1]
 
-            @public.livestream = { service, channel }
-            @broadcast 'settings:livestream', @public.livestream
+            @public.livestreams[index] = { service, channel }
+            @broadcast 'settings:livestream', { index, service, channel }
           else
             console.log "Could not get talk.gg channel:"
             console.log "Got unexpected status code #{res.statusCode}"

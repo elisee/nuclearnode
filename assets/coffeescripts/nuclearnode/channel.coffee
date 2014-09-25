@@ -233,10 +233,21 @@ channel.appendToChat = (type, content) ->
 setupLivestream = ->
   streamBoxElement = document.querySelector('.StreamBox')
 
-  if channel.data.livestream.service != 'none'
-    streamBoxElement.innerHTML = JST["nuclearnode/livestreams/#{channel.data.livestream.service}"] { channel: channel.data.livestream.channel, app: app }
-  else
-    streamBoxElement.innerHTML = ''
+  for livestream, childIndex in channel.data.livestreams
+    livestreamName = "#{livestream.service}/#{livestream.channel}"
+    livestreamHTML = JST["nuclearnode/livestreams/#{livestream.service}"] { channel: livestream.channel, app: app }
+
+    oldStreamElement = streamBoxElement.children[childIndex]
+    if ! oldStreamElement?
+      streamBoxElement.insertAdjacentHTML 'beforeend', livestreamHTML
+    else if oldStreamElement.dataset.livestream != livestreamName
+      insertPoint = oldStreamElement.nextSibling
+      oldStreamElement.parentElement.removeChild oldStreamElement
+
+      if insertPoint?
+        insertPoint.insertAdjacentHTML 'beforebegin', livestreamHTML
+      else
+        streamBoxElement.insertAdjacentHTML 'beforeend', livestreamHTML
 
   return
 
@@ -253,15 +264,18 @@ renderSettings = ->
     settingsTab.querySelector('select[name=guestAccess]').addEventListener 'change', (event) ->
       channel.socket.emit 'settings:room.guestAccess', event.target.value
 
-    livestreamServiceSelect = settingsTab.querySelector('select[name=livestreamService]')
-    livestreamChannelInput = settingsTab.querySelector('input[name=livestreamChannel]')
+    for i in [0...channel.data.livestreams.length]
+      do ->
+        livestreamIndex = i
+        livestreamServiceSelect = settingsTab.querySelector("table[data-livestream-index='#{i}'] select[name=livestreamService]")
+        livestreamChannelInput  = settingsTab.querySelector("table[data-livestream-index='#{i}'] input[name=livestreamChannel]")
 
-    livestreamServiceSelect.addEventListener 'change', (event) ->
-      livestreamChannelInput.parentElement.parentElement.style.display = if event.target.value == 'talkgg' then 'none' else ''
-      channel.socket.emit 'settings:livestream', event.target.value, livestreamChannelInput.value
+        livestreamServiceSelect.addEventListener 'change', (event) ->
+          livestreamChannelInput.parentElement.parentElement.style.display = if event.target.value in [ 'none', 'talkgg' ] then 'none' else ''
+          channel.socket.emit 'settings:livestream', livestreamIndex, event.target.value, livestreamChannelInput.value
 
-    livestreamChannelInput.addEventListener 'change', (event) ->
-      channel.socket.emit 'settings:livestream', livestreamServiceSelect.value, event.target.value
+        livestreamChannelInput.addEventListener 'change', (event) ->
+          channel.socket.emit 'settings:livestream', livestreamIndex, livestreamServiceSelect.value, event.target.value
 
   channel.logic.onSettingsSetup settingsTab
 
@@ -297,12 +311,12 @@ updateGuestChat = ->
     chatInputBoxElement.placeholder = i18n.t('nuclearnode:chat.typeHereToChat')
     chatInputBoxElement.disabled = false
 
-onLivestreamUpdated = (livestream) ->
-  channel.data.livestream = livestream
+onLivestreamUpdated = (data) ->
+  channel.data.livestreams[data.index] = { service: data.service, channel: data.channel }
 
   if app.user.role in [ 'host', 'hubAdministrator' ]
-    document.querySelector('#SettingsTab select[name=livestreamService]').value = livestream.service
-    document.querySelector('#SettingsTab input[name=livestreamChannel]').value = livestream.channel
+    document.querySelector("#SettingsTab table[data-livestream-index='#{data.index}'] select[name=livestreamService]").value = data.service
+    document.querySelector("#SettingsTab table[data-livestream-index='#{data.index}'] input[name=livestreamChannel]").value = data.channel
 
   setupLivestream()
   return
