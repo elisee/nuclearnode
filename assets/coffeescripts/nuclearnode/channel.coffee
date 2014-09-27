@@ -233,9 +233,13 @@ channel.appendToChat = (type, content) ->
 setupLivestream = ->
   streamBoxElement = document.querySelector('.StreamBox')
 
+  livestreamCount = 0
+
   for livestream, childIndex in channel.data.livestreams
     livestreamName = "#{livestream.service}/#{livestream.channel}"
     livestreamHTML = JST["nuclearnode/livestreams/#{livestream.service}"] { channel: livestream.channel, app: app }
+
+    livestreamCount++ if livestream.service != 'none'
 
     oldStreamElement = streamBoxElement.children[childIndex]
     if ! oldStreamElement?
@@ -249,6 +253,7 @@ setupLivestream = ->
       else
         streamBoxElement.insertAdjacentHTML 'beforeend', livestreamHTML
 
+  streamBoxElement.dataset.count = livestreamCount
   return
 
 
