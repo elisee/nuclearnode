@@ -190,7 +190,7 @@ module.exports = class Channel
       return if index < 0 or index >= config.public.maxLivestreams
 
       if service != 'talkgg'
-        return if ! /^[A-Za-z0-9_]+$/.test(channel)
+        return if ! /^[A-Za-z0-9_-]+$/.test(channel)
         @public.livestreams[index] = { service, channel }
         @broadcast 'settings:livestream', { index, service, channel }
       else
