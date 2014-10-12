@@ -7,6 +7,11 @@ chatLogElement = document.getElementById('ChatLog')
 channel.start = -> initApp -> channel.logic.init ->
   channel.socket = io.connect reconnection: false, transports: [ 'websocket' ]
 
+  embeddedChatTemplate = JST["nuclearnode/chats/#{app.channel.service}"]
+  if embeddedChatTemplate?
+    document.getElementById('EmbeddedChat').innerHTML = embeddedChatTemplate( channel : app.channel.name )
+    document.getElementById('ChatTab').classList.add 'Embedded'
+
   channel.socket.on 'connect', -> channel.socket.emit 'joinChannel', app.channel.service, app.channel.name
   channel.socket.on 'disconnect', onDisconnected
   channel.socket.on 'noGuestsAllowed', -> channel.appendToChat 'Info', i18n.t 'nuclearnode:chat.noGuestsAllowed'; muteDisconnect = true
