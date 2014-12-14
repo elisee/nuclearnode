@@ -289,10 +289,12 @@ renderSettings = ->
 
   channel.logic.onSettingsSetup settingsTab
 
+escapeHTML = (x) -> x.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+
 onWelcomeMessageUpdated = (welcomeMessage) ->
   channel.data.welcomeMessage = welcomeMessage
 
-  channel.appendToChat 'Info', i18n.t 'nuclearnode:settingsUpdate.room.welcomeMessage', welcomeMessage: welcomeMessage
+  channel.appendToChat 'Info', i18n.t 'nuclearnode:settingsUpdate.room.welcomeMessage', welcomeMessage: escapeHTML(welcomeMessage)
   if app.user.role not in [ 'host', 'hubAdministrator' ]
     document.querySelector('#SettingsTab .WelcomeMessage').textContent = welcomeMessage
   else
