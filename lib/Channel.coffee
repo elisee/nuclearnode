@@ -178,7 +178,7 @@ module.exports = class Channel
       return if ! moddedUser?
       index = @modUsers.indexOf(moddedUser)
       return if index == -1
-      @moddedUsers.splice index, 1
+      @modUsers.splice index, 1
       moddedUser.public.role = ''
 
       @broadcast 'setUserRole', userAuthId: userAuthId, role: moddedUser.public.role
