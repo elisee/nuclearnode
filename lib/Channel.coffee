@@ -125,13 +125,21 @@ module.exports = class Channel
       return if ! userToBan? or typeof(userToBan) != 'object' or typeof(userToBan.authId) != 'string' or typeof(userToBan.displayName) != 'string'
 
       bannedUser = @usersByAuthId[userToBan.authId]
-      return if ! bannedUser? or @adminUsers.indexOf(bannedUser) != -1 or @modUsers.indexOf(bannedUser) != -1
+      if ! bannedUser?
+        @log "Cannot ban #{userToBan.displayName} (#{userToBan.authId}), no such user"
+        return
+
+      if @adminUsers.indexOf(bannedUser) != -1 or @modUsers.indexOf(bannedUser) != -1
+        @log "Cannot ban #{userToBan.displayName} (#{userToBan.authId}), admin or mod"
+        return
 
       bannedUserInfo =
         authId: userToBan.authId
         displayName: userToBan.displayName
 
-      return if @public.bannedUsersByAuthId[bannedUserInfo.authId]?
+      if @public.bannedUsersByAuthId[bannedUserInfo.authId]?
+        @log "Cannot ban #{bannedUserInfo.displayName} (#{bannedUserInfo.authId}), already banned"
+        return
 
       @public.bannedUsersByAuthId[bannedUserInfo.authId] = bannedUserInfo
 
