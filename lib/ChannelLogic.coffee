@@ -42,7 +42,7 @@ module.exports = class ChannelLogic
       @channel.actorsByAuthId[actor.public.authId] = actor
       @channel.public.actors.push actor.public
 
-      @channel.broadcast 'addActor', actor.public
+      return if ! @channel.broadcast 'addActor', actor.public
 
       @startRound() if @channel.public.state == 'waitingForPlayers' and @channel.public.actors.length == @channel.public.settings.minPlayers
       return
@@ -67,7 +67,7 @@ module.exports = class ChannelLogic
       # until the current round is over or simply allow reconnecting for a while
       delete @channel.actorsByAuthId[user.public.authId]
       @channel.public.actors.splice @channel.public.actors.indexOf(user.actor.public), 1
-      @channel.broadcast 'removeActor', user.public.authId
+      return if ! @channel.broadcast 'removeActor', user.public.authId
 
     return
 
@@ -80,7 +80,7 @@ module.exports = class ChannelLogic
     
     @channel.public.stateStartTime = Date.now()
     @channel.public.state = state
-    @channel.broadcast 'setState', state
+    return if ! @channel.broadcast 'setState', state
 
   startRound: ->
     @setState 'playing'

@@ -37,12 +37,8 @@ module.exports = class Channel
     @logic = new ChannelLogic @
 
   broadcast: (message, data, sockets=@sockets) ->
-    for socket in sockets
-      if socket?
-        socket.emit message, data
-      else
-         @log "Null socket in @sockets"
-    return
+    socket?.emit message, data for socket in sockets
+    return @logic?
 
   log: (message) -> @engine.log "[#{@service}:#{@name}] #{message}"
   logDebug: (message) -> @engine.logDebug "[#{@service}:#{@name}] #{message}"
@@ -85,7 +81,7 @@ module.exports = class Channel
         # but don't actually send them to anyone else
         socket.emit 'chatMessage', { userAuthId: socket.user.public.authId, text: text }
       else if socket.user.chat.recentMessageTimestamps.length < chatSettings.maxRecentMessages or now - socket.user.chat.recentMessageTimestamps[0] > chatSettings.minRecentMessageInterval
-        @broadcast 'chatMessage', { userAuthId: socket.user.public.authId, text: text }
+        return if ! @broadcast 'chatMessage', { userAuthId: socket.user.public.authId, text: text }
       else
         socket.user.chat.hellbanPoints++
         socket.emit 'chatMessage', text: 'undelivered'
@@ -96,16 +92,16 @@ module.exports = class Channel
       return
 
     socket.on 'settings:room.welcomeMessage', (text) =>
-      return if @adminUsers.indexOf(socket.user) == -1 or typeof(text) != 'string'
+      return if @adminUsers.indexOf(socket.user) == -1
       @public.welcomeMessage = text.substring 0, 300
-      @broadcast 'settings:room.welcomeMessage', @public.welcomeMessage
+      return if ! @broadcast 'settings:room.welcomeMessage', @public.welcomeMessage
 
     socket.on 'settings:room.guestAccess', (guestAccess) =>
       return if @adminUsers.indexOf(socket.user) == -1
       return if guestAccess not in [ 'full', 'noChat', 'deny' ]
 
       @public.guestAccess = guestAccess
-      @broadcast 'settings:room.guestAccess', @public.guestAccess
+      return if ! @broadcast 'settings:room.guestAccess', @public.guestAccess
 
       if guestAccess == 'deny'
         for authId, connectedUser of @usersByAuthId
@@ -148,9 +144,9 @@ module.exports = class Channel
       # rather than iterating over the array
       while bannedUser.sockets.length > 0
         bannedUser.sockets[0].emit 'banned'
-        bannedUser.sockets[0].disconnect()
+        bannedUser.sockets[0]?.disconnect()
 
-      @broadcast 'banUser', bannedUserInfo
+      return if ! @broadcast 'banUser', bannedUserInfo
       return
 
     socket.on 'unbanUser', (userAuthId) =>
@@ -161,7 +157,7 @@ module.exports = class Channel
       return if ! bannedUserInfo?
       delete @public.bannedUsersByAuthId[userAuthId]
 
-      @broadcast 'unbanUser', bannedUserInfo
+      return if ! @broadcast 'unbanUser', bannedUserInfo
       return
 
     socket.on 'modUser', (userToMod) =>
@@ -175,7 +171,7 @@ module.exports = class Channel
       @modUsers.push moddedUser
       moddedUser.public.role = 'moderator'
 
-      @broadcast 'setUserRole', userAuthId: moddedUser.public.authId, role: moddedUser.public.role
+      return if ! @broadcast 'setUserRole', userAuthId: moddedUser.public.authId, role: moddedUser.public.role
       return
 
     socket.on 'unmodUser', (userAuthId) =>
@@ -189,7 +185,7 @@ module.exports = class Channel
       @modUsers.splice index, 1
       moddedUser.public.role = ''
 
-      @broadcast 'setUserRole', userAuthId: userAuthId, role: moddedUser.public.role
+      return if ! @broadcast 'setUserRole', userAuthId: userAuthId, role: moddedUser.public.role
       return
 
     socket.on 'settings:livestream', (index, service, channel) =>
@@ -200,7 +196,7 @@ module.exports = class Channel
       if service != 'talkgg'
         return if ! /^[A-Za-z0-9_-]+$/.test(channel)
         @public.livestreams[index] = { service, channel }
-        @broadcast 'settings:livestream', { index, service, channel }
+        return if ! @broadcast 'settings:livestream', { index, service, channel }
       else
         http.get('http://www.talk.gg/direct', (res) =>
           if res.statusCode == 302
@@ -208,7 +204,7 @@ module.exports = class Channel
             channel = location[location.length - 1]
 
             @public.livestreams[index] = { service, channel }
-            @broadcast 'settings:livestream', { index, service, channel }
+            return if ! @broadcast 'settings:livestream', { index, service, channel }
           else
             console.log "Could not get talk.gg channel:"
             console.log "Got unexpected status code #{res.statusCode}"
@@ -233,7 +229,7 @@ module.exports = class Channel
       @logic.onUserLeft socket.user
       delete @usersByAuthId[ socket.user.public.authId ]
       @public.users.splice @public.users.indexOf(socket.user.public), 1
-      @broadcast 'removeUser', socket.user.public.authId
+      return if ! @broadcast 'removeUser', socket.user.public.authId
 
       # Remove from admin list if applicable
       adminIndex = @adminUsers.indexOf(socket.user)
@@ -248,7 +244,7 @@ module.exports = class Channel
           newHostUser = @usersByAuthId[newHostPublicUser.authId]
           @adminUsers.push newHostUser
 
-          @broadcast 'setUserRole', userAuthId: newHostPublicUser.authId, role: newHostPublicUser.role
+          return if ! @broadcast 'setUserRole', userAuthId: newHostPublicUser.authId, role: newHostPublicUser.role
 
       # Remove from mod list if applicable
       modIndex = @modUsers.indexOf(socket.user)
@@ -295,7 +291,7 @@ module.exports = class Channel
     @public.users.push user.public
     @logic.onUserJoined user
 
-    @broadcast 'addUser', user.public
+    return if ! @broadcast 'addUser', user.public
     @logDebug "User #{user.public.displayName} created"
 
     user
