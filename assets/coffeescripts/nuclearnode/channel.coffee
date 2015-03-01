@@ -65,7 +65,7 @@ onChannelDataReceived = (data) ->
   channel.data = data
 
   if channel.data.welcomeMessage.length > 0
-    channel.appendToChat 'Info', channel.data.welcomeMessage
+    channel.appendToChat 'Info', escapeHTML(channel.data.welcomeMessage)
 
   channel.data.usersByAuthId = {}
   channel.data.usersByAuthId[user.authId] = user for user in channel.data.users
