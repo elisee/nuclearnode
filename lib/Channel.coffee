@@ -96,7 +96,7 @@ module.exports = class Channel
       return
 
     socket.on 'settings:room.welcomeMessage', (text) =>
-      return if @adminUsers.indexOf(socket.user) == -1
+      return if @adminUsers.indexOf(socket.user) == -1 or typeof(text) != 'string'
       @public.welcomeMessage = text.substring 0, 300
       @broadcast 'settings:room.welcomeMessage', @public.welcomeMessage
 
