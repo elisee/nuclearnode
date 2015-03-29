@@ -73,6 +73,7 @@
     host: 'Host'
     administrator: 'Administrator'
     moderator: 'Moderator'
+    player: 'Player'
 
   settings:
     rules:

@@ -122,10 +122,11 @@ onUserRoleSet = (data) ->
     app.user.role = data.role
     renderSettings()
 
-  channel.appendToChat 'Info', i18n.t 'nuclearnode:chat.userRoleSet', user: JST['nuclearnode/chatUser']( { user, i18n, app } ), role: i18n.t('nuclearnode:userRoles.' + user.role)
+  role = user.role ? "player"
+  channel.appendToChat 'Info', i18n.t 'nuclearnode:chat.userRoleSet', user: JST['nuclearnode/chatUser']( { user, i18n, app } ), role: i18n.t('nuclearnode:userRoles.' + role)
 
 onUserBanned = (bannedUser) ->
-  channel.appendToChat 'Info', i18n.t 'nuclearnode:chat.userBanned', { user: bannedUser.displayName }
+  channel.appendToChat 'Info', i18n.t 'nuclearnode:chat.userBanned', { user: escapeHTML(bannedUser.displayName) }
 
   bannedUsersElement = document.querySelector('#SettingsTab .BannedUsers')
 
@@ -146,7 +147,7 @@ onUserBanned = (bannedUser) ->
   return
 
 onUserUnbanned = (bannedUser) ->
-  channel.appendToChat 'Info', i18n.t 'nuclearnode:chat.userUnbanned', { user: bannedUser.displayName }
+  channel.appendToChat 'Info', i18n.t 'nuclearnode:chat.userUnbanned', { user: escapeHTML(bannedUser.displayName) }
 
   delete channel.data.bannedUsersByAuthId[bannedUser.authId]
   liElement = document.querySelector("#SettingsTab .BannedUsers li[data-auth-id=\"#{bannedUser.authId}\"]")
