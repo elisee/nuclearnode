@@ -189,6 +189,7 @@ module.exports = class Channel
       return
 
     socket.on 'settings:livestream', (index, service, channel) =>
+      return if @adminUsers.indexOf(socket.user) == -1
       return if service not in [ 'none', 'twitch', 'hitbox', 'dailymotion', 'talkgg' ]
       index |= 0
       return if index < 0 or index >= config.public.maxLivestreams
