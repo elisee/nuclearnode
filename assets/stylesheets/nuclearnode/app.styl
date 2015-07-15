@@ -15,7 +15,8 @@ body
       width 0
 
 #App
-  flex 1 1 0
+  flex 1
+  flex-basis 0
   display flex
   flex-direction column
   margin-left 60px
@@ -46,7 +47,8 @@ body
     color #c0c0c0
 
     .AppInfo
-      flex 1 1 0
+      flex 1
+      flex-basis 0
       font-weight 100
       padding 0 0.5em
       display inline-block
@@ -111,7 +113,8 @@ body
         text-decoration none
 
   > main
-    flex 1 1 0
+    flex 1
+    flex-basis 0
     border-top 1px solid rgba(255,255,255,0.15)
     border-right 1px solid rgba(255,255,255,0.1)
 
@@ -177,7 +180,9 @@ body
       justify-content center
 
     .AppDetails
-      flex 1 0 0
+      flex 1
+      flex-shrink 0
+      flex-basis 0
       margin-right 0.5em
       opacity 0
       transition opacity 0.1s linear
