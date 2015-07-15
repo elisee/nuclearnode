@@ -102,12 +102,12 @@
       
 
 #SidebarTabs
-  flex 1
+  flex 1 1 0
   display flex
   flex-direction column
 
   > div
-    flex 1
+    flex 1 1 0
     flex-direction column
 
     &:not(.Active)
@@ -152,16 +152,16 @@
     #ChatInputPanel
       display none
     #EmbeddedChat
-      flex 1
+      flex 1 1 0
       display flex
       flex-direction column
 
       iframe, object
-        flex 1
+        flex 1 1 0
 
   &:not(.Embedded)
     #ChatLogPanel
-      flex 1
+      flex 1 1 0
     #EmbeddedChat
       display none
     #ChatInputPanel
@@ -173,7 +173,7 @@
   text-align left
 
 #ChatLog
-  flex 1
+  flex 1 1 0
   line-height 1.25
   font-size 16px
 
@@ -234,7 +234,7 @@
       color #8aa
 
 #ChatInputBox
-  flex 1
+  flex 1 1 0
   line-height 1.25
   font-size 14px
   background rgba(0,0,0,0.4)
@@ -317,18 +317,18 @@
 .FullChannel
   display flex
   flex-flow column
-  flex 1
+  flex 1 1 0
   
   .StreamInfo
     text-align center
     padding 0.5em
 
   .StreamBox
-    flex 1
+    flex 1 1 0
     display flex
     flex-direction column
 
     > *
-      flex 1
+      flex 1 1 0
       
   
