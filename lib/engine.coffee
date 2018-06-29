@@ -4,6 +4,10 @@ signedRequest = require 'signed-request'
 _ = require 'lodash'
 Channel = require './Channel'
 
+validateChannel = (channelName) ->
+  return false if channelName.indexOf('fag' + 'got') != -1
+  if /^[A-Za-z0-9_-]{1,20}$/.exec(channelName) then return true else return false
+
 module.exports = engine =
   channelsById: {}
 
@@ -49,10 +53,6 @@ module.exports = engine =
         loginServices: engine.loginServices
         user: req.user
         channelInfos: channelInfos
-
-    validateChannel = (channelName) ->
-      return false if channelName.indexOf('fag' + 'got') != -1
-      if /^[A-Za-z0-9_-]{1,20}$/.exec(channelName) then return true else return false
 
     app.param 'channel', (req, res, next, channel) -> if validateChannel(channel) then next() else res.send 404
 
