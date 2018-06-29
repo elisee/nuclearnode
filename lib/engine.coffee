@@ -114,7 +114,7 @@ module.exports = engine =
 
     socket.on 'joinChannel', (service, channelName) ->
       return if typeof channelName != 'string' or socket.channel?
-      return if ! /^[A-Za-z0-9_-]{1,20}$/.exec(channelName)
+      return if ! validateChannel(channelName)
       if config.channels.services.length == 0
         return if service? and channelName != config.appId
       else
